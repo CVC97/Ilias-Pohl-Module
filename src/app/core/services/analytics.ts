@@ -69,19 +69,22 @@ export class Analytics {
     }
 
 
-	private endCurrentVisit() {
-		if (this.currentVisit) {
-			this.currentVisit.endTime = Date.now();
-			this.currentVisit.duration = this.currentVisit.endTime - this.currentVisit.startTime;
-			this.currentVisit.duration_s = this.currentVisit.duration / 1000;
-			this.visits.push({ ...this.currentVisit });
-			
-			// LOG HERE - This runs every time user leaves a page
-			console.log('Page visit ended:', this.currentVisit);
-			console.log('All visits so far:', this.visits);
-			
-			this.currentVisit = null;
-		}
+    private endCurrentVisit() {
+        if (this.currentVisit) {
+            this.currentVisit.endTime = Date.now();
+            this.currentVisit.duration = this.currentVisit.endTime - this.currentVisit.startTime;
+            this.currentVisit.duration_s = this.currentVisit.duration / 1000;
+            this.visits.push({ ...this.currentVisit });
+            
+            console.log('Page visit ended:', this.currentVisit);
+            console.log('Duration: ' + this.currentVisit.duration_s + ' seconds (' + this.currentVisit.duration + 'ms)');
+            console.log('All visits so far:', this.visits);
+            
+            this.currentVisit = null;
+            
+            // Send to backend after each visit
+            // this.sendToBackend();
+        }
 	}
 
 
@@ -91,7 +94,6 @@ export class Analytics {
 
 
     private saveData() {
-        // For now, save to localStorage (temporary solution)
         if (isPlatformBrowser(this.platformId)) {
             const existingData = localStorage.getItem('analyticsData');
             const allVisits = existingData ? JSON.parse(existingData) : [];
@@ -101,20 +103,23 @@ export class Analytics {
     }
 
 
-    // Method to send data to backend (you'll implement this later)
     async sendToBackend() {
-        this.endCurrentVisit();
-        
-        // TODO: Send to your backend API
-        // Example:
-        // await fetch('https://your-backend.com/api/analytics', {
-        //     method: 'POST',
-        //     headers: { 'Content-Type': 'application/json' },
-        //     body: JSON.stringify(this.visits)
-        // });
-        
-        console.log('Analytics data:', this.visits);
-        this.visits = [];
+        if (this.visits.length === 0) return;
+
+        try {
+            const response = await fetch('http://localhost:3000/api/analytics', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(this.visits)
+            });
+
+            const result = await response.json();
+            console.log('Data sent to backend:', result);
+
+            this.visits = []; // Clear visits after successful send
+        } catch (error) {
+            console.error('Failed to send analytics:', error);
+        }
     }
 
 

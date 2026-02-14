@@ -3,12 +3,16 @@ import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
+
+
 // properties of each glossary term
 interface GlossaryTerm {
     title: string;
     definition: string;
     link?: string;
 }
+
+
 
 @Component({
     selector: 'app-glossary',
@@ -17,6 +21,8 @@ interface GlossaryTerm {
     templateUrl: './glossary.html',
     styleUrl: './glossary.css',
 })
+
+
 
 export class Glossary {
     searchTerm: string = '';

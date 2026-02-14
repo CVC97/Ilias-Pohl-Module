@@ -1,1 +1,14 @@
-<p>spring-constant works!</p>
+<div class="container">
+    <div class="card">
+        <div class="glossary-lamp">
+            <h1 class="glossary-lamp-title">Federkonstante</h1>
+            <p class="glossary-lamp-text" [innerHTML]="spring_constantText"></p>
+        </div>
+        <div class="glossary-write">
+            <p class="glossary-text" [innerHTML]="spring_constantFormulaText"></p>
+        </div>
+        <div class="mt-2">
+            <a routerLink="/glossary" class="btn">← Zurück zu den Begriffen</a>
+        </div>
+    </div>
+</div>

@@ -3,11 +3,15 @@ import { isPlatformBrowser } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
+
+
 declare global {
     interface Window {
         MathJax: any;
     }
 }
+
+
 
 @Component({
     selector: 'app-amplitude',
@@ -16,6 +20,8 @@ declare global {
     templateUrl: './amplitude.html',
     styleUrl: './amplitude.css',
 })
+
+
 
 export class Amplitude implements OnInit {
     amplitudeText!: SafeHtml;

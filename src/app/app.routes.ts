@@ -12,17 +12,19 @@ import { HomDgl } from './features/glossary_features/hom-dgl/hom-dgl';
 import { InhomDgl } from './features/glossary_features/inhom-dgl/inhom-dgl';
 import { AngularFrequency } from './features/glossary_features/angular-frequency/angular-frequency';
 
+
+
 export const routes: Routes = [
     { path: '', component: Home , title: 'Pohlsches Rad'},
     { path: 'glossary', component: Glossary , title: 'Pohlsches Rad - Begriffe'},
-    { path: 'amplitude', component: Amplitude, title: 'Amplitude'},
-	{ path: 'critical-damping', component: CriticalDamping, title: 'Aperiodischer Grenzfall'},
-	{ path: 'damping-coefficient', component: DampingCoefficient, title: 'Dämpungskoeffizient'},
-	{ path: 'angular-momentum', component: AngularMomentum, title: 'Drehmoment'},
-	{ path: 'natural-frequency', component: NaturalFrequency, title: 'Eigenschwingfrequenz'},
-	{ path: 'exponential-ansatz', component: ExponentialAnsatz, title: 'Exponentialansatz'},
-	{ path: 'spring-constant', component: SpringConstant, title: 'Federkonstante'},
-	{ path: 'hom-dgl', component: HomDgl, title: 'Homogene DGL'},
-	{ path: 'inhom-dgl', component: InhomDgl, title: 'Inhomogene DGL'},
-	{ path: 'angular-frequency', component: AngularFrequency, title: 'Kreisfrequenz'},
+    { path: 'glossary/amplitude', component: Amplitude, title: 'Amplitude'},
+	{ path: 'glossary/critical-damping', component: CriticalDamping, title: 'Aperiodischer Grenzfall'},
+	{ path: 'glossary/damping-coefficient', component: DampingCoefficient, title: 'Dämpungskoeffizient'},
+	{ path: 'glossary/angular-momentum', component: AngularMomentum, title: 'Drehmoment'},
+	{ path: 'glossary/natural-frequency', component: NaturalFrequency, title: 'Eigenschwingfrequenz'},
+	{ path: 'glossary/exponential-ansatz', component: ExponentialAnsatz, title: 'Exponentialansatz'},
+	{ path: 'glossary/spring-constant', component: SpringConstant, title: 'Federkonstante'},
+	{ path: 'glossary/hom-dgl', component: HomDgl, title: 'Homogene DGL'},
+	{ path: 'glossary/inhom-dgl', component: InhomDgl, title: 'Inhomogene DGL'},
+	{ path: 'glossary/angular-frequency', component: AngularFrequency, title: 'Kreisfrequenz'},
 ]

@@ -1,11 +1,253 @@
-/* You can add global styles to this file, and also import other style files */
+/* GLOBAL STYLES */
 
+/* University of Göttingen Color Palette */
+:root {
+    --uni-blau-1: rgb(21, 50, 104);
+    --uni-blau-2: rgb(0, 95, 155);
+    --uni-blau-3: rgb(0, 145, 200);
+    --uni-blau-4: rgb(80, 165, 210);
+    --uni-blau-chamois: rgb(234, 226, 216);
+	--altweiss: rgb(245, 243, 240);
+	--grau-90: rgb(59, 59, 58);
+    --grau-80: rgb(87, 87, 86);
+    --grau-60: rgb(135, 135, 134);
+	--grau-20: rgb(217, 218, 218);
+	--grau-10: rgb(236, 236, 237);
+    --physik-gelb: rgb(253, 166, 66);
+    --jura-rot: rgb(199, 13, 45);
+    --forst-gruen: rgb(37, 105, 81);
+    
+    /* Vibrant shiny blues */
+    --bright-blue: #2196F3;
+    --sky-blue: #03A9F4;
+    --electric-blue: #00BCD4;
+}
+
+/* Global Reset & Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: white;
+    color: var(--uni-blau-1);
+    line-height: 1.6;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+	text-align: justify;
+	font-size: 0.8rem;
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+    color: var(--uni-blau-1);
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+h1 {
+    font-size: 2rem;
+    color: var(--uni-blau-1);
+    padding-bottom: 0.5rem;
+}
+
+
+h2 {
+    font-size: 1.8rem;
+    color: var(--uni-blau-2);
+}
+
+/* Links */
 a {
-	color: blue;
-	text-decoration: underline;
-	cursor: pointer;
+    color: var(--uni-blau-2);
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    border-bottom: 2px solid transparent;
 }
 
 a:hover {
-	color: darkblue;
+    color: var(--uni-blau-2);
+    border-bottom: 2px solid var(--sky-blue);
 }
+
+/* Header */
+header {
+    background: var(--uni-blau-1);
+    color: white;
+    padding: 0.8rem 2rem;
+}
+
+.header-lines {
+    margin-top: 0.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.line {
+    height: 10px;
+    width: 100%;
+}
+
+.line-1 {
+    background: var(--uni-blau-3);
+}
+
+.line-2 {
+    background: var(--uni-blau-2);
+}
+
+.header-content {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.header-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 0.2rem;
+}
+
+.header-subtitle {
+    font-size: 1rem;
+    opacity: 0.9;
+    font-weight: 400;
+}
+
+/* Main content area */
+main {
+    flex: 1;
+    background: white;
+	/* background: rgb(44, 44, 44); */
+    display: flex;
+    flex-direction: column;
+}
+
+/* Container for page content */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+    width: 100%;
+}
+
+/* Card/Panel styling */
+.card {
+    background: rgba(255, 255, 255, 0.95);
+	/* background: rgb(99, 99, 99); */
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 8px 16px rgba(33, 150, 243, 0.2);
+    margin-bottom: 2rem;
+    border: 1px solid rgba(33, 150, 243, 0.1);
+}
+
+/* Buttons */
+.btn {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    background: var(--uni-blau-1);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(33, 150, 243, 0.3);
+	font-size: 1rem;
+}
+
+.btn:hover {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    background: var(--uni-blau-2);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(33, 150, 243, 0.3);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--uni-blau-2), var(--bright-blue));
+}
+
+.btn-secondary {
+    background: linear-gradient(135deg, var(--sky-blue), var(--electric-blue));
+}
+
+/* Navigation styles (for future nav bar) */
+nav {
+    background: linear-gradient(135deg, var(--uni-blau-1), var(--uni-blau-2));
+    padding: 1rem 2rem;
+    box-shadow: 0 4px 8px rgba(33, 150, 243, 0.2);
+}
+
+nav a {
+    color: white;
+    margin-right: 2rem;
+    border-bottom: 2px solid transparent;
+}
+
+nav a:hover {
+    border-bottom: 2px solid var(--sky-blue);
+}
+
+/* Footer */
+footer {
+    background: var(--uni-blau-2);
+    color: white;
+    padding: 1rem 2rem;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    font-size: 0.9rem;
+}
+
+.footer-department {
+    font-weight: 500;
+    opacity: 0.75;
+}
+
+.footer-info {
+	font-weight: 600;
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+}
+
+.footer-info span {
+    opacity: 0.75;
+}
+
+/* Utility classes */
+.text-center {
+    text-align: center;
+}
+
+.mt-1 { margin-top: 1rem; }
+.mt-2 { margin-top: 2rem; }
+.mb-1 { margin-bottom: 1rem; }
+.mb-2 { margin-bottom: 2rem; }

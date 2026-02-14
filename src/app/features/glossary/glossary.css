@@ -1,0 +1,75 @@
+.glossary-intro {
+    font-size: 1.1rem;
+    color: var(--grau-60);
+    margin-bottom: 2rem;
+}
+
+.search-box {
+    margin-bottom: 2rem;
+}
+
+.search-box input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    border: 2px solid var(--uni-blau-4);
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+
+.search-box input:focus {
+    outline: none;
+    border-color: var(--bright-blue);
+    box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.1);
+}
+
+.glossary-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.glossary-item {
+    padding: 1.5rem;
+    background: linear-gradient(135deg, #e3f2fd 0%, #f5f9ff 100%);
+    border-left: 4px solid var(--bright-blue);
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+
+.glossary-item:hover {
+    transform: translateX(5px);
+    box-shadow: 0 4px 12px rgba(33, 150, 243, 0.15);
+}
+
+.term-title {
+    font-size: 1.4rem;
+    color: var(--uni-blau-1);
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+.term-definition {
+    color: var(--uni-blau-1);
+    line-height: 1.7;
+    margin: 0;
+}
+
+/* adds a line which I don't like */
+/* .term-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+} */
+
+.term-link:hover {
+    border-bottom: none;
+}
+
+.glossary-item:has(.term-link) {
+    cursor: pointer;
+}
+
+.glossary-item:has(.term-link):hover {
+    background: linear-gradient(135deg, #d1e7fd 0%, #e8f4ff 100%);
+}

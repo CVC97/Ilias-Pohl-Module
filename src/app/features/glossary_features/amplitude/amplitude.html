@@ -1,0 +1,18 @@
+<div class="container">
+    <div class="card">
+        <div class="glossary-lamp">
+            <h1 class="glossary-lamp-title">Amplitude</h1>
+            <p class="glossary-lamp-text" [innerHTML]="amplitudeText"></p>
+        </div>
+        <div class="glossary-write">
+            <p class="glossary-text" [innerHTML]="amplitudeFormulaText"></p>
+        </div>
+        <div class="glossary-look">
+            <p class="glossary-text" [innerHTML]="amplitudePlotText"></p>
+            <img src="assets/images/amplitude_damping.png" alt="Amplitude-Frequenz-Diagramm" class="plot-image">
+        </div>
+        <div class="mt-2">
+            <a routerLink="/glossary" class="btn">← Zurück zu den Begriffen</a>
+        </div>
+    </div>
+</div>

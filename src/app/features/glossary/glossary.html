@@ -1,1 +1,32 @@
-<p>glossary works!</p>
+<div class="container">
+    <div class="card">
+        <!-- <h1>Glossar</h1> -->
+        <p class="glossary-intro">Wichtige Begriffe zum Pohlschen Rad und harmonischen Schwingungen</p>
+        
+        <div class="search-box">
+            <input 
+                type="text" 
+                placeholder="Begriff suchen..." 
+                [(ngModel)]="searchTerm"
+                (input)="filterTerms()"
+            >
+        </div>
+
+        <div class="glossary-list">
+            <div class="glossary-item" *ngFor="let term of filteredTerms">
+                <a [routerLink]="term.link" class="term-link" *ngIf="term.link">
+                    <h2 class="term-title">{{ term.title }}</h2>
+                    <p class="term-definition">{{ term.definition }}</p>
+                </a>
+                <div *ngIf="!term.link">
+                    <h2 class="term-title">{{ term.title }}</h2>
+                    <p class="term-definition">{{ term.definition }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-2">
+            <a routerLink="/" class="btn">← Zurück zur Startseite</a>
+        </div>
+    </div>
+</div>

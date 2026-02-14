@@ -20,13 +20,12 @@
             "browser": "src/main.ts",
             "tsConfig": "tsconfig.app.json",
             "assets": [
-              {
-                "glob": "**/*",
-                "input": "public"
-              }
+              "src/assets/pohl_icon.svg",
+              "src/assets"
             ],
             "styles": [
-              "src/styles.css"
+              "src/styles.css",
+              "src/styles_glossary.css"
             ],
             "server": "src/main.server.ts",
             "outputMode": "server",

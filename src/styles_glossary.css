@@ -36,6 +36,7 @@
     border-radius: 12px;
     padding: 2rem;
     box-shadow: 0 8px 16px rgba(33, 150, 243, 0.2);
+    margin-top: 2rem;
     margin-bottom: 2rem;
     border: 2px solid var(--grau-80);
 }

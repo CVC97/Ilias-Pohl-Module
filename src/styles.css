@@ -79,50 +79,6 @@ a:hover {
     border-bottom: 2px solid var(--sky-blue);
 }
 
-/* Header */
-header {
-    background: var(--uni-blau-1);
-    color: white;
-    padding: 0.8rem 2rem;
-}
-
-.header-lines {
-    margin-top: 0.25rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-}
-
-.line {
-    height: 10px;
-    width: 100%;
-}
-
-.line-1 {
-    background: var(--uni-blau-3);
-}
-
-.line-2 {
-    background: var(--uni-blau-2);
-}
-
-.header-content {
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-.header-title {
-    font-size: 1.3rem;
-    font-weight: 600;
-    margin-bottom: 0.2rem;
-}
-
-.header-subtitle {
-    font-size: 1rem;
-    opacity: 0.9;
-    font-weight: 400;
-}
-
 /* Main content area */
 main {
     flex: 1;
@@ -140,21 +96,36 @@ main {
     width: 100%;
 }
 
-/* Card/Panel styling */
+/* panel styling */
 .card {
     background: rgba(255, 255, 255, 0.95);
 	/* background: rgb(99, 99, 99); */
     border-radius: 12px;
     padding: 2rem;
     box-shadow: 0 8px 16px rgba(33, 150, 243, 0.2);
-    margin-bottom: 2rem;
+    margin-bottom: 4rem;
     border: 1px solid rgba(33, 150, 243, 0.1);
+}
+
+/* container for buttons */
+.button-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* individual button placed pn the right side */
+.button-container-right {
+    display: flex;
+    justify-content: flex-end;
 }
 
 /* Buttons */
 .btn {
     display: inline-block;
     padding: 0.75rem 1.5rem;
+    width: 25rem;
+    text-align: center;
     background: var(--uni-blau-1);
     color: white;
     border: none;
@@ -202,44 +173,6 @@ nav a {
 
 nav a:hover {
     border-bottom: 2px solid var(--sky-blue);
-}
-
-/* Footer */
-footer {
-    background: var(--uni-blau-2);
-    color: white;
-    padding: 1rem 2rem;
-    position: fixed;
-    left: 0;
-    bottom: 0;
-    width: 100%;
-}
-
-.footer-content {
-    max-width: 1200px;
-    margin: 0 auto;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 1rem;
-    font-size: 0.9rem;
-}
-
-.footer-department {
-    font-weight: 500;
-    opacity: 0.75;
-}
-
-.footer-info {
-	font-weight: 600;
-    display: flex;
-    gap: 2rem;
-    align-items: center;
-}
-
-.footer-info span {
-    opacity: 0.75;
 }
 
 /* Utility classes */

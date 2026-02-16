@@ -1,0 +1,43 @@
+/* Header */
+header {
+    background: var(--uni-blau-1);
+    color: white;
+    padding: 0.8rem 2rem;
+}
+
+.header-lines {
+    margin-top: 0.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.line {
+    height: 10px;
+    width: 100%;
+}
+
+.line-1 {
+    background: var(--uni-blau-3);
+}
+
+.line-2 {
+    background: var(--uni-blau-2);
+}
+
+.header-content {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.header-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 0.2rem;
+}
+
+.header-subtitle {
+    font-size: 1rem;
+    opacity: 0.9;
+    font-weight: 400;
+}

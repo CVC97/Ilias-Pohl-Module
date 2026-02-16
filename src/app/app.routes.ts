@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { Home } from './features/home/home';
 import { Glossary } from './features/glossary/glossary';
+
 import { Amplitude } from './features/glossary_features/amplitude/amplitude';
 import { CriticalDamping } from './features/glossary_features/critical-damping/critical-damping';
 import { DampingCoefficient } from './features/glossary_features/damping-coefficient/damping-coefficient';
@@ -12,6 +13,7 @@ import { HomDgl } from './features/glossary_features/hom-dgl/hom-dgl';
 import { InhomDgl } from './features/glossary_features/inhom-dgl/inhom-dgl';
 import { AngularFrequency } from './features/glossary_features/angular-frequency/angular-frequency';
 
+import { IntroExperiment } from './features/learning_features/intro-experiment/intro-experiment';
 
 
 export const routes: Routes = [
@@ -27,4 +29,5 @@ export const routes: Routes = [
 	{ path: 'glossary/hom-dgl', component: HomDgl, title: 'Homogene DGL'},
 	{ path: 'glossary/inhom-dgl', component: InhomDgl, title: 'Inhomogene DGL'},
 	{ path: 'glossary/angular-frequency', component: AngularFrequency, title: 'Kreisfrequenz'},
+	{ path: 'experiment/intro', component: IntroExperiment, title: 'Einstieg Versuchsaufbau'},
 ]

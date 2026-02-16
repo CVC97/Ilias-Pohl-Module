@@ -1,0 +1,74 @@
+.sub-navigation {
+    display: flex;
+    gap: 0rem;
+    margin-bottom: 2rem;
+    border-bottom: 2px solid var(--uni-blau-4);
+}
+
+.sub-nav-btn {
+    flex: 1;  /* Each button takes equal space (1/3) */
+    padding: 1rem 2rem;
+    background: transparent;
+    border: none;
+    color: var(--uni-blau-1);
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -2px;
+}
+
+.sub-nav-btn:hover {
+    color: var(--bright-blue);
+}
+
+.sub-nav-btn.active {
+    color: var(--bright-blue);
+    border-bottom-color: var(--bright-blue);
+}
+
+.sub-content {
+    min-height: 400px;
+}
+
+.sub-content {
+    min-height: 400px;
+    position: relative;
+}
+
+.card {
+    animation: slideIn 0.3s ease-in-out;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.full-width-image-container {
+    margin: 2rem 0;
+}
+
+.full-width-image {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(33, 150, 243, 0.2);
+}
+
+.image-description {
+    margin-top: 1rem;
+    font-size: 1rem;
+    color: var(--uni-blau-1);
+    line-height: 1.7;
+    text-align: center;  /* or left, depending on your preference */
+    font-style: italic;  /* optional - makes it look more like a caption */
+}

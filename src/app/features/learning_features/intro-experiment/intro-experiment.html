@@ -1,22 +1,14 @@
 <div class="container">
     <div class="card">
-        <h1>Einstieg Versuchsaufbau</h1>
+        <h1>
+            Einstieg Versuchsaufbau 
+            <span *ngIf="currentView === 'intro_exp1'">(1/3)</span>
+            <span *ngIf="currentView === 'intro_exp2'">(2/3)</span>
+            <span *ngIf="currentView === 'intro_exp3'">(3/3)</span>
+        </h1>
         
-        <!-- navigation tabs -->
-        <div class="sub-navigation">
-            <button (click)="currentView = 'intro_exp1'" [class.active] = "currentView === 'intro_exp1'" class = "sub-nav-btn">
-                (1/3)
-            </button>
-            <button (click)="currentView = 'intro_exp2'" [class.active] = "currentView === 'intro_exp2'" class = "sub-nav-btn">
-                (2/3)
-            </button>
-            <button (click)="currentView = 'intro_exp3'" [class.active] = "currentView === 'intro_exp3'" class = "sub-nav-btn">
-                (3/3)
-            </button>
-        </div>
-        
-        <!-- content sections -->
-        <div class="sub-content">
+        <!-- Content sections -->
+        <div class="content">
             <div *ngIf="currentView === 'intro_exp1'">
                 <p>
                     In diesem Versuch werden Sie Schwingungsphänomene (gedämpfte und getriebene Schwingungen) untersuchen und sich die Zusammenhänge 
@@ -55,93 +47,90 @@
                     Am anderen Ende ist die Feder über den Anreger mit dem Schrittmotor verbunden. 
                     Ohne externen Antrieb dient der Anreger als fester Ankerpunkt der Feder (vergleichbar zu dem Aufhängungspunkt einer "klassischen" Feder). 
                 </p>
-                <!-- first evaluation container: Schwungrad -->
-                <div class="evaluation-container  evaluation-container-1">
-                    <!-- left side: image -->
+                
+                <!-- First evaluation container: Schwungrad -->
+                <div class="evaluation-container evaluation-container-1" [class.disabled]="isCorrect1">
                     <div class="evaluation-image">
                         <img src="assets/images/schwungrad_2.png" alt="Schwungrad">
                     </div>
                     
-                    <!-- right side: question and answers -->
                     <div class="evaluation-content">
                         <h3 class="evaluation-question">Welche der Aussagen in Bezug auf das Schwungrad sind richtig?</h3>
                         
                         <div class="evaluation-options">
                             <label class="evaluation-option">
-                                <input type="checkbox" name="element1" value="answer1">
+                                <input type="checkbox" name="element1" value="answer1" [disabled]="isCorrect1">
                                 <span>Das Schwungrad setzt das System in Bewegung.</span>
                             </label>
                             
                             <label class="evaluation-option">
-                                <input type="checkbox" name="element2" value="answer2">
+                                <input type="checkbox" name="element2" value="answer2" [disabled]="isCorrect1">
                                 <span> Die Form des Schwungkörpers beeinträchtigt den Versuch. Nur durch die zylinderförmige Form ist eine harmonische Bewegung möglich</span>
                             </label>
                             
                             <label class="evaluation-option">
-                                <input type="checkbox" name="element3" value="answer3">
+                                <input type="checkbox" name="element3" value="answer3" [disabled]="isCorrect1">
                                 <span>Solange der Schwungkörper sich um seinen Schwerpunkt dreht, spielt die exakte Form keine Rolle.</span>
                             </label>
                             
                             <label class="evaluation-option">
-                                <input type="checkbox" name="element4" value="answer4">
+                                <input type="checkbox" name="element4" value="answer4" [disabled]="isCorrect1">
                                 <span>Das Schwungrad dient als träger Körper, dessen Bewegung untersucht wird.</span>
                             </label>
                         </div>
                         
-                        <button class="btn evaluation-submit-btn" (click)="evaluateAnswer1()">Auswerten</button>
+                        <button class="btn evaluation-submit-btn" (click)="evaluateAnswer1()" [disabled]="isCorrect1">
+                            Auswerten
+                        </button>
                         
-                        <!-- Result box (hidden initially) -->
                         <div class="evaluation-result" [class.show]="showResult1" [class.correct]="isCorrect1" [class.incorrect]="!isCorrect1">
                             <p [innerHTML]="resultMessage1"></p>
                         </div>
                     </div>
                 </div>
 
-                <!-- second evaluation container: Feder -->
-                <div class="evaluation-container evaluation-container-2">
-                    <!-- left side: image -->
+                <!-- Second evaluation container: Feder -->
+                <div class="evaluation-container evaluation-container-2" [class.disabled]="isCorrect2">
                     <div class="evaluation-image">
                         <img src="assets/images/feder_2.png" alt="Feder">
                     </div>
                     
-                    <!-- right side: question and answers -->
                     <div class="evaluation-content">
                         <h3 class="evaluation-question">Welche Aussage über die Feder ist korrekt?</h3>
                         
                         <div class="evaluation-options">
                             <label class="evaluation-option">
-                                <input type="checkbox" name="element1" value="answer1">
+                                <input type="checkbox" name="element1" value="answer1" [disabled]="isCorrect2">
                                 <span>Die Feder ist für den Versuch nur notwendig, wenn man auch den externen Antrieb verwendet.</span>
                             </label>
                             
                             <label class="evaluation-option">
-                                <input type="checkbox" name="element2" value="answer2">
+                                <input type="checkbox" name="element2" value="answer2" [disabled]="isCorrect2">
                                 <span>Die Feder sorgt für ein rücktreibendes Drehmoment.</span>
                             </label>
                             
                             <label class="evaluation-option">
-                                <input type="checkbox" name="element3" value="answer3">
+                                <input type="checkbox" name="element3" value="answer3" [disabled]="isCorrect2">
                                 <span>Die Feder führt zu kontinuierlichen Dämpfung des Schwungrads.</span>
                             </label>
                         </div>
                         
-                        <button class="btn evaluation-submit-btn" (click)="evaluateAnswer2()">Auswerten</button>
+                        <button class="btn evaluation-submit-btn" (click)="evaluateAnswer2()" [disabled]="isCorrect2">
+                            Auswerten
+                        </button>
                         
-                        <!-- Result box (hidden initially) -->
                         <div class="evaluation-result" [class.show]="showResult2" [class.correct]="isCorrect2" [class.incorrect]="!isCorrect2">
                             <p [innerHTML]="resultMessage2"></p>
                         </div>
                     </div>
                 </div>  
 
-                <!-- third evaluation container: Wirbelstrombremse -->
-                <div class="evaluation-container evaluation-container-3">
-                    <!-- left side: image -->
+                <!-- Third evaluation container: Wirbelstrombremse -->
+                <div class="evaluation-container evaluation-container-3" [class.disabled]="isCorrect3">
                     <div class="evaluation-image">
                         <img src="assets/images/wirbelstrombremse_2.png" alt="Wirbelstrombremse">
                     </div>
                     
-                    <!-- right side: question and answers -->
                     <div class="evaluation-content">
                         <h3 class="evaluation-question">Zur Dämpfung wird in diesem Versuchsaufbau ein Magnet verwendet, 
                             der so verschoben werden kann, dass er das Rad (mit Abstand, also nicht wie eine Scheibenbremse) umschließt.
@@ -149,24 +138,25 @@
                         
                         <div class="evaluation-options">
                             <label class="evaluation-option">
-                                <input type="checkbox" name="element1" value="answer1">
+                                <input type="checkbox" name="element1" value="answer1" [disabled]="isCorrect3">
                                 <span>Ohne die Wirbelstrombremse würde das Schwungrad unendlich lange weiterschwingen.</span>
                             </label>
                             
                             <label class="evaluation-option">
-                                <input type="checkbox" name="element2" value="answer2">
+                                <input type="checkbox" name="element2" value="answer2" [disabled]="isCorrect3">
                                 <span>Das Material des Schwungrads bedingt die Wirkung der Wirbelstrombremse.</span>
                             </label>
                             
                             <label class="evaluation-option">
-                                <input type="checkbox" name="element3" value="answer3">
+                                <input type="checkbox" name="element3" value="answer3" [disabled]="isCorrect3">
                                 <span>Die Wirbelstrombremse ist direkt von der Auslenkung des Schwungrads abhängig..</span>
                             </label>
                         </div>
                         
-                        <button class="btn evaluation-submit-btn" (click)="evaluateAnswer3()">Auswerten</button>
+                        <button class="btn evaluation-submit-btn" (click)="evaluateAnswer3()" [disabled]="isCorrect3">
+                            Auswerten
+                        </button>
                         
-                        <!-- Result box (hidden initially) -->
                         <div class="evaluation-result" [class.show]="showResult3" [class.correct]="isCorrect3" [class.incorrect]="!isCorrect3">
                             <p [innerHTML]="resultMessage3"></p>
                         </div>
@@ -175,7 +165,16 @@
             </div>
 
             <div *ngIf="currentView === 'intro_exp3'">
-                <p [innerHTML]="introExperimentText"></p>
+                <!-- Horizontal layout: text + image -->
+                <div class="text-image-container">
+                    <div class="image-content">
+                        <img src="assets/images/schwungrad_3.png" alt="Schwungrad mit Massestück" loading="lazy">
+                    </div>
+                    <div class="text-content">
+                        <p [innerHTML]="introExperimentText"></p>
+                    </div>
+                </div>
+                
                 <div class="evaluation-container evaluation-container-4">
 
                 </div>
@@ -189,6 +188,16 @@
                     Daher setzen Sie sich auf den folgenden Seiten zunächst mit der Dynamik des gedämpften Systems auseinander, bevor Sie sich mit der Auswirkung des externen Motors beschäftigen.
                 </p>
             </div>
+        </div>
+
+        <!-- Forward button - bottom right, conditionally enabled -->
+        <div class="button-container">
+            <button class="btn" (click)="goBack()">
+                {{ isFirstPage ? '← Zurück zur Startseite' : '← Zurück' }}
+            </button>
+            <button class="btn" (click)="goForward()" [disabled]="!canProceed">
+                Weiter →
+            </button>
         </div>
     </div>
 </div>

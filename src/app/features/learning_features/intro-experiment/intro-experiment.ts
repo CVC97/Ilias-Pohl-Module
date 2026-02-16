@@ -1,7 +1,7 @@
 import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 
@@ -11,6 +11,7 @@ declare global {
         MathJax: any;
     }
 }
+
 
 
 @Component({
@@ -26,21 +27,16 @@ declare global {
 export class IntroExperiment implements OnInit {
     introExperimentText!: SafeHtml;
 
+    // Navigation state
+    currentView: string = 'intro_exp1';
 
-    private _currentView: string = 'intro_exp1';
-    
-    get currentView(): string {
-        return this._currentView;
-    }
-    
-    set currentView(value: string) {
-        this._currentView = value;
-        // Render math after view changes
-        if (value === 'intro_exp3') {
-            setTimeout(() => this.renderMath(), 150);
-        }
-    }
-    
+    // Page completion tracking
+    page1Complete = true;
+    // page2Complete = false;
+    // page3Complete = false;
+    // everything true for development purposes
+    page2Complete = true;
+    page3Complete = true;
 
     // QA 1 state (Schwungrad)
     showResult1 = false;
@@ -63,9 +59,9 @@ export class IntroExperiment implements OnInit {
 
     constructor(
         private sanitizer: DomSanitizer,
-        @Inject(PLATFORM_ID) private platformId: Object
+        @Inject(PLATFORM_ID) private platformId: Object,
+        private router: Router
     ) {}
-
 
 
     ngOnInit() {
@@ -82,8 +78,6 @@ export class IntroExperiment implements OnInit {
             Im stationären Fall gleichen sich das zusätzliche Drehmoment und das rücktreibende Drehmoment der 
             Feder aus: $(M_{\\text{Feder}} = -D\\varphi)$.
         `);
-
-
     }
 
 
@@ -94,11 +88,60 @@ export class IntroExperiment implements OnInit {
                 if (window.MathJax) {
                     window.MathJax.typesetPromise();
                 }
-            });
+            }, 100);
         }
     }
 
 
+    // Navigation helpers
+    get isFirstPage(): boolean {
+        return this.currentView === 'intro_exp1';
+    }
+
+
+    get canProceed(): boolean {
+        if (this.currentView === 'intro_exp1') return this.page1Complete;
+        if (this.currentView === 'intro_exp2') return this.page2Complete;
+        if (this.currentView === 'intro_exp3') return this.page3Complete;
+        return false;
+    }
+
+
+    get canGoBack(): boolean {
+        return true; // Always can go back (page 1 goes to home)
+    }
+
+
+    goBack() {
+        if (this.currentView === 'intro_exp1') {
+            this.router.navigate(['/']);
+        } else if (this.currentView === 'intro_exp2') {
+            this.currentView = 'intro_exp1';
+            this.renderMath();
+        } else if (this.currentView === 'intro_exp3') {
+            this.currentView = 'intro_exp2';
+            this.renderMath();
+        }
+    }
+
+    goForward() {
+        if (this.canProceed) {
+            if (this.currentView === 'intro_exp1') {
+                this.currentView = 'intro_exp2';
+            } else if (this.currentView === 'intro_exp2') {
+                this.currentView = 'intro_exp3';
+            }
+            // Add future navigation here for page 3
+            this.renderMath();
+        }
+    }
+
+
+    // Check if page 2 is complete (all 3 questions correct)
+    updatePage2Completion() {
+        this.page2Complete = this.isCorrect1 && this.isCorrect2 && this.isCorrect3;
+        // this.page2Complete = true;
+    }
 
 
     // QA 1 evaluation (Schwungrad)
@@ -149,10 +192,9 @@ export class IntroExperiment implements OnInit {
             }
         }
 
+        this.updatePage2Completion();
         this.renderMath();
     }
-
-
 
     // QA 2 evaluation (Feder)
     evaluateAnswer2() {
@@ -197,10 +239,9 @@ export class IntroExperiment implements OnInit {
             }
         }
 
+        this.updatePage2Completion();
         this.renderMath();
     }
-
-
 
     // QA 3 evaluation (Wirbelstrombremse)
     evaluateAnswer3() {
@@ -230,8 +271,8 @@ export class IntroExperiment implements OnInit {
                 Die Wirbelstrombremse funktioniert über das Prinzip der Induktion --- je nach Stärke des Magnetfeldes der 
                 Wirbelstrombremse wird das Schwungrad stärker abgedämpft in seiner Bewegung. 
                 Die Dämpfung ist hierbei linear zur Bewegungsgeschwindigkeit des Rads durch das Magnetfeld. Die Wirbelstrombremse bewirkt also ein bremsendes Moment
-                $$M=-\\rho\\varphi,$$
-                wobei $\\rho$ der Reibungskoeffizient und $\\varphi$ die Winkelgeschwindigkeit sind.<br><br>
+                $$M=-\\rho\\dot{\\varphi},$$
+                wobei $\\rho$ der Reibungskoeffizient und $\\dot{\\varphi}$ die Winkelgeschwindigkeit sind.<br><br>
                 Im Versuch ist die Wirbelstrombremse durch einen Magneten realisiert. 
                 Sie können die Dämpfung des Rades variieren, indem Sie den Magneten weiter über das Rad schieben. 
                 Je größer der Bereich der Rads, den das Magnetfeld beeinträchtigt, desto stärker ist die dämpfende Wirkung.<br><br>
@@ -252,6 +293,7 @@ export class IntroExperiment implements OnInit {
             }
         }
 
+        this.updatePage2Completion();
         this.renderMath();
     }
 }

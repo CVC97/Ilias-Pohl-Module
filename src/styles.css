@@ -103,12 +103,13 @@ main {
     border-radius: 12px;
     padding: 2rem;
     box-shadow: 0 8px 16px rgba(33, 150, 243, 0.2);
-    margin-bottom: 4rem;
+    margin-bottom: 8rem;
     border: 1px solid rgba(33, 150, 243, 0.1);
 }
 
 /* container for buttons */
 .button-container {
+    margin-top: 2rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -118,6 +119,7 @@ main {
 .button-container-right {
     display: flex;
     justify-content: flex-end;
+    /* align-items: right; */
 }
 
 /* Buttons */
@@ -150,6 +152,12 @@ main {
     box-shadow: 0 4px 12px rgba(33, 150, 243, 0.3);
 }
 
+.btn:disabled {
+    background: var(--grau-60);
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
 .btn-primary {
     background: linear-gradient(135deg, var(--uni-blau-2), var(--bright-blue));
 }
@@ -179,8 +187,3 @@ nav a:hover {
 .text-center {
     text-align: center;
 }
-
-.mt-1 { margin-top: 1rem; }
-.mt-2 { margin-top: 2rem; }
-.mb-1 { margin-bottom: 1rem; }
-.mb-2 { margin-bottom: 2rem; }

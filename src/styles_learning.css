@@ -142,3 +142,18 @@
         max-width: 100%;
     }
 }
+
+/* Disabled evaluation container */
+.evaluation-container.disabled {
+    opacity: 0.7;
+    background: var(--grau-10);
+    pointer-events: none;
+}
+
+.evaluation-container.disabled .evaluation-option {
+    background: var(--grau-20);
+}
+
+.evaluation-container.disabled input[type="checkbox"]:disabled {
+    cursor: not-allowed;
+}

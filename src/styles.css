@@ -123,20 +123,35 @@ main {
 }
 
 /* Buttons */
-.btn {
+.btn,
+a.btn,
+button.btn {
+    /* Layout */
     display: inline-block;
-    padding: 0.75rem 1.5rem;
+    box-sizing: border-box;
+    
+    /* Size */
     width: 25rem;
+    padding: 0.75rem 1.5rem;
+    
+    /* Typography */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.5;
     text-align: center;
-    background: var(--uni-blau-1);
+    text-decoration: none;
     color: white;
+    
+    /* Appearance */
+    background: var(--uni-blau-1);
     border: none;
     border-radius: 6px;
-    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(33, 150, 243, 0.3);
+    
+    /* Interaction */
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 12px rgba(33, 150, 243, 0.3);
-	font-size: 1rem;
 }
 
 .btn:hover {

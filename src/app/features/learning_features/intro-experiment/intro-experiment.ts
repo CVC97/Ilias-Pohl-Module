@@ -27,10 +27,10 @@ declare global {
 export class IntroExperiment implements OnInit {
     introExperimentText!: SafeHtml;
 
-    // Navigation state
+    // navigation state
     currentView: string = 'intro_exp1';
 
-    // Page completion tracking
+    // page completion tracking
     page1Complete = true;
     // page2Complete = false;
     // page3Complete = false;
@@ -88,7 +88,7 @@ export class IntroExperiment implements OnInit {
                 if (window.MathJax) {
                     window.MathJax.typesetPromise();
                 }
-            }, 100);
+            });
         }
     }
 
@@ -99,6 +99,7 @@ export class IntroExperiment implements OnInit {
     }
 
 
+    // ability to proceed in the module: depending on the Q+A performance (all questions have to be answered)
     get canProceed(): boolean {
         if (this.currentView === 'intro_exp1') return this.page1Complete;
         if (this.currentView === 'intro_exp2') return this.page2Complete;
@@ -107,11 +108,13 @@ export class IntroExperiment implements OnInit {
     }
 
 
+    // going back always enabled (for now at least)
     get canGoBack(): boolean {
-        return true; // Always can go back (page 1 goes to home)
+        return true;
     }
 
 
+    // going back shows the previous subpage / home page
     goBack() {
         if (this.currentView === 'intro_exp1') {
             this.router.navigate(['/']);
@@ -124,6 +127,8 @@ export class IntroExperiment implements OnInit {
         }
     }
 
+
+    // go forward shows next subpage / page
     goForward() {
         if (this.canProceed) {
             if (this.currentView === 'intro_exp1') {
@@ -131,7 +136,7 @@ export class IntroExperiment implements OnInit {
             } else if (this.currentView === 'intro_exp2') {
                 this.currentView = 'intro_exp3';
             }
-            // Add future navigation here for page 3
+            // nothing implemented beyond (3/3 so far)
             this.renderMath();
         }
     }
@@ -155,9 +160,11 @@ export class IntroExperiment implements OnInit {
             }
         });
 
+        // all correct answers selected: iterates through all correct answer and checks whether they are selected
         const allCorrectSelected = this.correctAnswers1.every(answer => 
             selectedAnswers.includes(answer)
         );
+        // all correct answers selected: iterates through all selected answers and checks whether they are correct
         const noIncorrectSelected = selectedAnswers.every(answer => 
             this.correctAnswers1.includes(answer)
         );

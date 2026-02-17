@@ -16,7 +16,7 @@
                     Machen Sie sich hier zunächst mit dem Versuchsaufbau vertraut. 
                 </p>
                 <div class="full-width-image-container">
-                    <img src="assets/images/experiment_schematic_1.png" alt="Versuchsaufbau" class="full-width-image" loading="lazy">
+                    <img src="assets/images/experiment_schematic_1.png" alt="Versuchsaufbau" class="full-width-image">
                     <p class="image-description">
                         Vergleichendes Bild Aufbau und Skizze des Versuchsaufbaus
                     </p>
@@ -33,7 +33,7 @@
             
             <div *ngIf="currentView === 'intro_exp2'">
                 <div class="full-width-image-container">
-                    <img src="assets/images/experiment_schematic_2.png" alt="Versuchsaufbau" class="full-width-image" loading="lazy">
+                    <img src="assets/images/experiment_schematic_2.png" alt="Versuchsaufbau" class="full-width-image">
                 </div>
                 <p>
                     Aus physikalischer Sicht essentielle Elemente des Versuchsaufbaus sind das Schwungrad, die Feder, die Wirbelstrombremse und der Anreger.<br><br>
@@ -168,7 +168,7 @@
                 <!-- Horizontal layout: text + image -->
                 <div class="text-image-container">
                     <div class="image-content">
-                        <img src="assets/images/schwungrad_3.png" alt="Schwungrad mit Massestück" loading="lazy">
+                        <img src="assets/images/schwungrad_3.png" alt="Schwungrad mit Massestück">
                     </div>
                     <div class="text-content">
                         <p [innerHTML]="introExperimentText"></p>
@@ -192,9 +192,11 @@
 
         <!-- Forward button - bottom right, conditionally enabled -->
         <div class="button-container">
-            <button class="btn" (click)="goBack()">
-                {{ isFirstPage ? '← Zurück zur Startseite' : '← Zurück' }}
-            </button>
+            <!-- a for links -->
+            <a *ngIf="isFirstPage" routerLink="/" class="btn">← Zurück zur Startseite</a>
+            <!-- button for actions -->
+            <button *ngIf="!isFirstPage" class="btn" (click)="goBack()">← Zurück</button>
+            
             <button class="btn" (click)="goForward()" [disabled]="!canProceed">
                 Weiter →
             </button>

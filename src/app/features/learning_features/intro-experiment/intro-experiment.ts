@@ -3,7 +3,8 @@ import { isPlatformBrowser } from '@angular/common';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { Evaluation } from '../../../shared/evaluation/evaluation';
+import { MultipleChoiceImage } from '../../../shared/evaluation/multiple-choice-image/multiple-choice-image';
+import { MultipleChoice } from '../../../shared/evaluation/multiple-choice/multiple-choice';
 
 
 
@@ -18,7 +19,7 @@ declare global {
 @Component({
 	selector: 'app-intro-experiment',
     standalone: true,
-    imports: [CommonModule, RouterLink, Evaluation],
+    imports: [CommonModule, RouterLink, MultipleChoiceImage, MultipleChoice],
     templateUrl: './intro-experiment.html',
     styleUrl: './intro-experiment.css',
 })

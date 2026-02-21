@@ -3,25 +3,24 @@ import { CommonModule } from '@angular/common';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 
-
 interface QuestionOption {
-    value: string;
-    label: string;
+	value: string;
+	label: string;
 }
 
 
 
 @Component({
-    selector: 'app-evaluation',
-    standalone: true,
-    imports: [CommonModule],
-    templateUrl: './evaluation.html',
-    styleUrl: './evaluation.css'
+	selector: 'app-multiple-choice-image',
+	standalone: true,
+	imports: [CommonModule],
+	templateUrl: './multiple-choice-image.html',
+	styleUrl: './multiple-choice-image.css',
 })
 
 
 
-export class Evaluation implements OnInit {
+export class MultipleChoiceImage implements OnInit {
     @Input() imageSrc!: string;
     @Input() imageAlt!: string;
     @Input() question!: string;

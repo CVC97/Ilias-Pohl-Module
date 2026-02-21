@@ -49,7 +49,7 @@
                 </p>
                 
                 <!-- first evaluation container: Schwungrad -->
-                <app-evaluation
+                <app-multiple-choice-image
                     [imageSrc]="question1.imageSrc"
                     [imageAlt]="question1.imageAlt"
                     [question]="question1.question"
@@ -60,10 +60,10 @@
                     [incompleteMessage]="question1.incompleteMessage"
                     [incorrectMessage]="question1.incorrectMessage"
                     (onAnswerEvaluated)="onQuestion1Answered($event)">
-                </app-evaluation>
+                </app-multiple-choice-image>
 
                 <!-- second evaluation container: Feder -->
-                <app-evaluation
+                <app-multiple-choice-image
                     [imageSrc]="question2.imageSrc"
                     [imageAlt]="question2.imageAlt"
                     [question]="question2.question"
@@ -74,10 +74,10 @@
                     [incompleteMessage]="question2.incompleteMessage"
                     [incorrectMessage]="question2.incorrectMessage"
                     (onAnswerEvaluated)="onQuestion2Answered($event)">
-                </app-evaluation>
+                </app-multiple-choice-image>
 
                 <!-- third evaluation container: Wirbelstrombremse -->
-                <app-evaluation
+                <app-multiple-choice-image
                     [imageSrc]="question3.imageSrc"
                     [imageAlt]="question3.imageAlt"
                     [question]="question3.question"
@@ -88,7 +88,7 @@
                     [incompleteMessage]="question3.incompleteMessage"
                     [incorrectMessage]="question3.incorrectMessage"
                     (onAnswerEvaluated)="onQuestion3Answered($event)">
-                </app-evaluation>
+                </app-multiple-choice-image>
             </div>
 
             <div *ngIf="currentView === 'intro_exp3'">

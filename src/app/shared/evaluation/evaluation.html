@@ -1,0 +1,31 @@
+<div class="evaluation-container" [class]="containerId" [class.disabled]="isCorrect">
+    <div class="evaluation-image">
+        <img [src]="imageSrc" [alt]="imageAlt">
+    </div>
+    
+    <div class="evaluation-content">
+        <h3 class="evaluation-question">{{ question }}</h3>
+        
+        <div class="evaluation-options">
+            <label class="evaluation-option" *ngFor="let option of options; let i = index">
+                <input 
+                    type="checkbox" 
+                    [name]="'element' + (i+1)" 
+                    [value]="option.value"
+                    [disabled]="isCorrect">
+                <span>{{ option.label }}</span>
+            </label>
+        </div>
+        
+        <button class="btn evaluation-submit-btn" (click)="evaluateAnswer()" [disabled]="isCorrect">
+            Auswerten
+        </button>
+        
+        <div class="evaluation-result" 
+             [class.show]="showResult" 
+             [class.correct]="isCorrect" 
+             [class.incorrect]="!isCorrect">
+            <p [innerHTML]="resultMessage"></p>
+        </div>
+    </div>
+</div>

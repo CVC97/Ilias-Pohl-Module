@@ -76,9 +76,10 @@ export class Analytics {
             this.currentVisit.duration_s = this.currentVisit.duration / 1000;
             this.visits.push({ ...this.currentVisit });
             
-            console.log('Page visit ended:', this.currentVisit);
-            console.log('Duration: ' + this.currentVisit.duration_s + ' seconds (' + this.currentVisit.duration + 'ms)');
-            console.log('All visits so far:', this.visits);
+            console.log('Page visit ended in: ' +  this.currentVisit.duration_s + ' seconds');
+            console.log('PATHLOG: ', this.currentVisit);
+            // console.log('RESLOG: ')
+            console.log('All visits so far: ', this.visits);
             
             this.currentVisit = null;
             

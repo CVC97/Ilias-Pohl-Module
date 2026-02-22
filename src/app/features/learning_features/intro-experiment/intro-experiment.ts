@@ -5,6 +5,8 @@ import { Router, RouterLink } from '@angular/router';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { MultipleChoiceImage } from '../../../shared/evaluation/multiple-choice-image/multiple-choice-image';
 import { MultipleChoice } from '../../../shared/evaluation/multiple-choice/multiple-choice';
+import { ImageChoice } from '../../../shared/evaluation/image-choice/image-choice';
+import { IncomingMessage } from 'http';
 
 
 
@@ -19,7 +21,7 @@ declare global {
 @Component({
 	selector: 'app-intro-experiment',
     standalone: true,
-    imports: [CommonModule, RouterLink, MultipleChoiceImage, MultipleChoice],
+    imports: [CommonModule, RouterLink, MultipleChoiceImage, MultipleChoice, ImageChoice],
     templateUrl: './intro-experiment.html',
     styleUrl: './intro-experiment.css',
 })
@@ -27,9 +29,11 @@ declare global {
 
 
 export class IntroExperiment implements OnInit {
+	// +++ QA data +++
+
     // question 1 data
     question1 = {
-        imageSrc: 'assets/images/schwungrad_2.png',
+        imageSrc: 'assets/images/intro-experiment/schwungrad_2.png',
         imageAlt: 'Schwungrad',
         question: 'Welche der Aussagen in Bezug auf das Schwungrad sind richtig?',
         options: [
@@ -39,7 +43,7 @@ export class IntroExperiment implements OnInit {
             { value: 'answer4', label: 'Das Schwungrad dient als träger Körper, dessen Bewegung untersucht wird.' }
         ],
         correctAnswers: ['answer3', 'answer4'],
-        containerId: 'evaluation-container-1',
+        containerId: 'question1-container',
         successMessage: `✓ Völlig richtig.<br><br>
 			Die Bewegung des Schwungrads wird untersucht, wenn es "von außen" angetrieben wird. 
 			Der Schwungkörper muss kein Zylinder sein, wenn Sie sich das Bild des Versuchsaufbaus anschauen, dann ist auch dies kein Zylinder. 
@@ -63,7 +67,7 @@ export class IntroExperiment implements OnInit {
 
 	// question 2 data
     question2 = {
-        imageSrc: 'assets/images/feder_2.png',
+        imageSrc: 'assets/images/intro-experiment/feder_2.png',
         imageAlt: 'Feder',
         question: 'Welche Aussage über die Feder ist korrekt?',
         options: [
@@ -72,7 +76,7 @@ export class IntroExperiment implements OnInit {
             { value: 'answer3', label: 'Die Feder führt zu kontinuierlichen Dämpfung des Schwungrads.' },
         ],
         correctAnswers: ['answer2'],
-        containerId: 'evaluation-container-1',
+        containerId: 'question2-container',
         successMessage: `✓ Korrekt, die Feder bedingt ein rücktreibendes Drehmoment, das von der Auslenkung aus der Ruhelage abhängt. 
 			Das rücktreibende Drehmoment $M$ kann mathematisch beschrieben werden als 
 			$$M = -D^*\\varphi.$$
@@ -85,7 +89,7 @@ export class IntroExperiment implements OnInit {
 
 	// question 3 data
     question3 = {
-        imageSrc: 'assets/images/wirbelstrombremse_2.png',
+        imageSrc: 'assets/images/intro-experiment/wirbelstrombremse_2.png',
         imageAlt: 'Wirbelstrombremse',
         question: `Zur Dämpfung wird in diesem Versuchsaufbau ein Magnet verwendet, 
 			der so verschoben werden kann, dass er das Rad (mit Abstand, also nicht wie eine Scheibenbremse) umschließt.
@@ -96,7 +100,7 @@ export class IntroExperiment implements OnInit {
             { value: 'answer3', label: 'Die Wirbelstrombremse ist direkt von der Auslenkung des Schwungrads abhängig.' },
         ],
         correctAnswers: ['answer2'],
-        containerId: 'evaluation-container-1',
+        containerId: 'question3-container',
         successMessage: `✓ Genau richtig.<br><br>
 			Damit die Wirbelstrombremse zu einer Dämpfung des Systems führen kann, muss das Schwungrad aus einem leitenden Material bestehen. 
 			Die Wirbelstrombremse funktioniert über das Prinzip der Induktion --- je nach Stärke des Magnetfeldes der 
@@ -114,24 +118,73 @@ export class IntroExperiment implements OnInit {
     };
 
 
+	// question 4 data
+    question4 = {
+        question: `Welche Informationen über den Versuchsaufbau benötigen Sie bzw. welche Größen müssen Sie messen, um das Direktionsmoment $D$ der Feder zu bestimmen?`,
+        options: [
+            { value: 'answer1', label: 'Frequenz der Schwingung $\\omega$.' },
+            { value: 'answer2', label: 'Radius des Schwungrads $R$.' },
+            { value: 'answer3', label: 'Masse des Schwungrads $m_\\mathrm{Rad}$.' },
+			{ value: 'answer4', label: 'Auslenkwinkel $\\varphi$.' },
+			{ value: 'answer5', label: 'Abstand zwischen Aufhängung der Masse und Mittelpunkt des Schwungrads $R$.' },
+			{ value: 'answer6', label: 'Masse der Zusatzmassen $m_{zm}$.' },
+			{ value: 'answer7', label: 'Trägheitsmoment des Schwungrads $\\theta$.' },
+        ],
+        correctAnswers: ['answer4', 'answer5', 'answer6'],
+        containerId: 'question4-container',
+        successMessage: `✓ Korrekt.<br><br>
+			indem Sie den Auslenkwinkel für unterschiedliche Massenstücke messen können Sie mit Hilfe der Angabe des Abstands zwischen Aufhängung der 
+			Masse und Aufhängung des Schwungrads das wirkende Drehmoment bestimmen. 
+			Das Direktionsmoment der Feder können Sie hieraus bestimmen.`,
+		incompleteMessage: `✗ Das ist noch nicht ganz richtig - einige Elemente fehlen noch.<br><br>Betrachten Sie noch einmal die relevanten Formeln.`,
+        incorrectMessage: `✗ Das ist noch nicht ganz richtig - einige Ihrer Antworten sind falsch.<br><br>Betrachten Sie noch einmal die relevanten Formeln.`
+    };
+
+
+	// question 4 data
+	question5 = {
+		question: 'Welchen Zusammenhang zwischen dem Winkel $\\varphi$ und dem Drehmoment $M$ erwarten Sie bei der Messung?',
+		options: [
+			{ 
+				value: 'answer1', 
+				imageSrc: 'assets/images/intro-experiment/angle_over_moment_option1_3.png',
+				// label: 'Plot 1'
+			},
+			{ 
+				value: 'answer2', 
+				imageSrc: 'assets/images/intro-experiment/angle_over_moment_option2_3.png',
+				// label: 'Plot 2'
+			},
+			{ 
+				value: 'answer3', 
+				imageSrc: 'assets/images/intro-experiment/angle_over_moment_option3_3.png',
+				// label: 'Plot3'
+			},
+		],
+		correctAnswers: ['answer2'],
+		containerId: 'question5-container',
+		successMessage: `✓ Richtig, der Zusammenhang sollte etwa linear sein - je größer das wirkende Drehmoment, desto stärker wird das Rad ausgelenkt. 
+			Es gilt der Zusammenhang $M=\\varphi D$.<br><br>
+			Das Drehmoment kann nicht direkt im Versuch gemessen/variiert werden, Sie können aber durch das Anhängen unterschiedlicher Massekörper ein Drehmoment erzeugen.`,
+		incompleteMessage: `✗ Überlegen Sie sich, was passiert, wenn Sie unterschiedliche Massestücke an eine "normale" Feder hängen. Wie reagiert die Feder, wenn Sie die Masse verdoppeln?`,
+        incorrectMessage: `✗ Überlegen Sie sich, was passiert, wenn Sie unterschiedliche Massestücke an eine "normale" Feder hängen. Wie reagiert die Feder, wenn Sie die Masse verdoppeln?`
+	};
+
+
     // track completion
     isCorrect1 = false;
     isCorrect2 = false;
     isCorrect3 = false;
-
-	// page completion tracking
-	page1Complete = true;
-	// page2Complete = false;
-	// page3Complete = false;
-
-	// everything true for development purposes
-	page2Complete = true;
-	page3Complete = true;
-
+    isCorrect4 = false;
+    isCorrect5 = false;
+	
 	// QA states
 	showResult1 = false;
 	showResult2 = false;
 	showResult3 = false;
+	showResult4 = false;
+	showResult5 = false;
+	
 
 	// actions upon aswering questions
     onQuestion1Answered(isCorrect: boolean) {
@@ -139,20 +192,34 @@ export class IntroExperiment implements OnInit {
 		this.updatePage2Completion();
 		this.renderMath();
     }
-
+	
     onQuestion2Answered(isCorrect: boolean) {
 		this.isCorrect2 = isCorrect;
 		this.updatePage2Completion();
 		this.renderMath();
     }
-
+	
     onQuestion3Answered(isCorrect: boolean) {
 		this.isCorrect3 = isCorrect;
 		this.updatePage2Completion();
 		this.renderMath();
     }
 	
+    onQuestion4Answered(isCorrect: boolean) {
+		this.isCorrect4 = isCorrect;
+		this.updatePage3Completion();
+		this.renderMath();
+    }
 	
+    onQuestion5Answered(isCorrect: boolean) {
+		this.isCorrect5 = isCorrect;
+		this.updatePage3Completion();
+		this.renderMath();
+    }
+	
+
+	// +++ TeX rendering +++
+
 	// rendering Math texts
     constructor(
 		private sanitizer: DomSanitizer,
@@ -163,8 +230,8 @@ export class IntroExperiment implements OnInit {
 
 	introExperimentText!: SafeHtml;
 
-
     ngOnInit() {
+		// sanitized string to enable LaTeX rendering
         this.introExperimentText = this.sanitizer.bypassSecurityTrustHtml(`
             Das Schwungrad ist in dem Versuch im Schwerpunkt aufgehängt. Durch das Anbringen zusätzliche 
             Massestücke wirkt ein zusätzliches <a target="_blank" rel="noopener noreferrer" href="/glossary/angular-momentum" class="glossary-link">Drehmoment</a>, 
@@ -184,7 +251,7 @@ export class IntroExperiment implements OnInit {
     }
 
 
-    // Trigger MathJax rendering
+    // trigger MathJax rendering
     renderMath() {
         if (isPlatformBrowser(this.platformId)) {
             setTimeout(() => {
@@ -195,12 +262,23 @@ export class IntroExperiment implements OnInit {
         }
     }
 
+
+	// +++ in-page navigation +++
 	
     // navigation helpers
 	currentView: string = 'intro_exp1';
     get isFirstPage(): boolean {
         return this.currentView === 'intro_exp1';
     }
+
+	// page completion tracking
+	page1Complete = true;
+	// page2Complete = false;
+	// page3Complete = false;
+
+	// everything true for development purposes
+	page2Complete = true;
+	page3Complete = true;
 
 
     // ability to proceed in the module: depending on the Q+A performance (all questions have to be answered)
@@ -246,9 +324,12 @@ export class IntroExperiment implements OnInit {
     }
 
 
-    // Check if page 2 is complete (all 3 questions correct)
+    // check if page is complete (all questions correct)
     updatePage2Completion() {
         this.page2Complete = this.isCorrect1 && this.isCorrect2 && this.isCorrect3;
-        // this.page2Complete = true;
+    }
+
+    updatePage3Completion() {
+        this.page3Complete = this.isCorrect4 && this.isCorrect5;
     }
 }

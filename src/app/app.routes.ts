@@ -12,6 +12,7 @@ import { SpringConstant } from './features/glossary_features/spring-constant/spr
 import { HomDgl } from './features/glossary_features/hom-dgl/hom-dgl';
 import { InhomDgl } from './features/glossary_features/inhom-dgl/inhom-dgl';
 import { AngularFrequency } from './features/glossary_features/angular-frequency/angular-frequency';
+import { MomentOfInertia } from './features/glossary_features/moment-of-inertia/moment-of-inertia';
 
 import { IntroExperiment } from './features/learning_features/intro-experiment/intro-experiment';
 
@@ -29,5 +30,6 @@ export const routes: Routes = [
 	{ path: 'glossary/hom-dgl', component: HomDgl, title: 'Homogene DGL'},
 	{ path: 'glossary/inhom-dgl', component: InhomDgl, title: 'Inhomogene DGL'},
 	{ path: 'glossary/angular-frequency', component: AngularFrequency, title: 'Kreisfrequenz'},
+	{ path: 'glossary/moment-of-inertia', component: MomentOfInertia, title: 'Trägheitsmoment'},
 	{ path: 'experiment/intro', component: IntroExperiment, title: 'Einstieg Versuchsaufbau'},
 ]

@@ -3,26 +3,27 @@ import { CommonModule } from '@angular/common';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 
-interface QuestionOption {
-	value: string;
-	label: string;
+
+interface ImageOption {
+    value: string;
+    imageSrc: string;
+    label?: string;
 }
 
 
 
 @Component({
-	selector: 'app-multiple-choice',
-	standalone: true,
-	imports: [CommonModule],
-	templateUrl: './multiple-choice.html',
-	styleUrl: './multiple-choice.css',
+    selector: 'app-image-choice',
+    standalone: true,
+    imports: [CommonModule],
+    templateUrl: './image-choice.html',
+    styleUrl: './image-choice.css'
 })
 
 
-
-export class MultipleChoice implements OnInit {
+export class ImageChoice implements OnInit {
     @Input() question!: string;
-    @Input() options!: QuestionOption[];
+    @Input() options!: ImageOption[];
     @Input() correctAnswers!: string[];
     @Input() containerId!: string;
     
@@ -38,23 +39,28 @@ export class MultipleChoice implements OnInit {
     showResult = false;
     isCorrect = false;
     resultMessage: SafeHtml = '';
+    selectedValues: Set<string> = new Set();
 
     constructor(private sanitizer: DomSanitizer) {}
 
     ngOnInit() {}
 
+    toggleSelection(value: string) {
+        if (this.isCorrect) return; // Disable if already correct
+        
+        if (this.selectedValues.has(value)) {
+            this.selectedValues.delete(value);
+        } else {
+            this.selectedValues.add(value);
+        }
+    }
+
+    isSelected(value: string): boolean {
+        return this.selectedValues.has(value);
+    }
 
     evaluateAnswer() {
-        const checkboxes = document.querySelectorAll(
-            `.${this.containerId} input[type="checkbox"]`
-        );
-        const selectedAnswers: string[] = [];
-
-        checkboxes.forEach((checkbox: any) => {
-            if (checkbox.checked) {
-                selectedAnswers.push(checkbox.value);
-            }
-        });
+        const selectedAnswers = Array.from(this.selectedValues);
 
         const allCorrectSelected = this.correctAnswers.every(answer =>
             selectedAnswers.includes(answer)
@@ -73,7 +79,6 @@ export class MultipleChoice implements OnInit {
         this.onAnswerEvaluated.emit(this.isCorrect);
         this.updateResultMessage(selectedAnswers, allCorrectSelected);
     }
-
 
     updateResultMessage(selectedAnswers: string[], allCorrectSelected: boolean) {
         if (this.isCorrect) {

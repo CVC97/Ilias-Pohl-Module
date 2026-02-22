@@ -77,6 +77,11 @@ export class Glossary {
             title: 'Kreisfrequenz',
             definition: 'Unter der Kreisfrequenz ω einer Schwingung wird allgemein der überstrichene Winkel φ pro Zeitspanne verstanden.',
 			link: '/glossary/angular-frequency'
+        },
+        {
+            title: 'Trägheitsmoment',
+            definition: 'Das Trägheitsmoment Θ ist ein Maß für den Widerstand, den ein Körper der Änderung seiner Winkelgeschwindigkeit entgegensetzt. Es spielt damit bei einer Drehbewegung die gleiche Rolle wie die (träge) Masse im Verhältnis von Kraft und Beschleunigung (Translationsbewegeung).',
+			link: '/glossary/moment-of-inertia'
         }
     ];
 

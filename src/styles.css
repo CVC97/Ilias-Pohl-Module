@@ -21,6 +21,17 @@
     --bright-blue: #2196F3;
     --sky-blue: #03A9F4;
     --electric-blue: #00BCD4;
+
+    /* Theme variables (light mode) */
+    --bg-primary: white;
+    --bg-secondary: var(--altweiss);
+    --text-primary: var(--uni-blau-1);
+    --text-secondary: var(--uni-blau-2);
+    --card-bg: rgba(255, 255, 255, 0.95);
+    --border-color: rgba(33, 150, 243, 0.1);
+    --shadow-color: rgba(33, 150, 243, 0.2);
+    --button-color: var(--uni-blau-1);
+    --button-color-hover: var(--uni-blau-2);
 }
 
 /* Global Reset & Base Styles */
@@ -30,14 +41,24 @@
     box-sizing: border-box;
 }
 
-html, body {
-    height: 100%;
+/* Dark mode */
+[data-theme="dark"] {
+    --bg-primary: rgb(51, 51, 51);
+    --bg-secondary: rgb(48, 48, 48);
+    --text-primary: var(--altweiss);
+    --text-secondary: rgb(180, 180, 180);
+    --card-bg: rgb(32, 32, 32);
+    --border-color: var(--grau-90);
+    --shadow-color: var(--grau-80);
+    --button-color: var(--uni-blau-2);
+    --button-color-hover: var(--uni-blau-3);
 }
+
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: white;
-    color: var(--uni-blau-1);
+    background: var(--bg-primary);
+    color: var(--text-primary);
     line-height: 1.6;
     display: flex;
     flex-direction: column;
@@ -55,7 +76,7 @@ h1, h2, h3, h4, h5, h6 {
 
 h1 {
     font-size: 2rem;
-    color: var(--uni-blau-1);
+    color: var(--text-primary);
     padding-bottom: 0.5rem;
 }
 
@@ -82,7 +103,7 @@ a:hover {
 /* Main content area */
 main {
     flex: 1;
-    background: white;
+    background: var(--bg-primary);
 	/* background: rgb(44, 44, 44); */
     display: flex;
     flex-direction: column;
@@ -98,13 +119,12 @@ main {
 
 /* panel styling */
 .card {
-    background: rgba(255, 255, 255, 0.95);
-	/* background: rgb(99, 99, 99); */
+    background: var(--card-bg);
     border-radius: 12px;
     padding: 2rem;
-    box-shadow: 0 8px 16px rgba(33, 150, 243, 0.2);
+    box-shadow: 0 8px 16px var(--shadow-color);
     margin-bottom: 8rem;
-    border: 1px solid rgba(33, 150, 243, 0.1);
+    border: 1px solid var(--border-color);
 }
 
 /* container for buttons */
@@ -144,7 +164,7 @@ button.btn {
     color: white;
     
     /* Appearance */
-    background: var(--uni-blau-1);
+    background: var(--button-color);
     border: none;
     border-radius: 6px;
     box-shadow: 0 4px 12px rgba(33, 150, 243, 0.3);
@@ -157,7 +177,7 @@ button.btn {
 .btn:hover {
     display: inline-block;
     padding: 0.75rem 1.5rem;
-    background: var(--uni-blau-2);
+    background: var(--button-color-hover);
     color: white;
     border: none;
     border-radius: 6px;

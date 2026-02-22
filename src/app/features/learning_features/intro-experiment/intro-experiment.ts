@@ -141,7 +141,7 @@ export class IntroExperiment implements OnInit {
     };
 
 
-	// question 4 data
+	// question 5 data
 	question5 = {
 		question: 'Welchen Zusammenhang zwischen dem Winkel $\\varphi$ und dem Drehmoment $M$ erwarten Sie bei der Messung?',
 		options: [
@@ -171,12 +171,60 @@ export class IntroExperiment implements OnInit {
 	};
 
 
+	// question 6 data
+	question6 = {
+		question: `
+			Die unten angezeigten Graphen zeigen zeitliche Entwicklungen der Winkelauslenkung (Winkel $\\varphi$) des Schwungrads.<br><br>
+			Welcher dieser Graphen sind "realistisch"? Welche der folgenden Graphen könnten bei einem realen Versuch enstehen, wenn Sie davon ausgehen, 
+			dass das Rad zu Beginn um den Winkel $\\varphi_0=10^\\circ$ ausgelenkt und einfach losgelassen wurde (Anfangsgeschwindigkeit $\\dot{\\varphi_0}=10^\\circ$)?<br>
+			Gehen Sie davon aus, dass das Schwungrad in seinem Schwerpunkt aufgehängt und das Magnetfeld der Wirbelstrombremse jeweils auf einen festen Wert 
+			(unterschiedliche Einstellungen bei den unterschiedlichen Antwortmöglichkeiten) eingestellt ist.`,
+		options: [
+			{ 
+				value: 'answer1', 
+				imageSrc: 'assets/images/intro-experiment/phi_over_t_option1_4.png',
+			},
+			{ 
+				value: 'answer2', 
+				imageSrc: 'assets/images/intro-experiment/phi_over_t_option2_4.png',
+			},
+			{ 
+				value: 'answer3', 
+				imageSrc: 'assets/images/intro-experiment/phi_over_t_option3_4.png',
+			},
+			{ 
+				value: 'answer4', 
+				imageSrc: 'assets/images/intro-experiment/phi_over_t_option4_4.png',
+			},
+			{ 
+				value: 'answer5', 
+				imageSrc: 'assets/images/intro-experiment/phi_over_t_option5_4.png',
+			},
+			{ 
+				value: 'answer6', 
+				imageSrc: 'assets/images/intro-experiment/phi_over_t_option6_4.png',
+			},
+		],
+		correctAnswers: ['answer3', 'answer4', 'answer6'],
+		containerId: 'question6-container',
+		successMessage: `Sehr gut! Das gedämpfte Schwungrad schwingt mit einer festen Frequenz und hat eine abnehmende Amplitude. Das war ein guter Start. 
+		Dann geht es hier jetzt weiter mit einem weiterführenden Test:
+		Klicken Sie hier, damit sich der Test in einem neuen Tab öffnet.
+		Kehren Sie anschließend in diesen Tab zurück, um hier zu erfahren, wie es für Sie weitergeht.`,
+		incompleteMessage: `✗ Einige der von die ausgewählten Bewegungsformen entsprechen nicht dem, was man aus einem Experiment erwarten würde. 
+			Hier findest du eine Simulation des Experiments. Verändere die Dämpfung und die Anfangsbedingungen, um zu sehen, wie sich die Bewegung des Schwungrads verändert:`,
+        incorrectMessage: `✗ Einige der von die ausgewählten Bewegungsformen entsprechen nicht dem, was man aus einem Experiment erwarten würde. 
+			Hier findest du eine Simulation des Experiments. Verändere die Dämpfung und die Anfangsbedingungen, um zu sehen, wie sich die Bewegung des Schwungrads verändert:`
+	};
+
+
     // track completion
     isCorrect1 = false;
     isCorrect2 = false;
     isCorrect3 = false;
     isCorrect4 = false;
     isCorrect5 = false;
+    isCorrect6 = false;
 	
 	// QA states
 	showResult1 = false;
@@ -184,6 +232,7 @@ export class IntroExperiment implements OnInit {
 	showResult3 = false;
 	showResult4 = false;
 	showResult5 = false;
+	showResult6 = false;
 	
 
 	// actions upon aswering questions
@@ -214,6 +263,12 @@ export class IntroExperiment implements OnInit {
     onQuestion5Answered(isCorrect: boolean) {
 		this.isCorrect5 = isCorrect;
 		this.updatePage3Completion();
+		this.renderMath();
+    }
+
+    onQuestion6Answered(isCorrect: boolean) {
+		this.isCorrect6 = isCorrect;
+		this.updatePage4Completion();
 		this.renderMath();
     }
 	
@@ -275,10 +330,12 @@ export class IntroExperiment implements OnInit {
 	page1Complete = true;
 	// page2Complete = false;
 	// page3Complete = false;
+	// page4Complete = false;
 
 	// everything true for development purposes
 	page2Complete = true;
 	page3Complete = true;
+	page4Complete = true;
 
 
     // ability to proceed in the module: depending on the Q+A performance (all questions have to be answered)
@@ -286,6 +343,7 @@ export class IntroExperiment implements OnInit {
         if (this.currentView === 'intro_exp1') return this.page1Complete;
         if (this.currentView === 'intro_exp2') return this.page2Complete;
         if (this.currentView === 'intro_exp3') return this.page3Complete;
+		if (this.currentView === 'intro_exp4') return this.page4Complete;
         return false;
     }
 
@@ -306,6 +364,9 @@ export class IntroExperiment implements OnInit {
         } else if (this.currentView === 'intro_exp3') {
             this.currentView = 'intro_exp2';
             this.renderMath();
+        } else if (this.currentView === 'intro_exp4') {
+            this.currentView = 'intro_exp3';
+            this.renderMath();
         }
     }
 
@@ -317,6 +378,8 @@ export class IntroExperiment implements OnInit {
                 this.currentView = 'intro_exp2';
             } else if (this.currentView === 'intro_exp2') {
                 this.currentView = 'intro_exp3';
+            } else if (this.currentView === 'intro_exp3') {
+                this.currentView = 'intro_exp4';
             }
             // nothing implemented beyond (3/3 so far)
             this.renderMath();
@@ -331,5 +394,9 @@ export class IntroExperiment implements OnInit {
 
     updatePage3Completion() {
         this.page3Complete = this.isCorrect4 && this.isCorrect5;
+    }
+
+    updatePage4Completion() {
+        this.page4Complete = this.isCorrect6;
     }
 }

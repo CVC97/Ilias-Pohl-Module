@@ -41,3 +41,24 @@ header {
     opacity: 0.9;
     font-weight: 400;
 }
+
+.theme-toggle {
+    position: absolute;
+    top: 1rem;
+    right: 2rem;
+    background: transparent;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.theme-toggle:hover {
+    transform: scale(1.2);
+}
+
+.theme-toggle img {
+    width: 24px;
+    height: 24px;
+    filter: brightness(0) invert(1);
+}

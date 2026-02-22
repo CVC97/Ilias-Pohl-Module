@@ -2,6 +2,10 @@
     <div class="header-content">
         <div class="header-title">Pohlscher Resonator</div>
         <div class="header-subtitle">Praktikum zu Experimentalphysik I</div>
+        <button class="theme-toggle" (click)="toggleTheme()" [attr.aria-label]="themeService.isDarkMode() ? 'Switch to light mode' : 'Switch to dark mode'">
+            <img *ngIf="!themeService.isDarkMode()" src="assets/icons/sun.svg" alt="Light mode">
+            <img *ngIf="themeService.isDarkMode()" src="assets/icons/moon.svg" alt="Dark mode">
+        </button>
     </div>
 </header>
 <div class="header-lines">

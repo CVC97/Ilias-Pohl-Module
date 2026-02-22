@@ -67,7 +67,7 @@
 .image-description {
     margin-top: 1rem;
     font-size: 1rem;
-    color: var(--uni-blau-1);
+    color: var(--text-primary);
     line-height: 1.7;
     text-align: center;  /* or left, depending on your preference */
     font-style: italic;  /* optional - makes it look more like a caption */

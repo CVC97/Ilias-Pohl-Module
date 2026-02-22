@@ -1,10 +1,10 @@
 <div class="container">
     <div class="card">
         <h1>
-            Einstieg Versuchsaufbau 
-            <span *ngIf="currentView === 'intro_exp1'">(1/3)</span>
-            <span *ngIf="currentView === 'intro_exp2'">(2/3)</span>
-            <span *ngIf="currentView === 'intro_exp3'">(3/3)</span>
+            <span *ngIf="currentView === 'intro_exp1'">Einstieg Versuchsaufbau (1/3)</span>
+            <span *ngIf="currentView === 'intro_exp2'">Einstieg Versuchsaufbau (2/3)</span>
+            <span *ngIf="currentView === 'intro_exp3'">Einstieg Versuchsaufbau (3/3)</span>
+            <span *ngIf="currentView === 'intro_exp4'">Eingangsfrage gedämpfter harmonischer Oszillator</span>
         </h1>
         
         <!-- Content sections -->
@@ -126,12 +126,27 @@
 
                 <p>
                     Der Versuchsaufbau kann noch weiter charakterisiert werden.<br>
-                    Beispielsweise kann das <a routerLink="/glossary/moment-of-inertia" class="glossary-link">Trägheitsmoment</a> 
+                    Beispielsweise kann das <a target="_blank" rel="noopener noreferrer" routerLink="/glossary/moment-of-inertia" class="glossary-link">Trägheitsmoment</a> 
                     des Schwungrads bestimmt oder die Wirkung der Wirbelstrombremse untersucht werden.<br>
                     Beide Eigenschaften des Versuchsaufbaus beziehen sich auf das dynamische Verhalten des Systems. 
                     Daher setzen Sie sich auf den folgenden Seiten zunächst mit der Dynamik des gedämpften Systems auseinander, 
                     bevor Sie sich mit der Auswirkung des externen Motors beschäftigen.
                 </p>
+            </div>
+
+            <div *ngIf="currentView === 'intro_exp4'">
+
+                <app-image-choice
+                    [question]="question6.question"
+                    [options]="question6.options"
+                    [correctAnswers]="question6.correctAnswers"
+                    [containerId]="question6.containerId"
+                    [successMessage]="question6.successMessage"
+                    [incompleteMessage]="question6.incompleteMessage"
+                    [incorrectMessage]="question6.incorrectMessage"
+                    (onAnswerEvaluated)="onQuestion6Answered($event)">
+                </app-image-choice>
+
             </div>
         </div>
 

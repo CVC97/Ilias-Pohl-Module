@@ -79,7 +79,7 @@ export class Analytics {
             console.log('Page visit ended in: ' +  this.currentVisit.duration_s + ' seconds');
             console.log('PATHLOG: ', this.currentVisit);
             // console.log('RESLOG: ')
-            console.log('All visits so far: ', this.visits);
+            // console.log('All visits so far: ', this.visits);
             
             this.currentVisit = null;
             

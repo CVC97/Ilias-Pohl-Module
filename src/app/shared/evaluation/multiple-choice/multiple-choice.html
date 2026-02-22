@@ -1,6 +1,6 @@
 <div class="evaluation-container" [class]="containerId" [class.disabled]="isCorrect">    
     <div class="evaluation-content">
-        <h3 class="evaluation-question">{{ question }}</h3>
+        <h3 class="evaluation-question" [innerHTML]="question"></h3>
         
         <div class="evaluation-options">
             <label class="evaluation-option" *ngFor="let option of options; let i = index">

@@ -6,14 +6,22 @@ import { Session } from './session';
 
 
 
-interface PageVisit {
+export interface PageVisit {
     page: string;
     startTime: number;
     endTime?: number;
     duration?: number;
-	duration_s?: number;
+    duration_s?: number;
     sessionId: string;
     timestamp: string;
+}
+
+
+
+export interface AnalyticsData {
+    sessionId: string;
+    visits: PageVisit[];
+    currentVisit: PageVisit | null;
 }
 
 
@@ -25,9 +33,9 @@ interface PageVisit {
 
 
 export class Analytics {
+    private isBrowser: boolean;
     private currentVisit: PageVisit | null = null;
     private visits: PageVisit[] = [];
-    private sessionId: string;
 
 
     constructor(
@@ -35,14 +43,13 @@ export class Analytics {
         @Inject(PLATFORM_ID) private platformId: Object,
         private sessionService: Session
     ) {
-        // Use framework session ID instead of generating one
-        this.sessionId = this.sessionService.getSessionId() || this.generateSessionId();
+        this.isBrowser = isPlatformBrowser(this.platformId);
         this.initTracking();
     }
 
 
     private initTracking() {
-        if (!isPlatformBrowser(this.platformId)) return;
+        if (!this.isBrowser) return;
 
         // Track route changes
         this.router.events.pipe(
@@ -56,17 +63,23 @@ export class Analytics {
         if (typeof window !== 'undefined') {
             window.addEventListener('beforeunload', () => {
                 this.endCurrentVisit();
-                this.saveData();
+                this.saveToLocalStorage();
             });
         }
     }
 
 
     private startNewVisit(page: string) {
+        const sessionId = this.sessionService.getSessionId();
+        if (!sessionId) {
+            console.warn('No session ID available for analytics tracking');
+            return;
+        }
+
         this.currentVisit = {
             page: page,
             startTime: Date.now(),
-            sessionId: this.sessionId,
+            sessionId: sessionId,
             timestamp: new Date().toISOString()
         };
     }
@@ -77,28 +90,19 @@ export class Analytics {
             this.currentVisit.endTime = Date.now();
             this.currentVisit.duration = this.currentVisit.endTime - this.currentVisit.startTime;
             this.currentVisit.duration_s = this.currentVisit.duration / 1000;
+            
             this.visits.push({ ...this.currentVisit });
             
-            console.log('Page visit ended in: ' +  this.currentVisit.duration_s + ' seconds');
-            console.log('PATHLOG: ', this.currentVisit);
-            // console.log('RESLOG: ')
-            // console.log('All visits so far: ', this.visits);
+            console.log(`${this.currentVisit.page} left after ${this.currentVisit.duration_s} seconds`);
+            console.log('PATHLOG:', this.currentVisit);
             
             this.currentVisit = null;
-            
-            // Send to backend after each visit
-            // this.sendToBackend();
         }
-	}
-
-
-    private generateSessionId(): string {
-        return 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
     }
 
 
-    private saveData() {
-        if (isPlatformBrowser(this.platformId)) {
+    private saveToLocalStorage() {
+        if (this.isBrowser) {
             const existingData = localStorage.getItem('analyticsData');
             const allVisits = existingData ? JSON.parse(existingData) : [];
             allVisits.push(...this.visits);
@@ -107,32 +111,52 @@ export class Analytics {
     }
 
 
-    async sendToBackend() {
-        if (this.visits.length === 0) return;
+    // Public API
+    getSessionData(): AnalyticsData {
+        return {
+            sessionId: this.sessionService.getSessionId() || 'unknown',
+            visits: this.visits,
+            currentVisit: this.currentVisit
+        };
+    }
+
+
+    getAllVisits(): PageVisit[] {
+        return [...this.visits];
+    }
+    
+    
+    exportData(): string {
+        return JSON.stringify(this.getSessionData(), null, 2);
+    }
+
+
+    async sendToBackend(endpoint: string = 'http://localhost:3000/api/analytics') {
+        if (!this.isBrowser || this.visits.length === 0) return;
 
         try {
-            const response = await fetch('http://localhost:3000/api/analytics', {
+            const response = await fetch(endpoint, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(this.visits)
+                body: JSON.stringify(this.getSessionData())
             });
 
             const result = await response.json();
-            console.log('Data sent to backend:', result);
-
-            this.visits = []; // Clear visits after successful send
+            console.log('Analytics data sent to backend:', result);
+            
+            // Clear visits after successful send
+            this.visits = [];
         } catch (error) {
-            console.error('Failed to send analytics:', error);
+            console.error('Failed to send analytics data:', error);
         }
     }
 
 
-    // Get current session data (for debugging)
-    getSessionData() {
-        return {
-            sessionId: this.sessionId,
-            visits: this.visits,
-            currentVisit: this.currentVisit
-        };
+    clearData() {
+        this.visits = [];
+        this.currentVisit = null;
+        if (this.isBrowser) {
+            localStorage.removeItem('analyticsData');
+        }
     }
 }

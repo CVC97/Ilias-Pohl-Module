@@ -37,7 +37,7 @@ export class IntroExperiment implements OnInit, OnDestroy {
 		private trackingService: ResultsTracking
     ) {}
 
-	
+
 	// +++ QA data +++
 
     // question 1 data
@@ -292,8 +292,11 @@ export class IntroExperiment implements OnInit, OnDestroy {
 	introExperimentText!: SafeHtml;
 
     ngOnInit() {
-        // Start tracking this module
+        // start tracking this module
         this.trackingService.startModule('intro-experiment');
+
+        // restore completion states from previous session
+        this.restoreCompletionState();
 
 		// sanitized string to enable LaTeX rendering
         this.introExperimentText = this.sanitizer.bypassSecurityTrustHtml(`
@@ -318,6 +321,17 @@ export class IntroExperiment implements OnInit, OnDestroy {
     ngOnDestroy() {
         // End tracking when leaving the module
         this.trackingService.endModule();
+    }
+
+
+    private restoreCompletionState() {
+        // check if questions were already answered correctly
+        this.isCorrect1 = this.trackingService.isQuestionCompleted(this.question1.questionId);
+        this.isCorrect2 = this.trackingService.isQuestionCompleted(this.question2.questionId);
+        this.isCorrect3 = this.trackingService.isQuestionCompleted(this.question3.questionId);
+        
+        // update page completion
+        this.updatePage2Completion();
     }
 
 

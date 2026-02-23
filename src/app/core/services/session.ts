@@ -16,7 +16,6 @@ export class Session {
     private readonly SESSION_STORAGE_KEY = 'framework_session_id';
 
     constructor(
-
         @Inject(PLATFORM_ID) platformId: Object,
         private route: ActivatedRoute,
         private router: Router
@@ -29,21 +28,25 @@ export class Session {
     private initSession() {
         if (!this.isBrowser) return;
 
-        // Try to get session_id from URL first
+        // try to get session_id from URL first
         const urlSessionId = this.getSessionIdFromUrl();
         
         if (urlSessionId) {
-            // Got it from URL - store it
+            // got it from URL - store it
             this.sessionId = urlSessionId;
             this.saveToStorage(urlSessionId);
             console.log('Session ID from URL:', this.sessionId);
         } else {
-            // Not in URL - try to load from storage
+            // not in URL - try to load from storage
             this.sessionId = this.loadFromStorage();
             if (this.sessionId) {
                 console.log('Session ID from storage:', this.sessionId);
+			// neither in URL nor in storage - generate own session id and store it
             } else {
-                console.warn('No session ID found in URL or storage');
+                console.warn('No session ID found in URL or storage.');
+				this.sessionId = this.generateSessionId();
+				this.saveToStorage(this.sessionId);
+				console.log('Session ID generated and stored:', this.sessionId);
             }
         }
 
@@ -60,12 +63,13 @@ export class Session {
         });
     }
 
+
     private getSessionIdFromUrl(): string | null {
-        // Check route params
+        // check route params
         const sessionFromRoute = this.route.snapshot.queryParamMap.get('session_id');
         if (sessionFromRoute) return sessionFromRoute;
 
-        // Also check if it's in the URL directly (fallback)
+        // also check if it's in the URL directly (fallback)
         if (this.isBrowser) {
             const urlParams = new URLSearchParams(window.location.search);
             return urlParams.get('session_id');
@@ -74,13 +78,16 @@ export class Session {
         return null;
     }
 
+
+	// save session ID in storage
     private saveToStorage(sessionId: string) {
         if (this.isBrowser) {
             localStorage.setItem(this.SESSION_STORAGE_KEY, sessionId);
-            // Also save in sessionStorage as backup
+            // also save in sessionStorage as backup
             sessionStorage.setItem(this.SESSION_STORAGE_KEY, sessionId);
         }
     }
+
 
     private loadFromStorage(): string | null {
         if (this.isBrowser) {
@@ -94,15 +101,24 @@ export class Session {
         }
         return null;
     }
+	
+	
+	// generate a session if no session detected
+	private generateSessionId(): string {
+		return 'rogue_user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+	}
 
-    // Public API
+
+    // public API
     getSessionId(): string | null {
         return this.sessionId;
     }
 
+
     hasValidSession(): boolean {
         return this.sessionId !== null && this.sessionId.length > 0;
     }
+
 
     clearSession() {
         this.sessionId = null;

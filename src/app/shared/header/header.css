@@ -37,6 +37,7 @@ header {
 }
 
 .header-subtitle {
+    /* color: var(--physik-gelb); */
     font-size: 1rem;
     opacity: 0.9;
     font-weight: 400;
@@ -61,4 +62,10 @@ header {
     width: 24px;
     height: 24px;
     filter: brightness(0) invert(1);
+}
+
+.session-debug {
+    /* color: var(--jura-rot); */
+    color: var(--physik-gelb);
+    /* background-color: white; */
 }

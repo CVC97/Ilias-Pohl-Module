@@ -48,7 +48,33 @@ export class ImageChoice implements OnInit {
         private trackingService: ResultsTracking
     ) {}
 
-    ngOnInit() {}
+
+    ngOnInit() {
+        // check if this question was already answered correctly in this session
+        this.restorePreviousAnswer();
+    }
+
+
+    private restorePreviousAnswer() {
+        const previousResult = this.trackingService.getQuestionResult(this.questionId);
+        
+        if (previousResult && previousResult.isCorrect) {
+            // Question was answered correctly before - restore state
+            this.isCorrect = true;
+            this.showResult = true;
+            
+            // Restore selected images
+            this.selectedValues = new Set(previousResult.selectedAnswers);
+            
+            // Restore success message
+            const message = this.successMessage || '✓ Richtig!';
+            this.resultMessage = this.sanitizer.bypassSecurityTrustHtml(message);
+            
+            // Notify parent that this question is already complete
+            this.onAnswerEvaluated.emit(true);
+        }
+    }
+
 
     toggleSelection(value: string) {
         if (this.isCorrect) return; // Disable if already correct

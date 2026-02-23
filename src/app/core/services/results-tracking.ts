@@ -1,6 +1,6 @@
 import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { Analytics } from './analytics';
+import { Session } from './session';
 
 
 
@@ -13,23 +13,22 @@ export interface QuestionResult {
     timestamp: number;
     timestampISO: string;
     attemptCount: number;
-    sessionId: string; // NEW: Link to analytics session
+    sessionId: string;
 }
 
 
 
 export interface ModuleProgress {
     moduleId: string;
+    sessionId: string;
     startTime: number;
     endTime?: number;
-    totalTimeSpent: number;
+    totalTimeSpent?: number;
     totalTimeSpent_s?: number;
     questionsAnswered: number;
     questionsCorrect: number;
     results: QuestionResult[];
-    sessionId: string; // NEW: Link to analytics session
 }
-
 
 
 
@@ -38,16 +37,18 @@ export interface ModuleProgress {
 })
 
 
-
 export class ResultsTracking {
     private isBrowser: boolean;
     private currentModuleId: string = '';
     private moduleStartTime: number = 0;
     private results: Map<string, ModuleProgress> = new Map();
+    private readonly STORAGE_KEY = 'module-results';
+
+
 
     constructor(
         @Inject(PLATFORM_ID) platformId: Object,
-        private analyticsService: Analytics // NEW: Inject Analytics
+        private sessionService: Session
     ) {
         this.isBrowser = isPlatformBrowser(platformId);
         if (this.isBrowser) {
@@ -55,31 +56,54 @@ export class ResultsTracking {
         }
     }
 
-    // Start tracking a module
+
+
+    // Module tracking
     startModule(moduleId: string) {
+        const sessionId = this.sessionService.getSessionId();
+        if (!sessionId) {
+            console.warn('No session ID available for results tracking');
+            return;
+        }
+
         this.currentModuleId = moduleId;
         this.moduleStartTime = Date.now();
-
-        // Get current session ID from Analytics
-        const sessionData = this.analyticsService.getSessionData();
-        const sessionId = sessionData.sessionId;
 
         if (!this.results.has(moduleId)) {
             this.results.set(moduleId, {
                 moduleId,
+                sessionId,
                 startTime: this.moduleStartTime,
-                totalTimeSpent: 0,
                 questionsAnswered: 0,
                 questionsCorrect: 0,
-                results: [],
-                sessionId: sessionId
+                results: []
             });
         }
 
         console.log(`Started tracking module: ${moduleId} in session: ${sessionId}`);
     }
 
-    // Track a question result
+
+
+    endModule() {
+        if (!this.currentModuleId) return;
+
+        const moduleProgress = this.results.get(this.currentModuleId);
+        if (moduleProgress) {
+            moduleProgress.endTime = Date.now();
+            moduleProgress.totalTimeSpent = moduleProgress.endTime - moduleProgress.startTime;
+            moduleProgress.totalTimeSpent_s = moduleProgress.totalTimeSpent / 1000;
+            
+            this.saveToStorage();
+            
+            console.log(`Module ${this.currentModuleId} completed`);
+            console.log(`Time: ${moduleProgress.totalTimeSpent_s}s | Correct: ${moduleProgress.questionsCorrect}/${moduleProgress.questionsAnswered}`);
+        }
+    }
+
+
+
+    // Question tracking
     trackQuestionResult(
         questionId: string,
         isCorrect: boolean,
@@ -91,27 +115,30 @@ export class ResultsTracking {
             return;
         }
 
+        const sessionId = this.sessionService.getSessionId();
+        if (!sessionId) {
+            console.warn('No session ID available');
+            return;
+        }
+
         const moduleProgress = this.results.get(this.currentModuleId);
         if (!moduleProgress) return;
-
-        // Get current session ID
-        const sessionData = this.analyticsService.getSessionData();
-        const sessionId = sessionData.sessionId;
 
         // Check if question was already answered
         const existingResult = moduleProgress.results.find(r => r.questionId === questionId);
         
         if (existingResult) {
-            // Update existing result (re-attempt)
+            // Re-attempt
             existingResult.attemptCount++;
             existingResult.isCorrect = isCorrect;
             existingResult.selectedAnswers = selectedAnswers;
             existingResult.timestamp = Date.now();
             existingResult.timestampISO = new Date().toISOString();
             
-            console.log(`RESLOG ${sessionId}: ${questionId} (Re-)Attempt: ${existingResult.attemptCount}, Correct: ${isCorrect}`);
+            console.log(`${sessionId} tried ${questionId} on attempt ${existingResult.attemptCount}, result: ${isCorrect}`);
+            console.log('RESLOG:', existingResult);
         } else {
-            // Add new result (first attempt)
+            // First attempt
             const result: QuestionResult = {
                 questionId,
                 moduleId: this.currentModuleId,
@@ -121,119 +148,83 @@ export class ResultsTracking {
                 timestamp: Date.now(),
                 timestampISO: new Date().toISOString(),
                 attemptCount: 1,
-                sessionId: sessionId
+                sessionId
             };
+            
             moduleProgress.results.push(result);
             moduleProgress.questionsAnswered++;
             
-            console.log(`RESLOG: ${questionId}, Correct: ${isCorrect}`);
+            console.log(`${sessionId} tried ${questionId}, result: ${isCorrect}`);
+            console.log('RESLOG:', result);
         }
 
         if (isCorrect) {
             moduleProgress.questionsCorrect++;
         }
 
-        // this.saveToStorage();
+        this.saveToStorage();
     }
 
-    // End tracking for current module
-    endModule() {
-        if (!this.currentModuleId) return;
+
+    // Query methods
+    isQuestionCompleted(questionId: string): boolean {
+        if (!this.currentModuleId) return false;
 
         const moduleProgress = this.results.get(this.currentModuleId);
-        if (moduleProgress) {
-            moduleProgress.endTime = Date.now();
-            moduleProgress.totalTimeSpent = moduleProgress.endTime - moduleProgress.startTime;
-            moduleProgress.totalTimeSpent_s = moduleProgress.totalTimeSpent / 1000;
-            
-            console.log(`Module completed: ${this.currentModuleId}`);
-            console.log(`Time spent: ${moduleProgress.totalTimeSpent_s}s`);
-            console.log(`Questions correct: ${moduleProgress.questionsCorrect}/${moduleProgress.questionsAnswered}`);
-            
-            // this.saveToStorage();
-        }
+        if (!moduleProgress) return false;
+
+        const result = moduleProgress.results.find(r => r.questionId === questionId);
+        return result ? result.isCorrect : false;
     }
 
-    // Get results for a specific module
+
+    getQuestionResult(questionId: string): QuestionResult | undefined {
+        if (!this.currentModuleId) return undefined;
+
+        const moduleProgress = this.results.get(this.currentModuleId);
+        if (!moduleProgress) return undefined;
+
+        return moduleProgress.results.find(r => r.questionId === questionId);
+    }
+
+
     getModuleResults(moduleId: string): ModuleProgress | undefined {
         return this.results.get(moduleId);
     }
 
-    // Get all results
+
     getAllResults(): ModuleProgress[] {
         return Array.from(this.results.values());
     }
 
-    // Get results for current session
+
     getSessionResults(): ModuleProgress[] {
-        const sessionData = this.analyticsService.getSessionData();
-        const currentSessionId = sessionData.sessionId;
-        
+        const currentSessionId = this.sessionService.getSessionId();
+        if (!currentSessionId) return [];
+
         return Array.from(this.results.values())
             .filter(module => module.sessionId === currentSessionId);
     }
 
-    // Export results as JSON
+
+    // Export methods
     exportResults(): string {
-        return JSON.stringify(Array.from(this.results.values()), null, 2);
+        return JSON.stringify(this.getAllResults(), null, 2);
     }
 
-    // Export combined data (analytics + results)
-    exportCombinedData(): string {
-        const analyticsData = this.analyticsService.getSessionData();
-        const resultsData = this.getAllResults();
-        
-        return JSON.stringify({
-            analytics: analyticsData,
-            results: resultsData,
-            exportTime: new Date().toISOString()
-        }, null, 2);
-    }
 
-    // Send to backend (combine with analytics)
-    async sendToBackend() {
-        if (!this.isBrowser) return;
-
-        try {
-            const combinedData = {
-                analytics: this.analyticsService.getSessionData(),
-                results: this.getAllResults(),
-                timestamp: new Date().toISOString()
-            };
-
-            const response = await fetch('http://localhost:3000/api/combined-data', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(combinedData)
-            });
-
-            const result = await response.json();
-            console.log('Combined data sent to backend:', result);
-        } catch (error) {
-            console.error('Failed to send combined data:', error);
-        }
-    }
-
-    // Clear all results
-    clearResults() {
-        this.results.clear();
-        if (this.isBrowser) {
-            localStorage.removeItem('module-results');
-        }
-    }
-
-    // Save to localStorage
+    // Storage methods
     private saveToStorage() {
         if (this.isBrowser) {
             const data = Array.from(this.results.entries());
-            localStorage.setItem('module-results', JSON.stringify(data));
+            localStorage.setItem(this.STORAGE_KEY, JSON.stringify(data));
         }
     }
 
-    // Load from localStorage
+
     private loadFromStorage() {
         if (this.isBrowser) {
-            const stored = localStorage.getItem('module-results');
+            const stored = localStorage.getItem(this.STORAGE_KEY);
             if (stored) {
                 try {
                     const data = JSON.parse(stored);
@@ -243,5 +234,38 @@ export class ResultsTracking {
                 }
             }
         }
+    }
+
+
+    // Backend communication
+    async sendToBackend(endpoint: string = 'http://localhost:3000/api/results') {
+        if (!this.isBrowser) return;
+
+        try {
+            const response = await fetch(endpoint, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    sessionId: this.sessionService.getSessionId(),
+                    results: this.getAllResults(),
+                    timestamp: new Date().toISOString()
+                })
+            });
+
+            const result = await response.json();
+            console.log('Results sent to backend:', result);
+        } catch (error) {
+            console.error('Failed to send results:', error);
+        }
+    }
+
+	
+    // Cleanup
+    clearResults() {
+        this.results.clear();
+        if (this.isBrowser) {
+            localStorage.removeItem(this.STORAGE_KEY);
+        }
+        console.log('All results cleared');
     }
 }

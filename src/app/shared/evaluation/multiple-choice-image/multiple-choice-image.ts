@@ -1,6 +1,7 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { ResultsTracking } from '../../../core/services/results-tracking';
 
 
 interface QuestionOption {
@@ -27,6 +28,7 @@ export class MultipleChoiceImage implements OnInit {
     @Input() options!: QuestionOption[];
     @Input() correctAnswers!: string[];
     @Input() containerId!: string;
+    @Input() questionId!: string;
     
     // Custom messages
     @Input() successMessage?: string;
@@ -41,7 +43,10 @@ export class MultipleChoiceImage implements OnInit {
     isCorrect = false;
     resultMessage: SafeHtml = '';
 
-    constructor(private sanitizer: DomSanitizer) {}
+    constructor(
+        private sanitizer: DomSanitizer,
+        private trackingService: ResultsTracking
+    ) {}
 
     ngOnInit() {}
 
@@ -67,6 +72,14 @@ export class MultipleChoiceImage implements OnInit {
 
         this.isCorrect = allCorrectSelected && noIncorrectSelected;
         this.showResult = true;
+
+        // Track the result
+        this.trackingService.trackQuestionResult(
+            this.questionId,
+            this.isCorrect,
+            selectedAnswers,
+            this.correctAnswers
+        );
 
         if (this.isCorrect) {
             this.onCorrectAnswer.emit();

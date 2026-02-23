@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, OnInit, Inject, PLATFORM_ID, OnDestroy } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
@@ -6,6 +6,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { MultipleChoiceImage } from '../../../shared/evaluation/multiple-choice-image/multiple-choice-image';
 import { MultipleChoice } from '../../../shared/evaluation/multiple-choice/multiple-choice';
 import { ImageChoice } from '../../../shared/evaluation/image-choice/image-choice';
+import { ResultsTracking } from '../../../core/services/results-tracking';
 import { IncomingMessage } from 'http';
 
 
@@ -28,11 +29,20 @@ declare global {
 
 
 
-export class IntroExperiment implements OnInit {
+export class IntroExperiment implements OnInit, OnDestroy {
+    constructor(
+		private sanitizer: DomSanitizer,
+        @Inject(PLATFORM_ID) private platformId: Object,
+        private router: Router,
+		private trackingService: ResultsTracking
+    ) {}
+
+	
 	// +++ QA data +++
 
     // question 1 data
     question1 = {
+		questionId: 'intro-exp-1-schwungrad',
         imageSrc: 'assets/images/intro-experiment/schwungrad_2.png',
         imageAlt: 'Schwungrad',
         question: 'Welche der Aussagen in Bezug auf das Schwungrad sind richtig?',
@@ -67,6 +77,7 @@ export class IntroExperiment implements OnInit {
 
 	// question 2 data
     question2 = {
+		questionId: 'intro-exp-2-feder',
         imageSrc: 'assets/images/intro-experiment/feder_2.png',
         imageAlt: 'Feder',
         question: 'Welche Aussage über die Feder ist korrekt?',
@@ -89,6 +100,7 @@ export class IntroExperiment implements OnInit {
 
 	// question 3 data
     question3 = {
+		questionId: 'intro-exp-3-wirbelstrombremse',
         imageSrc: 'assets/images/intro-experiment/wirbelstrombremse_2.png',
         imageAlt: 'Wirbelstrombremse',
         question: `Zur Dämpfung wird in diesem Versuchsaufbau ein Magnet verwendet, 
@@ -120,6 +132,7 @@ export class IntroExperiment implements OnInit {
 
 	// question 4 data
     question4 = {
+		questionId: 'intro-exp-4-direktionsmoment',
         question: `Welche Informationen über den Versuchsaufbau benötigen Sie bzw. welche Größen müssen Sie messen, um das Direktionsmoment $D$ der Feder zu bestimmen?`,
         options: [
             { value: 'answer1', label: 'Frequenz der Schwingung $\\omega$.' },
@@ -143,6 +156,7 @@ export class IntroExperiment implements OnInit {
 
 	// question 5 data
 	question5 = {
+		questionId: 'intro-exp-5-winkel-drehmoment',
 		question: 'Welchen Zusammenhang zwischen dem Winkel $\\varphi$ und dem Drehmoment $M$ erwarten Sie bei der Messung?',
 		options: [
 			{ 
@@ -173,6 +187,7 @@ export class IntroExperiment implements OnInit {
 
 	// question 6 data
 	question6 = {
+		questionId: 'intro-exp-6-winkel-zeit',
 		question: `
 			Die unten angezeigten Graphen zeigen zeitliche Entwicklungen der Winkelauslenkung (Winkel $\\varphi$) des Schwungrads.<br><br>
 			Welcher dieser Graphen sind "realistisch"? Welche der folgenden Graphen könnten bei einem realen Versuch enstehen, wenn Sie davon ausgehen, 
@@ -274,18 +289,12 @@ export class IntroExperiment implements OnInit {
 	
 
 	// +++ TeX rendering +++
-
-	// rendering Math texts
-    constructor(
-		private sanitizer: DomSanitizer,
-        @Inject(PLATFORM_ID) private platformId: Object,
-        private router: Router
-    ) {}
-
-
 	introExperimentText!: SafeHtml;
 
     ngOnInit() {
+        // Start tracking this module
+        this.trackingService.startModule('intro-experiment');
+
 		// sanitized string to enable LaTeX rendering
         this.introExperimentText = this.sanitizer.bypassSecurityTrustHtml(`
             Das Schwungrad ist in dem Versuch im Schwerpunkt aufgehängt. Durch das Anbringen zusätzliche 
@@ -306,16 +315,26 @@ export class IntroExperiment implements OnInit {
     }
 
 
-    // trigger MathJax rendering
-    renderMath() {
-        if (isPlatformBrowser(this.platformId)) {
-            setTimeout(() => {
-                if (window.MathJax) {
-                    window.MathJax.typesetPromise();
-                }
-            });
-        }
+    ngOnDestroy() {
+        // End tracking when leaving the module
+        this.trackingService.endModule();
     }
+
+
+    // trigger MathJax rendering
+	renderMath() {
+		if (isPlatformBrowser(this.platformId)) {
+			setTimeout(() => {
+				if (window.MathJax) {
+					// Clear all previous MathJax processing
+					const elements = document.querySelectorAll('.MathJax');
+					elements.forEach(el => el.remove());
+					
+					window.MathJax.typesetPromise();
+				}
+			}, 100);
+		}
+	}
 
 
 	// +++ in-page navigation +++

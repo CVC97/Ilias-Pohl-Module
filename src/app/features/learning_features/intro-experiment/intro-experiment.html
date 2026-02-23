@@ -50,6 +50,7 @@
                 
                 <!-- first evaluation container: Schwungrad -->
                 <app-multiple-choice-image
+                    [questionId]="question1.questionId"
                     [imageSrc]="question1.imageSrc"
                     [imageAlt]="question1.imageAlt"
                     [question]="question1.question"
@@ -64,6 +65,7 @@
 
                 <!-- second evaluation container: Feder -->
                 <app-multiple-choice-image
+                    [questionId]="question2.questionId"
                     [imageSrc]="question2.imageSrc"
                     [imageAlt]="question2.imageAlt"
                     [question]="question2.question"
@@ -78,6 +80,7 @@
 
                 <!-- third evaluation container: Wirbelstrombremse -->
                 <app-multiple-choice-image
+                    [questionId]="question3.questionId"
                     [imageSrc]="question3.imageSrc"
                     [imageAlt]="question3.imageAlt"
                     [question]="question3.question"
@@ -103,6 +106,7 @@
                 </div>
                 
                 <app-multiple-choice
+                    [questionId]="question4.questionId"
                     [question]="question4.question"
                     [options]="question4.options"
                     [correctAnswers]="question4.correctAnswers"
@@ -114,6 +118,7 @@
                 </app-multiple-choice>
 
                 <app-image-choice
+                    [questionId]="question5.questionId"
                     [question]="question5.question"
                     [options]="question5.options"
                     [correctAnswers]="question5.correctAnswers"
@@ -137,6 +142,7 @@
             <div *ngIf="currentView === 'intro_exp4'">
 
                 <app-image-choice
+                    [questionId]="question6.questionId"
                     [question]="question6.question"
                     [options]="question6.options"
                     [correctAnswers]="question6.correctAnswers"

@@ -2,6 +2,7 @@ import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
+import { Session } from './session';
 
 
 
@@ -31,9 +32,11 @@ export class Analytics {
 
     constructor(
         private router: Router,
-        @Inject(PLATFORM_ID) private platformId: Object
+        @Inject(PLATFORM_ID) private platformId: Object,
+        private sessionService: Session
     ) {
-        this.sessionId = this.generateSessionId();
+        // Use framework session ID instead of generating one
+        this.sessionId = this.sessionService.getSessionId() || this.generateSessionId();
         this.initTracking();
     }
 

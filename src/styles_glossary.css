@@ -80,9 +80,9 @@
 }
 
 .glossary-link {
-    color: var(--uni-blau-2);
+    color: var(--glossary-link-color);
 }
 
 .glossary-link:hover {
-    color: var(--uni-blau-3);
+    color: var(--glossary-link-color-hover);
 }

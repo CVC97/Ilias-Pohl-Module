@@ -1,6 +1,6 @@
 /* Footer */
 footer {
-    background: var(--uni-blau-2);
+    background: var(--bg-footer);
     color: white;
     padding: 1rem 2rem;
     position: fixed;

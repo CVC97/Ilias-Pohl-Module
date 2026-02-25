@@ -28,39 +28,63 @@ export class Session {
     private initSession() {
         if (!this.isBrowser) return;
 
-        // try to get session_id from URL first
+        // priority 1: check if session already exists in storage (from another tab)
+        const storedSessionId = this.loadFromStorage();
+        
+        // priority 2: check URL for session_id parameter
         const urlSessionId = this.getSessionIdFromUrl();
         
         if (urlSessionId) {
-            // got it from URL - store it
-            this.sessionId = urlSessionId;
-            this.saveToStorage(urlSessionId);
-            console.log('Session ID from URL:', this.sessionId);
-        } else {
-            // not in URL - try to load from storage
-            this.sessionId = this.loadFromStorage();
-            if (this.sessionId) {
-                console.log('Session ID from storage:', this.sessionId);
-			// neither in URL nor in storage - generate own session id and store it
+			// URL has session_id - this takes priority (new framework access)
+			if (urlSessionId !== storedSessionId) {
+				// different session from URL - update storage
+                this.sessionId = urlSessionId;
+                this.saveToStorage(urlSessionId);
+                console.log('New session from framework:', urlSessionId);
             } else {
-                console.warn('No session ID found in URL or storage.');
-				this.sessionId = this.generateSessionId();
-				this.saveToStorage(this.sessionId);
-				console.log('Session ID generated and stored:', this.sessionId);
+                // same session - just use it
+                this.sessionId = urlSessionId;
+                console.log('Session ID from URL (matches storage):', this.sessionId);
             }
+        } else if (storedSessionId) {
+            // no URL param, but we have stored session - use it (new tab scenario)
+            this.sessionId = storedSessionId;
+            console.log('Session ID from storage (new tab):', this.sessionId);
+        } else {
+            // no URL param AND no storage - generate new (standalone access)
+            console.warn('No session ID found in URL or storage.');
+            this.sessionId = this.generateSessionId();
+            this.saveToStorage(this.sessionId);
+            console.log('Session ID generated and stored:', this.sessionId);
         }
 
-        // Listen for route changes to catch session_id in future navigations
+
+		// listen for route changes to catch session_id in future navigations
         this.router.events.pipe(
             filter(event => event instanceof NavigationEnd)
         ).subscribe(() => {
             const newSessionId = this.getSessionIdFromUrl();
             if (newSessionId && newSessionId !== this.sessionId) {
+                // new session from URL
                 this.sessionId = newSessionId;
                 this.saveToStorage(newSessionId);
-                console.log('Session ID updated:', this.sessionId);
+                console.log('Session ID updated from navigation:', this.sessionId);
             }
         });
+
+        // listen for storage changes from other tabs
+        if (typeof window !== 'undefined') {
+            window.addEventListener('storage', (event) => {
+                if (event.key === this.SESSION_STORAGE_KEY && event.newValue) {
+                    // another tab updated the session
+                    const newSessionId = event.newValue;
+                    if (newSessionId !== this.sessionId) {
+                        console.log('Session ID updated from another tab:', newSessionId);
+                        this.sessionId = newSessionId;
+                    }
+                }
+            });
+        }
     }
 
 
@@ -83,21 +107,13 @@ export class Session {
     private saveToStorage(sessionId: string) {
         if (this.isBrowser) {
             localStorage.setItem(this.SESSION_STORAGE_KEY, sessionId);
-            // also save in sessionStorage as backup
-            sessionStorage.setItem(this.SESSION_STORAGE_KEY, sessionId);
         }
     }
 
 
     private loadFromStorage(): string | null {
         if (this.isBrowser) {
-            // Try localStorage first
-            let stored = localStorage.getItem(this.SESSION_STORAGE_KEY);
-            if (stored) return stored;
-
-            // Fallback to sessionStorage
-            stored = sessionStorage.getItem(this.SESSION_STORAGE_KEY);
-            if (stored) return stored;
+            return localStorage.getItem(this.SESSION_STORAGE_KEY);
         }
         return null;
     }

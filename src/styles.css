@@ -32,6 +32,9 @@
     --shadow-color: rgba(33, 150, 243, 0.2);
     --button-color: var(--uni-blau-1);
     --button-color-hover: var(--uni-blau-2);
+    --bg-footer: var(--uni-blau-2);
+    --glossary-link-color: var(--uni-blau-2);
+    --glossary-link-color-hover: var(--uni-blau-3)
 }
 
 /* Global Reset & Base Styles */
@@ -52,6 +55,9 @@
     --shadow-color: var(--grau-80);
     --button-color: var(--uni-blau-2);
     --button-color-hover: var(--uni-blau-3);
+    --bg-footer: var(--uni-blau-3);
+    --glossary-link-color: var(--uni-blau-3);
+    --glossary-link-color-hover: var(--uni-blau-4)
 }
 
 

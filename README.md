@@ -5,7 +5,7 @@ Lernmodul zum Experiment "Der Pohlsche Resonator" des Grundpraktikums zur Experi
 The project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.1.4. with strong help of Claude AI.
 
 
-## Module Structure Tree
+## Project Structure Tree
 
 The directory tree is as follows:
 
@@ -33,7 +33,7 @@ src/
 |   └───shared/
 |   |   └───footer/                             // all footer code
 |   |   └───header/                             // all header code
-|   |   └───evaluation/                         // all Q+A types globally defined
+|   |   └───evaluation/                         // all Q+A types globally defined as features
 |   |   |   |   styles_evaluation.css           // stylesheet for the evaluation types
 |   |   |   |
 |   |   |   └───single-choice/ 
@@ -42,18 +42,23 @@ src/
 |   |   |   └───image-choice/
 |   |   |   └───drag-drop/
 |   |   |
-|   |   └───test/                               // test formats 
+|   |   └───test/                               // test formats (TBD)
 |   |   
 |   └───features/                               // code for the individual subpages
 |           └───home/                           // home page
 |           └───glossary/                       // glossary overview page
 |           └───glossary_features/              // contains the individual glossary entries
-|           └───learning_features/              // contains the individual subpages of the leaning module
-|           └───simulation_features/
+|           └───learning_features/              // " the " learning subpages
+|           └───test_features/                  // " the " tests / decision questions
+|           └───sidepath_features/              // " the " sidepath pages
+|           └───target_features/                // " the " target pages
+|           └───simulation_features/            // " the " simulation pages
 |
 └───assets/                                     // contains image, icons, etc.
 
 ```
+
+## Project Services and Components
 
 ### Services
 
@@ -66,7 +71,7 @@ Project-wide services providing functionality.
 - **data-export.ts:** exports page and question tracking (TBD)
 
 
-### Evaluation Formats
+### Evaluation Features
 
 Each Q+A box type has its own modularised code provided globally, these formats do exist.
 
@@ -101,4 +106,15 @@ The subpages of the learning module and the questionID of each Q+A box found in 
 
 - **intro-experiment:**
 
+
+### Test Features
+
+
+### Sidepath Features
+
+### Target Features
+
 ### Simulation Features
+
+
+### Tests

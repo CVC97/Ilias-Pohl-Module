@@ -254,37 +254,31 @@ export class IntroExperiment implements OnInit, OnDestroy {
     onQuestion1Answered(isCorrect: boolean) {
 		this.isCorrect1 = isCorrect;
 		this.updatePage2Completion();
-		this.renderMath();
     }
 	
     onQuestion2Answered(isCorrect: boolean) {
 		this.isCorrect2 = isCorrect;
 		this.updatePage2Completion();
-		this.renderMath();
     }
 	
     onQuestion3Answered(isCorrect: boolean) {
 		this.isCorrect3 = isCorrect;
 		this.updatePage2Completion();
-		this.renderMath();
     }
 	
     onQuestion4Answered(isCorrect: boolean) {
 		this.isCorrect4 = isCorrect;
 		this.updatePage3Completion();
-		this.renderMath();
     }
 	
     onQuestion5Answered(isCorrect: boolean) {
 		this.isCorrect5 = isCorrect;
 		this.updatePage3Completion();
-		this.renderMath();
     }
 
     onQuestion6Answered(isCorrect: boolean) {
 		this.isCorrect6 = isCorrect;
 		this.updatePage4Completion();
-		this.renderMath();
     }
 	
 
@@ -329,9 +323,14 @@ export class IntroExperiment implements OnInit, OnDestroy {
         this.isCorrect1 = this.trackingService.isQuestionCompleted(this.question1.questionId);
         this.isCorrect2 = this.trackingService.isQuestionCompleted(this.question2.questionId);
         this.isCorrect3 = this.trackingService.isQuestionCompleted(this.question3.questionId);
+        this.isCorrect4 = this.trackingService.isQuestionCompleted(this.question4.questionId);
+        this.isCorrect5 = this.trackingService.isQuestionCompleted(this.question5.questionId);
+        this.isCorrect6 = this.trackingService.isQuestionCompleted(this.question6.questionId);
         
         // update page completion
         this.updatePage2Completion();
+		this.updatePage3Completion();
+		this.updatePage4Completion();
     }
 
 
@@ -361,14 +360,14 @@ export class IntroExperiment implements OnInit, OnDestroy {
 
 	// page completion tracking
 	page1Complete = true;
-	// page2Complete = false;
-	// page3Complete = false;
-	// page4Complete = false;
+	page2Complete = false;
+	page3Complete = false;
+	page4Complete = false;
 
 	// everything true for development purposes
-	page2Complete = true;
-	page3Complete = true;
-	page4Complete = true;
+	// page2Complete = true;
+	// page3Complete = true;
+	// page4Complete = true;
 
 
     // ability to proceed in the module: depending on the Q+A performance (all questions have to be answered)

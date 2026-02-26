@@ -1,7 +1,17 @@
-import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, Inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { CommonModule } from '@angular/common';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ResultsTracking } from '../../../core/services/results-tracking';
+
+
+
+declare global {
+	interface Window {
+		MathJax: any;
+    }
+}
+
 
 
 interface QuestionOption {
@@ -47,7 +57,8 @@ export class MultipleChoiceImage implements OnInit {
 
     constructor(
         private sanitizer: DomSanitizer,
-        private trackingService: ResultsTracking
+        private trackingService: ResultsTracking,
+        @Inject(PLATFORM_ID) private platformId: Object
     ) {}
 
 
@@ -71,10 +82,29 @@ export class MultipleChoiceImage implements OnInit {
             // Restore success message
             const message = this.successMessage || '✓ Richtig!';
             this.resultMessage = this.sanitizer.bypassSecurityTrustHtml(message);
+
+            // Restore selected checkboxes after DOM is ready
+            setTimeout(() => {
+                this.restoreSelectedAnswers(previousResult.selectedAnswers);
+                this.renderMath();
+            }, 100);
             
             // Notify parent that this question is already complete
             this.onAnswerEvaluated.emit(true);
         }
+    }
+
+
+    private restoreSelectedAnswers(selectedAnswers: string[]) {
+        const checkboxes = document.querySelectorAll(
+            `.${this.containerId} input[type="checkbox"]`
+        );
+        
+        checkboxes.forEach((checkbox: any) => {
+            if (selectedAnswers.includes(checkbox.value)) {
+                checkbox.checked = true;
+            }
+        });
     }
 
 
@@ -114,6 +144,11 @@ export class MultipleChoiceImage implements OnInit {
         
         this.onAnswerEvaluated.emit(this.isCorrect);
         this.updateResultMessage(selectedAnswers, allCorrectSelected);
+
+        // render math after evaluating answer
+        setTimeout(() => {
+            this.renderMath();
+        }, 100);
     }
 
 
@@ -129,6 +164,26 @@ export class MultipleChoiceImage implements OnInit {
             } else {
                 this.resultMessage = this.sanitizer.bypassSecurityTrustHtml(this.incorrectMessage!);
             }
+        }
+    }
+
+
+    // trigger MathJax rendering
+    renderMath() {
+        if (isPlatformBrowser(this.platformId)) {
+            setTimeout(() => {
+                if (window.MathJax) {
+                    // Get ONLY the result element for THIS question
+                    const resultElement = document.querySelector(`.${this.containerId} .evaluation-result`);
+                    
+                    if (resultElement) {
+                        // Only render THIS specific element
+                        window.MathJax.typesetPromise([resultElement]).catch((err: any) => {
+                            console.error('MathJax rendering error:', err);
+                        });
+                    }
+                }
+            }, 100);
         }
     }
 }

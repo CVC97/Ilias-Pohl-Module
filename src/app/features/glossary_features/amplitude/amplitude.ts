@@ -1,40 +1,39 @@
-import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
+import { Component, Inject, PLATFORM_ID } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { RouterLink } from '@angular/router';
+import { CommonModule } from '@angular/common';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-
-
-
-declare global {
-    interface Window {
-        MathJax: any;
-    }
-}
+import { GlossaryBase } from '../glossary-base';
 
 
 
 @Component({
     selector: 'app-amplitude',
     standalone: true,
-    imports: [RouterLink],
+    imports: [RouterLink, CommonModule],
     templateUrl: './amplitude.html',
     styleUrl: './amplitude.css',
 })
 
 
 
-export class Amplitude implements OnInit {
+export class Amplitude extends GlossaryBase {
     amplitudeText!: SafeHtml;
     amplitudeFormulaText!: SafeHtml;
 	amplitudePlotText!: SafeHtml;
 
+
     constructor(
         private sanitizer: DomSanitizer,
-        @Inject(PLATFORM_ID) private platformId: Object
-    ) {}
+        @Inject(PLATFORM_ID) platformId: Object,
+        route: ActivatedRoute
+    ) {
+        super(platformId, route);
+    }
+
 
 	// bypassing math rendering errors
-    ngOnInit() {        
+    initContent() {        
         this.amplitudeText = this.sanitizer.bypassSecurityTrustHtml(`
             Die Amplitude ist der Betrag der maximalen Auslenkung der Schwingung aus der Ruhelage 
             und wird oft als $\\varphi_0$ oder $x_0$ bezeichnet. Bei einer getriebenen Schwingung ist die 
@@ -63,17 +62,5 @@ export class Amplitude implements OnInit {
             von der Erregerfrequenz $\\frac{\\omega}{\\omega_0}$ für verschiedene Dämpfungsverhältnisse 
             $\\frac{\\beta}{\\omega_0}$. Mit zunehmender Dämpfung sinkt das Amplitudenmaximum.
         `);
-        
-        this.renderMath();
-    }
-
-    renderMath() {
-        if (isPlatformBrowser(this.platformId)) {
-            setTimeout(() => {
-                if (window.MathJax) {
-                    window.MathJax.typesetPromise();
-                }
-            }, 100);
-        }
     }
 }

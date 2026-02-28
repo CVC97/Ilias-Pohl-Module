@@ -1,7 +1,9 @@
-import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
+import { Component, Inject, PLATFORM_ID } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { RouterLink } from '@angular/router';
+import { CommonModule } from '@angular/common';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { GlossaryBase } from '../glossary-base';
 
 
 
@@ -15,25 +17,30 @@ declare global {
 @Component({
 	selector: 'app-moment-of-inertia',
 	standalone: true,
-	imports: [RouterLink],
+    imports: [RouterLink, CommonModule],
 	templateUrl: './moment-of-inertia.html',
 	styleUrl: './moment-of-inertia.css',
 })
 
 
 
-export class MomentOfInertia implements OnInit {
+export class MomentOfInertia extends GlossaryBase {
     moiText!: SafeHtml;
     moiFormulaText!: SafeHtml;
 	moiPlotText!: SafeHtml;
 
+
     constructor(
         private sanitizer: DomSanitizer,
-        @Inject(PLATFORM_ID) private platformId: Object
-    ) {}
+        @Inject(PLATFORM_ID) platformId: Object,
+        route: ActivatedRoute
+    ) {
+        super(platformId, route);
+    }
+
 
 	// bypassing math rendering errors
-    ngOnInit() {        
+    initContent() {        
         this.moiText = this.sanitizer.bypassSecurityTrustHtml(`
             Das Trägheitsmoment $\\theta$ ist ein Maß für den Widerstand, den ein Körper der Änderung seiner Winkelgeschwindigkeit entgegensetzt. 
 			Es spielt damit bei einer Drehbewegung die gleiche Rolle wie die (träge) Masse im Verhältnis von Kraft und Beschleunigung (Translationsbewegeung).
@@ -47,17 +54,5 @@ export class MomentOfInertia implements OnInit {
 			Dabei ist $\\rho(\\vec{r})$ die Funktion der Dichte des Körpers und $\\vec{r}_\\perp$ der senkrechte Vektor von der Rotationsachse 
 			(vorgegeben von der vektoriellen Winkelgeschwindigkeit $\\omega$) zum Volumenelement $\\mathrm{d}V$.
         `);
-        
-        this.renderMath();
-    }
-
-    renderMath() {
-        if (isPlatformBrowser(this.platformId)) {
-            setTimeout(() => {
-                if (window.MathJax) {
-                    window.MathJax.typesetPromise();
-                }
-            }, 100);
-        }
     }
 }

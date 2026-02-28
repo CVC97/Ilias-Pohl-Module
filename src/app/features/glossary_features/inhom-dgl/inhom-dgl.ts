@@ -1,7 +1,9 @@
-import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
+import { Component, Inject, PLATFORM_ID } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { RouterLink } from '@angular/router';
+import { CommonModule } from '@angular/common';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { GlossaryBase } from '../glossary-base';
 
 
 
@@ -16,41 +18,33 @@ declare global {
 @Component({
     selector: 'app-inhom-dgl',
     standalone: true,
-    imports: [RouterLink],
+    imports: [RouterLink, CommonModule],
 	templateUrl: './inhom-dgl.html',
 	styleUrl: './inhom-dgl.css',
 })
 
 
 
-export class InhomDgl implements OnInit {
+export class InhomDgl extends GlossaryBase {
     inhom_dglFormulaText!: SafeHtml;
+
 
     constructor(
         private sanitizer: DomSanitizer,
-        @Inject(PLATFORM_ID) private platformId: Object
-    ) {}
+        @Inject(PLATFORM_ID) platformId: Object,
+        route: ActivatedRoute
+    ) {
+        super(platformId, route);
+    }
+
 
 	// bypassing math rendering errors
-    ngOnInit() {        
+    initContent() {        
         this.inhom_dglFormulaText = this.sanitizer.bypassSecurityTrustHtml(`
 			Allgemein gilt:
 			$$m\\ddot{x} + b\\dot{x} + kx = F(t)$$
 			Beim Pohlschen Rad ergibt sich dies zu:
 			$$\\Theta\\ddot{\\varphi} + \\rho\\dot{\\varphi} + D^*\\varphi = M_0\\cos(\\omega t)$$
         `);
-
-        
-        this.renderMath();
-    }
-
-    renderMath() {
-        if (isPlatformBrowser(this.platformId)) {
-            setTimeout(() => {
-                if (window.MathJax) {
-                    window.MathJax.typesetPromise();
-                }
-            }, 100);
-        }
     }
 }

@@ -1,7 +1,9 @@
-import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
+import { Component, Inject, PLATFORM_ID } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { RouterLink } from '@angular/router';
+import { CommonModule } from '@angular/common';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { GlossaryBase } from '../glossary-base';
 
 
 
@@ -16,25 +18,30 @@ declare global {
 @Component({
     selector: 'app-exponential-ansatz',
     standalone: true,
-    imports: [RouterLink],
+    imports: [RouterLink, CommonModule],
 	templateUrl: './exponential-ansatz.html',
 	styleUrl: './exponential-ansatz.css',
 })
 
 
 
-export class ExponentialAnsatz implements OnInit {
+export class ExponentialAnsatz extends GlossaryBase {
     exponential_ansatzText!: SafeHtml;
     exponential_ansatzFormulaText1!: SafeHtml;
 	exponential_ansatzFormulaText2!: SafeHtml;
 
+
     constructor(
         private sanitizer: DomSanitizer,
-        @Inject(PLATFORM_ID) private platformId: Object
-    ) {}
+        @Inject(PLATFORM_ID) platformId: Object,
+        route: ActivatedRoute
+    ) {
+        super(platformId, route);
+    }
+
 
 	// bypassing math rendering errors
-    ngOnInit() {        
+    initContent() {        
         this.exponential_ansatzText = this.sanitizer.bypassSecurityTrustHtml(`
 			Der Exponentialansatz ist eine hilfreiche Methode im Lösen von linearen Differentialgleichungen 
 			mit konstanten Koeffizienten. Es wird angenommen, dass sich die Lösungen durch eine exponentielle 
@@ -74,17 +81,5 @@ export class ExponentialAnsatz implements OnInit {
 			Komplex konjugierte Lösungen 
 			$$\\lambda_{1,2} = \\alpha \\pm i\\beta = -\\frac{b}{2a} \\pm i\\frac{\\sqrt{4ac - b^2}}{2a}$$
         `);
-        
-        this.renderMath();
-    }
-
-    renderMath() {
-        if (isPlatformBrowser(this.platformId)) {
-            setTimeout(() => {
-                if (window.MathJax) {
-                    window.MathJax.typesetPromise();
-                }
-            }, 100);
-        }
     }
 }

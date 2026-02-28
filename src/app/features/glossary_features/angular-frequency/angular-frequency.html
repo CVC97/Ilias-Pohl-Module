@@ -7,7 +7,8 @@
         <div class="glossary-write">
             <p class="glossary-text" [innerHTML]="angular_frequencyFormulaText"></p>
         </div>
-        <div class="button-container">
+        <!-- conditional back button -->
+        <div class="button-container" *ngIf="showBackButton">
             <a routerLink="/glossary" class="btn">← Zurück zu den Begriffen</a>
         </div>
     </div>

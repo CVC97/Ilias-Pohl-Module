@@ -11,7 +11,7 @@ The directory tree is as follows:
 
 ```
 
-dist/                                           // compressed angular build for deployment to server
+dist/                                           // compressed angular build for deployment
 
 angular.json                                    // defines location of stylesheets, icons, etc.
 src/
@@ -48,6 +48,11 @@ src/
 |           └───home/                           // home page
 |           └───glossary/                       // glossary overview page
 |           └───glossary_features/              // contains the individual glossary entries
+|           |   |   glossary-base.ts            // base component for all glossary items
+|           |   |
+|           |   └───amplitude/
+|           |   └─── ...
+|           |
 |           └───learning_features/              // " the " learning subpages
 |           └───test_features/                  // " the " tests / decision questions
 |           └───sidepath_features/              // " the " sidepath pages
@@ -115,6 +120,3 @@ The subpages of the learning module and the questionID of each Q+A box found in 
 ### Target Features
 
 ### Simulation Features
-
-
-### Tests

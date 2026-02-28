@@ -295,18 +295,18 @@ export class IntroExperiment implements OnInit, OnDestroy {
 		// sanitized string to enable LaTeX rendering
         this.introExperimentText = this.sanitizer.bypassSecurityTrustHtml(`
             Das Schwungrad ist in dem Versuch im Schwerpunkt aufgehängt. Durch das Anbringen zusätzliche 
-            Massestücke wirkt ein zusätzliches <a target="_blank" rel="noopener noreferrer" href="glossary/angular-momentum" class="glossary-link">Drehmoment</a>, 
+            Massestücke wirkt ein zusätzliches <a target="_blank" rel="noopener noreferrer" href="glossary/angular-momentum?from=module" class="glossary-link">Drehmoment</a>, 
             über das die Feder näher charakterisiert werden kann. 
             Um diesen Zusammenhang nachzuvollziehen, betrachten wir zunächst das Schwungrad ohne den zusätzlichen 
             Antrieb (s. Abbildung).
             <br><br>
             Auf ein zusätzliches Massestück mit der Masse $m_{zm}$ wirkt die Kraft $\\vec{F}_{zm} = m_{zm}\\vec{g}$, 
-            wodurch auf das Schwungrad das <a target="_blank" rel="noopener noreferrer" href="glossary/angular-momentum" class="glossary-link">Drehmoment</a> 
+            wodurch auf das Schwungrad das <a target="_blank" rel="noopener noreferrer" href="glossary/angular-momentum?from=module" class="glossary-link">Drehmoment</a> 
             $\\vec{M}_{zm} = \\vec{r} \\times \\vec{F}_{zm}$, bzw. 
             $|\\vec{M}_{zm}| = m_{zm}gR\\sin(\\varphi)$ wirkt.
             <br><br>
-            Im stationären Fall gleichen sich das zusätzliche <a target="_blank" rel="noopener noreferrer" href="glossary/angular-momentum" class="glossary-link">Drehmoment</a> 
-            und das rücktreibende <a target="_blank" rel="noopener noreferrer" href="glossary/angular-momentum" class="glossary-link">Drehmoment</a> der 
+            Im stationären Fall gleichen sich das zusätzliche <a target="_blank" rel="noopener noreferrer" href="glossary/angular-momentum?from=module" class="glossary-link">Drehmoment</a> 
+            und das rücktreibende <a target="_blank" rel="noopener noreferrer" href="glossary/angular-momentum?from=module" class="glossary-link">Drehmoment</a> der 
             Feder aus: $(M_{\\text{Feder}} = -D\\varphi)$.
         `);
     }

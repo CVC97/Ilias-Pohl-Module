@@ -1,34 +1,41 @@
-import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
+import { Component, Inject, PLATFORM_ID } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { RouterLink } from '@angular/router';
+import { CommonModule } from '@angular/common';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { GlossaryBase } from '../glossary-base';
 
-declare global {
-    interface Window {
-        MathJax: any;
-    }
-}
+
 
 @Component({
     selector: 'app-natural-frequency',
     standalone: true,
-    imports: [RouterLink],
+    imports: [RouterLink, CommonModule],
 	templateUrl: './natural-frequency.html',
 	styleUrl: './natural-frequency.css',
 })
 
-export class NaturalFrequency implements OnInit {
+
+
+export class NaturalFrequency extends GlossaryBase {
     natural_frequencyText!: SafeHtml;
     undamped_natural_frequencyFormulaText!: SafeHtml;
 	damped_natural_frequencyFormulaText!: SafeHtml;
 
+
+
     constructor(
         private sanitizer: DomSanitizer,
-        @Inject(PLATFORM_ID) private platformId: Object
-    ) {}
+        @Inject(PLATFORM_ID) platformId: Object,
+        route: ActivatedRoute
+    ) {
+        super(platformId, route);
+    }
+
+
 
 	// bypassing math rendering errors
-    ngOnInit() {        
+    initContent() {        
         this.natural_frequencyText = this.sanitizer.bypassSecurityTrustHtml(`
             Die Eigenschwingfrequenz $f$ beschreibt die Frequenz, mit der ein System nach einer Auslenkung schwingt, wenn keine äußere Kraft wirkt.
         `);
@@ -48,17 +55,5 @@ export class NaturalFrequency implements OnInit {
 			beziehungsweise für die Eigenkreisfrequenz:
 			$$\\omega_d = \\sqrt{\\omega_0^2 - \\beta^2}$$
         `);
-        
-        this.renderMath();
-    }
-
-    renderMath() {
-        if (isPlatformBrowser(this.platformId)) {
-            setTimeout(() => {
-                if (window.MathJax) {
-                    window.MathJax.typesetPromise();
-                }
-            }, 100);
-        }
     }
 }

@@ -1,7 +1,11 @@
-import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
+import { Component, Inject, PLATFORM_ID } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { RouterLink } from '@angular/router';
+import { CommonModule } from '@angular/common';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { GlossaryBase } from '../glossary-base';
+
+
 
 declare global {
     interface Window {
@@ -12,23 +16,28 @@ declare global {
 @Component({
     selector: 'app-critical-damping',
     standalone: true,
-    imports: [RouterLink],
+    imports: [RouterLink, CommonModule],
 	templateUrl: './critical-damping.html',
 	styleUrl: './critical-damping.css',
 })
 
-export class CriticalDamping implements OnInit {
+export class CriticalDamping extends GlossaryBase {
     critical_dampingText!: SafeHtml;
     critical_dampingFormulaText!: SafeHtml;
 	critical_dampingPlotText!: SafeHtml;
 
+
     constructor(
         private sanitizer: DomSanitizer,
-        @Inject(PLATFORM_ID) private platformId: Object
-    ) {}
+        @Inject(PLATFORM_ID) platformId: Object,
+        route: ActivatedRoute
+    ) {
+        super(platformId, route);
+    }
+
 
 	// bypassing math rendering errors
-    ngOnInit() {        
+    initContent() {        
         this.critical_dampingFormulaText = this.sanitizer.bypassSecurityTrustHtml(`
             <strong>Kennzeichen:</strong>
             <ul>
@@ -39,17 +48,5 @@ export class CriticalDamping implements OnInit {
                 <li>Bei stärkerer Dämpfung ($\\beta > \\omega_0$) geht das System in den überaperiodischen Fall (Kriechfall) über</li>
             </ul>
         `);
-        
-        this.renderMath();
-    }
-
-    renderMath() {
-        if (isPlatformBrowser(this.platformId)) {
-            setTimeout(() => {
-                if (window.MathJax) {
-                    window.MathJax.typesetPromise();
-                }
-            }, 100);
-        }
     }
 }

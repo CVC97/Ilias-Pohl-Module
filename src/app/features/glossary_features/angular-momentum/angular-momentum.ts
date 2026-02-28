@@ -1,33 +1,38 @@
-import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
+import { Component, Inject, PLATFORM_ID } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { RouterLink } from '@angular/router';
+import { CommonModule } from '@angular/common';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { GlossaryBase } from '../glossary-base';
 
-declare global {
-    interface Window {
-        MathJax: any;
-    }
-}
+
 
 @Component({
-	selector: 'app-angular-momentum',
-	standalone: true,
-	imports: [RouterLink],
-	templateUrl: './angular-momentum.html',
-	styleUrl: './angular-momentum.css',
+    selector: 'app-angular-momentum',
+    standalone: true,
+    imports: [RouterLink, CommonModule],
+    templateUrl: './angular-momentum.html',
+    styleUrl: './angular-momentum.css',
 })
 
-export class AngularMomentum implements OnInit {
+
+
+export class AngularMomentum extends GlossaryBase {
     angular_momentumText!: SafeHtml;
     angular_momentumFormulaText!: SafeHtml;
 
+
     constructor(
         private sanitizer: DomSanitizer,
-        @Inject(PLATFORM_ID) private platformId: Object
-    ) {}
+        @Inject(PLATFORM_ID) platformId: Object,
+        route: ActivatedRoute
+    ) {
+        super(platformId, route);
+    }
+
 
 	// bypassing math rendering errors
-    ngOnInit() {        
+    initContent() {        
         this.angular_momentumText = this.sanitizer.bypassSecurityTrustHtml(`
 			Das Drehmoment beschreibt die Drehwirkung einer Kraft auf einen Körper. 
 			Es verhält sich analog zur Kraft in geradlinigen Bewegungen und kann somit beschleunigend oder abbremsend wirken.
@@ -42,18 +47,5 @@ export class AngularMomentum implements OnInit {
 				<li><strong>Äußeres, periodisches Anregungsmoment</strong><br> $M_{\\text{ext}} = M_0 \\cos(\\omega t)$</li>
 			</ol>
         `);
-
-        
-        this.renderMath();
-    }
-
-    renderMath() {
-        if (isPlatformBrowser(this.platformId)) {
-            setTimeout(() => {
-                if (window.MathJax) {
-                    window.MathJax.typesetPromise();
-                }
-            }, 100);
-        }
     }
 }

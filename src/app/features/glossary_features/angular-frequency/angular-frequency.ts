@@ -1,7 +1,9 @@
-import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
+import { Component, Inject, PLATFORM_ID } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { RouterLink } from '@angular/router';
+import { CommonModule } from '@angular/common';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { GlossaryBase } from '../glossary-base';
 
 
 
@@ -16,24 +18,29 @@ declare global {
 @Component({
     selector: 'app-angular-frequency',
     standalone: true,
-    imports: [RouterLink],
+    imports: [RouterLink, CommonModule],
 	templateUrl: './angular-frequency.html',
 	styleUrl: './angular-frequency.css',
 })
 
 
 
-export class AngularFrequency implements OnInit {
+export class AngularFrequency extends GlossaryBase {
     angular_frequencyText!: SafeHtml;
     angular_frequencyFormulaText!: SafeHtml;
 
+
     constructor(
         private sanitizer: DomSanitizer,
-        @Inject(PLATFORM_ID) private platformId: Object
-    ) {}
+        @Inject(PLATFORM_ID) platformId: Object,
+        route: ActivatedRoute
+    ) {
+        super(platformId, route);
+    }
+
 
 	// bypassing math rendering errors
-    ngOnInit() {        
+    initContent() {        
         this.angular_frequencyText = this.sanitizer.bypassSecurityTrustHtml(`
             Unter der Kreisfrequenz $\\omega$ einer Schwingung wird allgemein der überstrichene Winkel 
 			$\\varphi$ pro Zeitspanne verstanden.
@@ -51,17 +58,5 @@ export class AngularFrequency implements OnInit {
 				<li><strong>Die Erregerkreisfrequenz</strong> $\\omega$, mit der das System von außen periodisch angeregt wird</li>
 			</ol>
         `);
-        
-        this.renderMath();
-    }
-
-    renderMath() {
-        if (isPlatformBrowser(this.platformId)) {
-            setTimeout(() => {
-                if (window.MathJax) {
-                    window.MathJax.typesetPromise();
-                }
-            }, 100);
-        }
     }
 }

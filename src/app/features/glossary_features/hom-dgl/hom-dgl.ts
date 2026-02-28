@@ -1,7 +1,9 @@
-import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
+import { Component, Inject, PLATFORM_ID } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { RouterLink } from '@angular/router';
+import { CommonModule } from '@angular/common';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { GlossaryBase } from '../glossary-base';
 
 
 
@@ -16,23 +18,28 @@ declare global {
 @Component({
     selector: 'app-hom-dgl',
     standalone: true,
-    imports: [RouterLink],
+    imports: [RouterLink, CommonModule],
 	templateUrl: './hom-dgl.html',
 	styleUrl: './hom-dgl.css',
 })
 
 
 
-export class HomDgl implements OnInit {
+export class HomDgl extends GlossaryBase {
     hom_dglFormulaText!: SafeHtml;
+
 
     constructor(
         private sanitizer: DomSanitizer,
-        @Inject(PLATFORM_ID) private platformId: Object
-    ) {}
+        @Inject(PLATFORM_ID) platformId: Object,
+        route: ActivatedRoute
+    ) {
+        super(platformId, route);
+    }
+    
 
 	// bypassing math rendering errors
-    ngOnInit() {        
+    initContent() {        
         this.hom_dglFormulaText = this.sanitizer.bypassSecurityTrustHtml(`
 			Die Differentialgleichung 
 			$$m\\ddot{x} + b\\dot{x} + Dx = 0$$
@@ -44,17 +51,5 @@ export class HomDgl implements OnInit {
 			Dabei entsprechen $\\Theta$ der Masse $m$, $\\rho$ der Dämpfungskonstante $b$ und 
 			$D^*$ der Federkonstante $D$.
         `);
-        
-        this.renderMath();
-    }
-
-    renderMath() {
-        if (isPlatformBrowser(this.platformId)) {
-            setTimeout(() => {
-                if (window.MathJax) {
-                    window.MathJax.typesetPromise();
-                }
-            }, 100);
-        }
     }
 }

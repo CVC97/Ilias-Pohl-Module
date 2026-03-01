@@ -28,8 +28,9 @@ export class DampedOscillations implements OnInit, OnDestroy {
 	// Question 1 data
     question1 = {
 		questionId: 'damped-osc-1-daempfungsstaerke',
-        question: 'Bei dem Versuch können Sie die Dämpfung darüber anpassen, dass Sie den Überlappbereich zwischen einem Magneten (eines Magnetfelds) und der Schwungscheibe variieren.',
-		questionInstruction: 'Ziehen Sie die Bilder in die richtige Reihenfolge (stärkste Dämpfung oben, schwächste unten).',
+        question: `Bei dem Versuch können Sie die Dämpfung darüber anpassen, dass Sie den Überlappbereich zwischen einem Magneten (eines Magnetfelds) und der Schwungscheibe variieren.
+			Ziehen Sie die Bilder in die richtige Reihenfolge (stärkste Dämpfung oben, schwächste unten).`,
+		questionInstruction: 'Frage 1 von 5 (30 Punkte): Sortierung Dämpfungskonstante',
         images: [
 			{ id: 'weak', imageSrc: 'assets/images/tests/weak_damping.png', label: 'Schwingung A' },
             { id: 'medium', imageSrc: 'assets/images/tests/medium_damping.png', label: 'Schwingung B' },
@@ -43,6 +44,7 @@ export class DampedOscillations implements OnInit, OnDestroy {
 
     // Track submissions
     question1Submitted = false;
+
 	
     constructor(
 		private sanitizer: DomSanitizer,

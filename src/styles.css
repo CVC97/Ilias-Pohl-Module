@@ -34,8 +34,9 @@
     --button-color-hover: var(--uni-blau-2);
     --bg-footer: var(--uni-blau-2);
     --glossary-link-color: var(--uni-blau-2);
-    --glossary-link-color-hover: var(--uni-blau-3)
-    
+    --glossary-link-color-hover: var(--uni-blau-3);
+    --test-h1-color: var(--uni-blau-1)
+
 }
 
 /* Global Reset & Base Styles */
@@ -58,7 +59,8 @@
     --button-color-hover: var(--uni-blau-3);
     --bg-footer: var(--uni-blau-3);
     --glossary-link-color: var(--uni-blau-3);
-    --glossary-link-color-hover: var(--uni-blau-4)
+    --glossary-link-color-hover: var(--uni-blau-4);
+    --test-h1-color: var(--physik-gelb)
 }
 
 

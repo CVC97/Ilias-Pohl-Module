@@ -113,18 +113,18 @@ The subpages of the learning module and the questionID of each Q+A box found in 
 
 
 - **intro-experiment:**
-    - intro-exp-1-schwungrad
-    - intro-exp-2-feder
-    - intro-exp-3-wirbelstrombremse
-    - intro-exp-4-direktionsmoment
-    - intro-exp-5-winkel-drehmoment
-    - intro-exp-6-winkel-zeit
+    - *intro-exp-1-schwungrad*
+    - *intro-exp-2-feder*
+    - *intro-exp-3-wirbelstrombremse*
+    - *intro-exp-4-direktionsmoment*
+    - *intro-exp-5-winkel-drehmoment*
+    - *intro-exp-6-winkel-zeit*
 
 
 ### Test Features
 
 - **damped-oscillations:**
-    - damped-osc-1-daempfungsstaerke
+    - *damped-osc-1-daempfungsstaerke*
 
 
 ### Sidepath Features

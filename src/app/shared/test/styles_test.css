@@ -1,4 +1,9 @@
 /* Test container */
+.h1-test {
+    color: var(--test-h1-color);
+}
+
+
 .test-container {
     background: white;
     border-radius: 12px;

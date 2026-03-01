@@ -28,9 +28,6 @@ interface QuestionOption {
 	templateUrl: './multiple-choice.html',
 	styleUrl: './multiple-choice.css',
 })
-
-
-
 export class MultipleChoice implements OnInit {
     @Input() question!: string;
     @Input() options!: QuestionOption[];

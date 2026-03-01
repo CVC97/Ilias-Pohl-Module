@@ -8,7 +8,7 @@ export interface TestQuestionResult {
     questionId: string;
     testId: string;
     isCorrect: boolean;
-    userAnswer: any; // Can be string[], number, or other types
+    userAnswer: any;
     correctAnswer: any;
     pointsAwarded: number;
     maxPoints: number;
@@ -39,9 +39,6 @@ export interface TestProgress {
 @Injectable({
     providedIn: 'root'
 })
-
-
-
 export class TestTracking {
     private isBrowser: boolean;
     private currentTestId: string = '';
@@ -61,7 +58,7 @@ export class TestTracking {
     }
 
 
-    // start tracking a test
+    // Start tracking a test
     startTest(testId: string, totalQuestions: number, maxPoints: number) {
         const sessionId = this.sessionService.getSessionId();
         if (!sessionId) {
@@ -89,7 +86,7 @@ export class TestTracking {
     }
 
 
-    // track a question result (can only be submitted once)
+    // Track a question result (can only be submitted once)
     trackQuestionResult(
         questionId: string,
         isCorrect: boolean,
@@ -112,7 +109,7 @@ export class TestTracking {
         const testProgress = this.tests.get(this.currentTestId);
         if (!testProgress) return;
 
-        // check if question was already answered (should not happen in tests)
+        // Check if question was already answered (should not happen in tests)
         const existingResult = testProgress.results.find(r => r.questionId === questionId);
         
         if (existingResult) {
@@ -120,7 +117,7 @@ export class TestTracking {
             return;
         }
 
-        // add new result
+        // Add new result
         const result: TestQuestionResult = {
             questionId,
             testId: this.currentTestId,
@@ -144,6 +141,7 @@ export class TestTracking {
         this.saveToStorage();
     }
 
+
     // End tracking for current test
     endTest() {
         if (!this.currentTestId) return;
@@ -163,7 +161,8 @@ export class TestTracking {
         }
     }
 
-    // Query methods
+
+    // Query methods - NEW: Restoration support
     isQuestionAnswered(questionId: string): boolean {
         if (!this.currentTestId) return false;
 
@@ -172,6 +171,7 @@ export class TestTracking {
 
         return testProgress.results.some(r => r.questionId === questionId);
     }
+
 
     getQuestionResult(questionId: string): TestQuestionResult | undefined {
         if (!this.currentTestId) return undefined;
@@ -182,13 +182,16 @@ export class TestTracking {
         return testProgress.results.find(r => r.questionId === questionId);
     }
 
+
     getTestResults(testId: string): TestProgress | undefined {
         return this.tests.get(testId);
     }
 
+
     getAllTests(): TestProgress[] {
         return Array.from(this.tests.values());
     }
+
 
     getSessionTests(): TestProgress[] {
         const currentSessionId = this.sessionService.getSessionId();
@@ -197,6 +200,7 @@ export class TestTracking {
         return Array.from(this.tests.values())
             .filter(test => test.sessionId === currentSessionId);
     }
+
 
     // Export methods
     exportTests(): string {
@@ -211,6 +215,7 @@ export class TestTracking {
         }
     }
 
+
     private loadFromStorage() {
         if (this.isBrowser) {
             const stored = localStorage.getItem(this.STORAGE_KEY);
@@ -224,6 +229,7 @@ export class TestTracking {
             }
         }
     }
+
 
     // Backend communication
     async sendToBackend(endpoint: string = 'http://localhost:3000/api/tests') {
@@ -246,6 +252,7 @@ export class TestTracking {
             console.error('Failed to send test results:', error);
         }
     }
+
 
     // Cleanup
     clearTests() {

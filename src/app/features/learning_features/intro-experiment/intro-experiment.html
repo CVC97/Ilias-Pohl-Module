@@ -156,12 +156,12 @@
             </div>
         </div>
 
-        <!-- Forward button - bottom right, conditionally enabled -->
+        <!-- forward button - bottom right, conditionally enabled -->
         <div class="button-container">
             <!-- a for links -->
-            <a *ngIf="isFirstPage" routerLink="/" class="btn">← Zurück zur Startseite</a>
+            <button *ngIf="isFirstPage" routerLink="/" class="btn" [disabled]="!canGoBack">← Zurück zur Startseite</button>
             <!-- button for actions -->
-            <button *ngIf="!isFirstPage" class="btn" (click)="goBack()">← Zurück</button>
+            <button *ngIf="!isFirstPage" class="btn" (click)="goBack()" [disabled]="!canGoBack">← Zurück</button>
             
             <button class="btn" (click)="goForward()" [disabled]="!canProceed">
                 Weiter →

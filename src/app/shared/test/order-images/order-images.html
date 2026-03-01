@@ -1,13 +1,10 @@
 <div class="test-container" [id]="containerId" [class.submitted]="isSubmitted">
     <h3 class="test-question">{{ question }}</h3>
-    <p class="test-instruction">
-        Ziehen Sie die Bilder in die richtige Reihenfolge (stärkste Dämpfung oben, schwächste unten).
-    </p>
+    <p class="test-instruction">{{ questionInstruction }}</p>
 
     <div 
         class="image-list" 
         cdkDropList 
-        cdkDropListOrientation="vertical"
         [cdkDropListAutoScrollDisabled]="true"
         (cdkDropListDropped)="drop($event)">
         
@@ -15,9 +12,7 @@
             *ngFor="let image of orderedImages; let i = index" 
             class="image-item"
             [class.disabled]="isSubmitted"
-            cdkDrag
-            cdkDragLockAxis="y"
-            [cdkDragFreeDragPosition]="{x: 0, y: 0}">
+            cdkDrag>
             
             <div class="drag-handle">
                 <span class="position-number">{{ i + 1 }}</span>

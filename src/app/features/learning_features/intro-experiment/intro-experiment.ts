@@ -378,6 +378,7 @@ export class IntroExperiment implements OnInit, OnDestroy {
 
     // going back always enabled (for now at least)
     get canGoBack(): boolean {
+		// if (this.currentView === 'intro_exp1') return false;
         return true;
     }
 

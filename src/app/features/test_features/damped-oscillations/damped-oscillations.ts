@@ -1,8 +1,18 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, Inject, PLATFORM_ID, OnDestroy } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { TestOrderImages } from '../../../shared/test/order-images/order-images';
 import { TestTracking } from '../../../core/services/test-tracking';
+
+
+
+declare global {
+	interface Window {
+		MathJax: any;
+    }
+}
 
 
 
@@ -14,74 +24,148 @@ import { TestTracking } from '../../../core/services/test-tracking';
     styleUrl: './damped-oscillations.css'
 })
 export class DampedOscillations implements OnInit, OnDestroy {
-    // Navigation
-    currentPage = 1;
-    totalPages = 5;
-
-    // Question 1 data
+	
+	// Question 1 data
     question1 = {
-        questionId: 'damped-osc-1-order-damping',
-        question: 'Ordnen Sie die folgenden Schwingungen nach ihrer Dämpfungsstärke.',
+		questionId: 'damped-osc-1-daempfungsstaerke',
+        question: 'Bei dem Versuch können Sie die Dämpfung darüber anpassen, dass Sie den Überlappbereich zwischen einem Magneten (eines Magnetfelds) und der Schwungscheibe variieren.',
+		questionInstruction: 'Ziehen Sie die Bilder in die richtige Reihenfolge (stärkste Dämpfung oben, schwächste unten).',
         images: [
-            { id: 'weak', imageSrc: 'assets/images/tests/weak_damping.png', label: 'Schwingung A' },
+			{ id: 'weak', imageSrc: 'assets/images/tests/weak_damping.png', label: 'Schwingung A' },
             { id: 'medium', imageSrc: 'assets/images/tests/medium_damping.png', label: 'Schwingung B' },
             { id: 'strong', imageSrc: 'assets/images/tests/strong_damping.png', label: 'Schwingung C' }
         ],
-        correctOrder: ['strong', 'medium', 'weak'], // IDs in correct order
+        correctOrder: ['strong', 'medium', 'weak'],
         maxPoints: 30,
         containerId: 'test-question-1'
     };
 
+
     // Track submissions
     question1Submitted = false;
-
+	
     constructor(
+		private sanitizer: DomSanitizer,
+        @Inject(PLATFORM_ID) private platformId: Object,
+        private router: Router,
         private testTracking: TestTracking,
-        private router: Router
     ) {}
-
+	
+	
     ngOnInit() {
-        // Start tracking this test
+		// Start tracking this test
         this.testTracking.startTest('damped-oscillations', 5, 150); // 5 questions, 150 total points
+        
+        // Restore completion state from previous session
+        this.restoreCompletionState();
     }
-
+	
+	
     ngOnDestroy() {
-        // End tracking when leaving
+		// End tracking when leaving
         this.testTracking.endTest();
     }
-
+	
+	
+    private restoreCompletionState() {
+		// Check if question was already answered
+        this.question1Submitted = this.testTracking.isQuestionAnswered(this.question1.questionId);
+        
+        console.log('Restored test completion state:', {
+			q1: this.question1Submitted
+        });
+    }
+	
+	
     onQuestion1Submit(result: any) {
-        this.question1Submitted = true;
-
-        // Track the result
-        this.testTracking.trackQuestionResult(
-            this.question1.questionId,
-            result.isCorrect,
-            result.userAnswer,
-            this.question1.correctOrder,
-            result.pointsAwarded,
-            this.question1.maxPoints
-        );
+		this.question1Submitted = true;
+		
+        // Track the result (only if not already tracked)
+        if (!this.testTracking.isQuestionAnswered(this.question1.questionId)) {
+			this.testTracking.trackQuestionResult(
+				this.question1.questionId,
+                result.isCorrect,
+                result.userAnswer,
+                this.question1.correctOrder,
+                result.pointsAwarded,
+                this.question1.maxPoints
+            );
+        }
     }
 
+
+    // trigger MathJax rendering
+	renderMath() {
+		if (isPlatformBrowser(this.platformId)) {
+			setTimeout(() => {
+				if (window.MathJax) {
+					// Clear all previous MathJax processing
+					const elements = document.querySelectorAll('.MathJax');
+					elements.forEach(el => el.remove());
+					
+					window.MathJax.typesetPromise();
+				}
+			}, 100);
+		}
+	}
+	
+	
+	// +++ in-page navigation +++
+	
+    // navigation helpers
+	currentView: string = 'damped_osc1';
+    get isFirstPage(): boolean {
+        return this.currentView === 'damped_osc1';
+    }
+
+
+
     get canProceed(): boolean {
-        // Can only proceed if all questions on current page are submitted
-        if (this.currentPage === 1) {
-            return this.question1Submitted;
+		// Can only proceed if all questions on current page are submitted
+        if (this.currentView === 'damped_osc1') {
+			return this.question1Submitted;
         }
         // Add more conditions for other pages
         return false;
     }
 
-    nextPage() {
-        if (this.canProceed && this.currentPage < this.totalPages) {
-            this.currentPage++;
+
+    // going back always enabled (for now at least)
+    get canGoBack(): boolean {
+		// if (this.currentView === 'damped_osc1') return false;
+        return true;
+    }
+	
+	
+    // going back shows the previous subpage / home page
+    goBack() {
+		if (this.currentView === 'damped_osc1') {
+            this.router.navigate(['learning/intro-experiment']);
+        } else if (this.currentView === 'damped_osc2') {
+            this.currentView = 'damped_osc1';
+            this.renderMath();
+        } else if (this.currentView === 'damped_osc3') {
+            this.currentView = 'damped_osc2';
+            this.renderMath();
+        } else if (this.currentView === 'damped_osc4') {
+            this.currentView = 'damped_osc2';
+            this.renderMath();
         }
     }
 
-    previousPage() {
-        if (this.currentPage > 1) {
-            this.currentPage--;
+
+    // go forward shows next subpage / page
+    goForward() {
+        if (this.canProceed) {
+            if (this.currentView === 'damped_osc1') {
+                this.currentView = 'damped_osc2';
+            } else if (this.currentView === 'damped_osc2') {
+                this.currentView = 'damped_osc3';
+            } else if (this.currentView === 'damped_osc3') {
+                this.currentView = 'damped_osc4';
+            } else if (this.currentView = 'damped_osc4')
+				this.router.navigate(['damped_osc2']);
+            this.renderMath();
         }
     }
 }

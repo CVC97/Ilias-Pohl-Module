@@ -4,7 +4,7 @@
     border-radius: 12px;
     padding: 2rem;
     margin-bottom: 2rem;
-    border: 2px solid var(--uni-blau-2);
+    border: 2px solid var(--physik-gelb);
 }
 
 .test-container.submitted {
@@ -41,7 +41,7 @@
 }
 
 .test-btn:hover:not(:disabled) {
-    background: var(--button-color-hover);
+    background: var(--physik-gelb);
 }
 
 .test-btn:disabled {

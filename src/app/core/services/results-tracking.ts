@@ -35,8 +35,6 @@ export interface ModuleProgress {
 @Injectable({
     providedIn: 'root'
 })
-
-
 export class ResultsTracking {
     private isBrowser: boolean;
     private currentModuleId: string = '';

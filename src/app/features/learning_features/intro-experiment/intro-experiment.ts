@@ -7,7 +7,6 @@ import { MultipleChoiceImage } from '../../../shared/evaluation/multiple-choice-
 import { MultipleChoice } from '../../../shared/evaluation/multiple-choice/multiple-choice';
 import { ImageChoice } from '../../../shared/evaluation/image-choice/image-choice';
 import { ResultsTracking } from '../../../core/services/results-tracking';
-import { IncomingMessage } from 'http';
 
 
 
@@ -26,9 +25,6 @@ declare global {
     templateUrl: './intro-experiment.html',
     styleUrl: './intro-experiment.css',
 })
-
-
-
 export class IntroExperiment implements OnInit, OnDestroy {
     constructor(
 		private sanitizer: DomSanitizer,
@@ -412,8 +408,8 @@ export class IntroExperiment implements OnInit, OnDestroy {
                 this.currentView = 'intro_exp3';
             } else if (this.currentView === 'intro_exp3') {
                 this.currentView = 'intro_exp4';
-            }
-            // nothing implemented beyond (3/3 so far)
+            } else if (this.currentView = 'into_exp4')
+				this.router.navigate(['/test/damped-oscillations']);
             this.renderMath();
         }
     }

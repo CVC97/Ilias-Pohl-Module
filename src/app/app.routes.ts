@@ -15,6 +15,7 @@ import { AngularFrequency } from './features/glossary_features/angular-frequency
 import { MomentOfInertia } from './features/glossary_features/moment-of-inertia/moment-of-inertia';
 
 import { IntroExperiment } from './features/learning_features/intro-experiment/intro-experiment';
+import { DampedOscillations } from './features/test_features/damped-oscillations/damped-oscillations';
 
 
 export const routes: Routes = [
@@ -31,5 +32,7 @@ export const routes: Routes = [
 	{ path: 'glossary/inhom-dgl', component: InhomDgl, title: 'Inhomogene DGL'},
 	{ path: 'glossary/angular-frequency', component: AngularFrequency, title: 'Kreisfrequenz'},
 	{ path: 'glossary/moment-of-inertia', component: MomentOfInertia, title: 'Trägheitsmoment'},
-	{ path: 'experiment/intro', component: IntroExperiment, title: 'Einstieg Versuchsaufbau'},
+
+	{ path: 'learning/intro-experiment', component: IntroExperiment, title: 'Einstieg Versuchsaufbau'},
+	{ path: 'test/damped-oscillations', component: DampedOscillations, title: 'Einstieg Versuchsaufbau'},
 ]

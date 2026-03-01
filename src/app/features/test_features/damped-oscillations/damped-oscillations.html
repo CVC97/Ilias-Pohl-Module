@@ -1,0 +1,28 @@
+<div class="container">
+    <div class="card">
+        <h1>Test: Gedämpfte Schwingungen ({{ currentPage }}/{{ totalPages }})</h1>
+
+        <!-- Page 1 -->
+        <div *ngIf="currentPage === 1">
+            <app-test-order-images
+                [questionId]="question1.questionId"
+                [question]="question1.question"
+                [images]="question1.images"
+                [correctOrder]="question1.correctOrder"
+                [maxPoints]="question1.maxPoints"
+                [containerId]="question1.containerId"
+                (onSubmit)="onQuestion1Submit($event)">
+            </app-test-order-images>
+        </div>
+
+        <!-- Navigation buttons -->
+        <div class="button-container">
+            <button class="btn" (click)="previousPage()" [disabled]="currentPage === 1">
+                ← Zurück
+            </button>
+            <button class="btn" (click)="nextPage()" [disabled]="!canProceed">
+                Weiter →
+            </button>
+        </div>
+    </div>
+</div>

@@ -43,6 +43,11 @@ src/
 |   |   |   └───drag-drop/
 |   |   |
 |   |   └───test/                               // test formats (TBD)
+|   |       |   styles_test.css                 // stylesheet for the test evaluations
+|   |       |
+|   |       └───order_image/ 
+|   |       └───single_choice/
+|   |       └───multiple-choice /
 |   |   
 |   └───features/                               // code for the individual subpages
 |           └───home/                           // home page
@@ -113,6 +118,8 @@ The subpages of the learning module and the questionID of each Q+A box found in 
 
 
 ### Test Features
+
+- **damped-oscillations:**
 
 
 ### Sidepath Features

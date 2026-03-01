@@ -1,0 +1,101 @@
+/* Test container */
+.test-container {
+    background: white;
+    border-radius: 12px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    border: 2px solid var(--uni-blau-2);
+}
+
+.test-container.submitted {
+    opacity: 0.9;
+    background: var(--grau-10);
+}
+
+/* Test question */
+.test-question {
+    font-size: 1.1rem;
+    color: var(--uni-blau-1);
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+.test-instruction {
+    color: var(--grau-80);
+    margin-bottom: 1.5rem;
+    font-style: italic;
+}
+
+
+/* Test-specific button - no conflict with .btn */
+.test-btn {
+    width: 100%;
+    background: var(--button-color);
+    color: white;
+    padding: 0.75rem;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.test-btn:hover:not(:disabled) {
+    background: var(--button-color-hover);
+}
+
+.test-btn:disabled {
+    background: var(--grau-60);
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.test-btn-submit {
+    width: 100%;
+    background: var(--button-color);
+    color: white;
+    padding: 0.75rem;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+
+/* Test result feedback */
+.test-result {
+    margin-top: 1.5rem;
+    padding: 1.5rem;
+    border-radius: 8px;
+    border-left: 4px solid;
+    animation: slideDown 0.4s ease-out;
+}
+
+.test-result.correct {
+    background: #e8f5e9;
+    border-color: #4caf50;
+    color: #2e7d32;
+}
+
+.test-result.incorrect {
+    background: #ffebee;
+    border-color: #f44336;
+    color: #c62828;
+}
+
+.test-result p {
+    margin: 0;
+    font-weight: 600;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

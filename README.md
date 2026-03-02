@@ -2,7 +2,7 @@
 
 Lernmodul zum Experiment "Der Pohlsche Resonator" des Grundpraktikums zur Experimentalphysik I der Georg-August Universität Göttingen.
 
-The project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.1.4. with strong help of Claude AI.
+The project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.1.4. with strong help of Claude (Sonnet 4.5).
 
 
 ## Project Structure Tree
@@ -17,52 +17,53 @@ src/
 |   styles.css                                  // main stylesheet
 |   styles_glossary.css                         // stylesheet for the glossary 
 |
-└───app/
-|   |   app.routes.ts                           // contains all the routing
-|   |
-|   └───core/
-|   |   └───services/                           // services to provide fuctionality
-|   |           theme.ts                        // light / dark mode toggling
-|   |           session.ts                      // session ID management
-|   |           analytics.ts                    // page tracking
-|   |           results-tracking.ts             // results tracking
-|   |           data-export.ts                  // data export
-|   |
-|   └───shared/
-|   |   └───footer/                             // all footer code
-|   |   └───header/                             // all header code
-|   |   └───evaluation/                         // all Q+A types globally defined as features
-|   |   |   |   styles_evaluation.css           // stylesheet for the evaluation types
-|   |   |   |
-|   |   |   └───single-choice/ 
-|   |   |   └───multiple-choice /
-|   |   |   └───multiple-choice-image/
-|   |   |   └───image-choice/
-|   |   |   └───drag-drop/
-|   |   |
-|   |   └───test/                               // test formats (TBD)
-|   |       |   styles_test.css                 // stylesheet for the test evaluations
-|   |       |
-|   |       └───order_image/ 
-|   |       └───single_choice/
-|   |       └───multiple-choice /
-|   |   
-|   └───features/                               // code for the individual subpages
-|           └───home/                           // home page
-|           └───glossary/                       // glossary overview page
-|           └───glossary_features/              // contains the individual glossary entries
-|           |   |   glossary-base.ts            // base component for all glossary items
-|           |   |
-|           |   └───amplitude/
-|           |   └─── ...
-|           |
-|           └───learning_features/              // " the " learning subpages
-|           └───test_features/                  // " the " tests / decision questions
-|           └───sidepath_features/              // " the " sidepath pages
-|           └───target_features/                // " the " target pages
-|           └───simulation_features/            // " the " simulation pages
-|
 └───assets/                                     // contains image, icons, etc.
+|
+└───app/
+    |   app.routes.ts                           // contains all the routing
+    |
+    └───core/
+    |   └───services/                           // services to provide fuctionality
+    |           theme.ts                        // light / dark mode toggling
+    |           session.ts                      // session ID management
+    |           analytics.ts                    // page tracking
+    |           results-tracking.ts             // results tracking
+    |           data-export.ts                  // data export
+    |
+    └───shared/
+    |   └───footer/                             // all footer code
+    |   └───header/                             // all header code
+    |   └───evaluation/                         // all Q+A types globally defined as features
+    |   |   |   styles_evaluation.css           // stylesheet for the evaluation types
+    |   |   |
+    |   |   └───single-choice/ 
+    |   |   └───multiple-choice /
+    |   |   └───multiple-choice-image/
+    |   |   └───image-choice/
+    |   |   └───drag-drop/
+    |   |
+    |   └───test/                               // test formats (TBD)
+    |       |   styles_test.css                 // stylesheet for the test evaluations
+    |       |
+    |       └───order_image/ 
+    |       └───single_choice/
+    |       └───multiple-choice /
+    |   
+    └───features/                               // code for the individual subpages
+            └───home/                           // home page
+            └───glossary/                       // glossary overview page
+            └───glossary_features/              // contains the individual glossary entries
+            |   |   glossary-base.ts            // base component for all glossary items
+            |   |
+            |   └───amplitude/
+            |   └─── ...
+            |
+            └───learning_features/              // " the " learning subpages
+            └───test_features/                  // " the " tests / decision questions
+            └───sidepath_features/              // " the " sidepath pages
+            └───target_features/                // " the " target pages
+            └───simulation_features/            // " the " simulation pages
+
 
 ```
 
@@ -104,7 +105,7 @@ The individual entries of the glossary. Either accessible via reference on the i
 - **inhom-dgl** ("Inhomogene Differentialgleichung")
 - **moment-of-inertia** ("Trägheitsmoment")
 - **natural-frequency** ("Eigenschwingfrequenz")
-- **pring-constant** ("Federkonstante")
+- **spring-constant** ("Federkonstante")
 
 
 ### Learning Features

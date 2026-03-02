@@ -18,6 +18,7 @@ import { IntroExperiment } from './features/learning_features/intro-experiment/i
 import { DampedOscillations } from './features/test_features/damped-oscillations/damped-oscillations';
 
 
+
 export const routes: Routes = [
     { path: '', component: Home , title: 'Pohlsches Rad'},
     { path: 'glossary', component: Glossary , title: 'Pohlsches Rad - Begriffe'},

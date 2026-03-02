@@ -14,6 +14,7 @@
 	--grau-20: rgb(217, 218, 218);
 	--grau-10: rgb(236, 236, 237);
     --physik-gelb: rgb(253, 166, 66);
+    --physik-gelb-60: rgb(255, 197, 131);
     --jura-rot: rgb(199, 13, 45);
     --forst-gruen: rgb(37, 105, 81);
     
@@ -31,12 +32,13 @@
     --border-color: rgba(33, 150, 243, 0.1);
     --shadow-color: rgba(33, 150, 243, 0.2);
     --button-color: var(--uni-blau-1);
-    --button-color-hover: var(--uni-blau-2);
+    --button-color-hover: white;
+    --button-text-color: white;
+    --button-text-color-hover: var(--uni-blau-1);
     --bg-footer: var(--uni-blau-2);
     --glossary-link-color: var(--uni-blau-2);
     --glossary-link-color-hover: var(--uni-blau-3);
-    --test-h1-color: var(--uni-blau-1)
-
+    --test-h1-color: var(--physik-gelb)
 }
 
 /* Global Reset & Base Styles */
@@ -55,8 +57,10 @@
     --card-bg: rgb(32, 32, 32);
     --border-color: var(--grau-90);
     --shadow-color: var(--grau-80);
-    --button-color: var(--uni-blau-2);
-    --button-color-hover: var(--uni-blau-3);
+    --button-color: var(--uni-blau-4);
+    --button-color-hover: var(--bg-primary);
+    --button-text-color: var(--bg-secondary);
+    --button-text-color-hover: white;
     --bg-footer: var(--uni-blau-3);
     --glossary-link-color: var(--uni-blau-3);
     --glossary-link-color-hover: var(--uni-blau-4);
@@ -170,7 +174,7 @@ button.btn {
     line-height: 1.5;
     text-align: center;
     text-decoration: none;
-    color: white;
+    color: var(--button-text-color);
     
     /* Appearance */
     background: var(--button-color);
@@ -187,7 +191,7 @@ button.btn {
     display: inline-block;
     padding: 0.75rem 1.5rem;
     background: var(--button-color-hover);
-    color: white;
+    color: var(--button-text-color-hover);
     border: none;
     border-radius: 6px;
     font-weight: 600;
@@ -198,6 +202,7 @@ button.btn {
 
 .btn:disabled {
     background: var(--grau-60);
+    color: white;
     cursor: not-allowed;
     opacity: 0.5;
 }

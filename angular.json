@@ -26,8 +26,8 @@
             "styles": [
               "src/styles.css",
               "src/styles_glossary.css",
-              "src/app/shared/evaluation/styles_evaluation.css",
-              "src/app/shared/test/styles_test.css"
+              "src/styles_evaluation.css",
+              "src/styles_test.css"
             ],
             "server": "src/main.server.ts",
             "outputMode": "server",

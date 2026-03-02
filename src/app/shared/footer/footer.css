@@ -1,12 +1,14 @@
-/* Footer */
+/* Footer - not fixed, sits below content */
 footer {
     background: var(--bg-footer);
     color: white;
-    padding: 1rem 2rem;
-    position: fixed;
-    left: 0;
-    bottom: 0;
+    padding: 0.5rem 2rem;
     width: 100%;
+    margin-top: auto; /* Push to bottom of page */
+}
+
+footer.visible {
+    transform: translateY(0); /* Slide up when visible */
 }
 
 .footer-content {

@@ -16,10 +16,13 @@ src/
 |   index.html                                  // main .html
 |   styles.css                                  // main stylesheet
 |   styles_glossary.css                         // stylesheet for the glossary 
+|   styles_evaluation.css                       // stylesheet for the evaluation types
+|   styles_test.css                             // stylesheet for the test evaluations
 |
 └───assets/                                     // contains image, icons, etc.
 |
 └───app/
+    |   app.html                                // general page structure
     |   app.routes.ts                           // contains all the routing
     |
     └───core/
@@ -34,8 +37,6 @@ src/
     |   └───footer/                             // all footer code
     |   └───header/                             // all header code
     |   └───evaluation/                         // all Q+A types globally defined as features
-    |   |   |   styles_evaluation.css           // stylesheet for the evaluation types
-    |   |   |
     |   |   └───single-choice/ 
     |   |   └───multiple-choice /
     |   |   └───multiple-choice-image/
@@ -43,8 +44,6 @@ src/
     |   |   └───drag-drop/
     |   |
     |   └───test/                               // test formats (TBD)
-    |       |   styles_test.css                 // stylesheet for the test evaluations
-    |       |
     |       └───order_image/ 
     |       └───single_choice/
     |       └───multiple-choice /

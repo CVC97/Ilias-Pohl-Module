@@ -18,12 +18,12 @@
     --jura-rot: rgb(199, 13, 45);
     --forst-gruen: rgb(37, 105, 81);
     
-    /* Vibrant shiny blues */
+    /* vibrant shiny blues */
     --bright-blue: #2196F3;
     --sky-blue: #03A9F4;
     --electric-blue: #00BCD4;
 
-    /* Theme variables (light mode) */
+    /* theme variables (light mode) */
     --bg-primary: white;
     --bg-secondary: var(--altweiss);
     --text-primary: var(--uni-blau-1);
@@ -41,14 +41,14 @@
     --test-h1-color: var(--physik-gelb)
 }
 
-/* Global Reset & Base Styles */
+/* global Reset & Base Styles */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-/* Dark mode */
+/* dark mode */
 [data-theme="dark"] {
     --bg-primary: rgb(51, 51, 51);
     --bg-secondary: rgb(48, 48, 48);
@@ -59,7 +59,7 @@
     --shadow-color: var(--grau-80);
     --button-color: var(--uni-blau-4);
     --button-color-hover: var(--bg-primary);
-    --button-text-color: var(--bg-secondary);
+    --button-text-color: white;
     --button-text-color-hover: white;
     --bg-footer: var(--uni-blau-3);
     --glossary-link-color: var(--uni-blau-3);
@@ -67,17 +67,39 @@
     --test-h1-color: var(--physik-gelb)
 }
 
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background: var(--bg-primary);
     color: var(--text-primary);
-    line-height: 1.6;
+    line-height: 2;
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
 	text-align: justify;
 	font-size: 0.8rem;
+}
+
+/* app container - full viewport height */
+.app-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 104vh; /* Minimum full viewport height */
+}
+
+/* main content - grows to fill space */
+.main-content {
+    flex: 1;                        /* Takes up remaining space */
+    padding-bottom: 2rem;           /* Space before footer */
+}
+
+/* ensure footer is always at bottom */
+app-footer {
+    margin-top: auto;
 }
 
 /* Typography */
@@ -136,7 +158,6 @@ main {
     border-radius: 12px;
     padding: 2rem;
     box-shadow: 0 8px 16px var(--shadow-color);
-    margin-bottom: 8rem;
     border: 1px solid var(--border-color);
 }
 

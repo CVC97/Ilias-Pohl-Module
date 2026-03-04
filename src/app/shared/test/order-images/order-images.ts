@@ -101,23 +101,23 @@ export class TestOrderImages implements OnInit {
 
         this.isSubmitted = true;
 
-        // Get user's order
+        // get user's order
         const userOrder = this.orderedImages.map(img => img.id);
 
-        // Check if correct
+        // check if correct
         this.isCorrect = this.arraysEqual(userOrder, this.correctOrder);
 
-        // Award points
+        // award points
         this.pointsAwarded = this.isCorrect ? this.maxPoints : 0;
 
-        // Feedback
+        // feedback
         if (this.isCorrect) {
             this.feedbackMessage = `✓ Richtig! Sie haben ${this.pointsAwarded} von ${this.maxPoints} Punkten erreicht.`;
         } else {
             this.feedbackMessage = `✗ Leider falsch. Sie haben 0 von ${this.maxPoints} Punkten erreicht.`;
         }
 
-        // Emit result
+        // emit result
         this.onSubmit.emit({
             isCorrect: this.isCorrect,
             userAnswer: userOrder,

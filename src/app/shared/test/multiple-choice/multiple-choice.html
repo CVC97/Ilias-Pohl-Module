@@ -1,1 +1,46 @@
-<p>multiple-choice works!</p>
+<div class="test-container" [id]="containerId" [class.submitted]="isSubmitted">
+    <div class="test-content">
+        <h3 class="test-question">{{ question }}</h3>
+        <p class="test-instruction" *ngIf="questionInstruction">{{ questionInstruction }}</p>
+
+        <div class="choice-options">
+            <label 
+                *ngFor="let option of options" 
+                class="choice-option"
+                [class.selected]="isSelected(option.value)"
+                [class.correct]="isSubmitted && isCorrectAnswer(option.value)"
+                [class.incorrect]="isSubmitted && isSelected(option.value) && !isCorrectAnswer(option.value)"
+                [class.disabled]="isSubmitted">
+                
+                <input 
+                    type="checkbox" 
+                    [value]="option.value"
+                    [checked]="isSelected(option.value)"
+                    [disabled]="isSubmitted"
+                    (change)="toggleOption(option.value)">
+                
+                <span class="option-label">{{ option.label }}</span>
+                
+                <!-- Show checkmark for correct answers after submission -->
+                <span *ngIf="isSubmitted && isCorrectAnswer(option.value)" class="indicator correct-indicator">✓</span>
+                <!-- Show cross for incorrectly selected answers -->
+                <span *ngIf="isSubmitted && isSelected(option.value) && !isCorrectAnswer(option.value)" class="indicator incorrect-indicator">✗</span>
+            </label>
+        </div>
+
+        <button 
+            class="test-btn test-submit-btn" 
+            (click)="submitAnswer()" 
+            [disabled]="isSubmitted">
+            {{ isSubmitted ? 'Bereits abgegeben' : 'Abgeben' }}
+        </button>
+
+        <div 
+            *ngIf="isSubmitted" 
+            class="test-result" 
+            [class.correct]="isCorrect" 
+            [class.incorrect]="!isCorrect">
+            <p>{{ feedbackMessage }}</p>
+        </div>
+    </div>
+</div>

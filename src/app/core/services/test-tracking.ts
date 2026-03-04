@@ -86,7 +86,7 @@ export class TestTracking {
     }
 
 
-    // Track a question result (can only be submitted once)
+    // track a question result (can only be submitted once)
     trackQuestionResult(
         questionId: string,
         isCorrect: boolean,
@@ -109,7 +109,7 @@ export class TestTracking {
         const testProgress = this.tests.get(this.currentTestId);
         if (!testProgress) return;
 
-        // Check if question was already answered (should not happen in tests)
+        // check if question was already answered (should not happen in tests)
         const existingResult = testProgress.results.find(r => r.questionId === questionId);
         
         if (existingResult) {
@@ -117,7 +117,7 @@ export class TestTracking {
             return;
         }
 
-        // Add new result
+        // add new result
         const result: TestQuestionResult = {
             questionId,
             testId: this.currentTestId,

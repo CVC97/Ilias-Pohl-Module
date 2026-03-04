@@ -1,1 +1,46 @@
-<p>single-choice works!</p>
+<div class="test-container" [id]="containerId" [class.submitted]="isSubmitted">
+    <div class="test-content">
+        <h3 class="test-question">{{ question }}</h3>
+        <p class="test-instruction">{{ questionInstruction }}</p>
+
+        <div class="choice-options">
+            <label 
+                *ngFor="let option of options" 
+                class="choice-option"
+                [class.selected]="selectedAnswer === option.value"
+                [class.correct]="isSubmitted && option.value === correctAnswer"
+                [class.incorrect]="isSubmitted && selectedAnswer === option.value && !isCorrect"
+                [class.disabled]="isSubmitted">
+                
+                <input 
+                    type="radio" 
+                    [name]="containerId"
+                    [value]="option.value"
+                    [checked]="selectedAnswer === option.value"
+                    [disabled]="isSubmitted"
+                    (change)="selectOption(option.value)">
+                
+                <span class="option-label">{{ option.label }}</span>
+                
+                <!-- Show checkmark/cross after submission -->
+                <span *ngIf="isSubmitted && option.value === correctAnswer" class="indicator correct-indicator">✓</span>
+                <span *ngIf="isSubmitted && selectedAnswer === option.value && !isCorrect" class="indicator incorrect-indicator">✗</span>
+            </label>
+        </div>
+
+        <button 
+            class="test-btn test-submit-btn" 
+            (click)="submitAnswer()" 
+            [disabled]="isSubmitted">
+            {{ isSubmitted ? 'Bereits abgegeben' : 'Abgeben' }}
+        </button>
+
+        <div 
+            *ngIf="isSubmitted" 
+            class="test-result" 
+            [class.correct]="isCorrect" 
+            [class.incorrect]="!isCorrect">
+            <p>{{ feedbackMessage }}</p>
+        </div>
+    </div>
+</div>

@@ -360,11 +360,6 @@ export class IntroExperiment implements OnInit, OnDestroy {
 	page3Complete = false;
 	page4Complete = false;
 
-	// everything true for development purposes
-	// page2Complete = true;
-	// page3Complete = true;
-	// page4Complete = true;
-
 
     // ability to proceed in the module: depending on the Q+A performance (all questions have to be answered)
     get canProceed(): boolean {

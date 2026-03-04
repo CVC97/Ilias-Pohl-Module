@@ -95,7 +95,7 @@
             </div>
 
             <div *ngIf="currentView === 'intro_exp3'">
-                <!-- Horizontal layout: text + image -->
+                <!-- horizontal layout: text + image -->
                 <div class="text-image-container">
                     <div class="image-content">
                         <img src="assets/images/intro-experiment/schwungrad_3.png" alt="Schwungrad mit Massestück">
@@ -140,7 +140,6 @@
             </div>
 
             <div *ngIf="currentView === 'intro_exp4'">
-
                 <app-image-choice
                     [questionId]="question6.questionId"
                     [question]="question6.question"
@@ -152,7 +151,6 @@
                     [incorrectMessage]="question6.incorrectMessage"
                     (onAnswerEvaluated)="onQuestion6Answered($event)">
                 </app-image-choice>
-
             </div>
         </div>
 

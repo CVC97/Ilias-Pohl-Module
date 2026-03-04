@@ -1,43 +1,45 @@
 <div class="test-container" [id]="containerId" [class.submitted]="isSubmitted">
-    <h3 class="test-question">{{ question }}</h3>
-    <p class="test-instruction">{{ questionInstruction }}</p>
+    <div class="test-content">
+        <h3 class="test-question">{{ question }}</h3>
+        <p class="test-instruction">{{ questionInstruction }}</p>
 
-    <div 
-        class="image-list" 
-        cdkDropList 
-        [cdkDropListAutoScrollDisabled]="true"
-        (cdkDropListDropped)="drop($event)">
-        
         <div 
-            *ngFor="let image of orderedImages; let i = index" 
-            class="image-item"
-            [class.disabled]="isSubmitted"
-            cdkDrag>
+            class="image-list" 
+            cdkDropList 
+            [cdkDropListAutoScrollDisabled]="true"
+            (cdkDropListDropped)="drop($event)">
             
-            <div class="drag-handle">
-                <span class="position-number">{{ i + 1 }}</span>
-                <span class="drag-icon">⋮⋮</span>
-            </div>
-            
-            <div class="image-content">
-                <img [src]="image.imageSrc" [alt]="image.label || 'Bild ' + (i+1)">
-                <span *ngIf="image.label" class="image-label">{{ image.label }}</span>
+            <div 
+                *ngFor="let image of orderedImages; let i = index" 
+                class="image-item"
+                [class.disabled]="isSubmitted"
+                cdkDrag>
+                
+                <div class="drag-handle">
+                    <span class="position-number">{{ i + 1 }}</span>
+                    <span class="drag-icon">⋮⋮</span>
+                </div>
+                
+                <div class="image-content">
+                    <img [src]="image.imageSrc" [alt]="image.label || 'Bild ' + (i+1)">
+                    <span *ngIf="image.label" class="image-label">{{ image.label }}</span>
+                </div>
             </div>
         </div>
-    </div>
 
-    <button 
-        class="test-btn test-submit-btn" 
-        (click)="submitAnswer()" 
-        [disabled]="isSubmitted">
-        {{ isSubmitted ? 'Bereits abgegeben' : 'Abgeben' }}
-    </button>
+        <button 
+            class="test-btn test-submit-btn" 
+            (click)="submitAnswer()" 
+            [disabled]="isSubmitted">
+            {{ isSubmitted ? 'Bereits abgegeben' : 'Abgeben' }}
+        </button>
 
-    <div 
-        *ngIf="isSubmitted" 
-        class="test-result" 
-        [class.correct]="isCorrect" 
-        [class.incorrect]="!isCorrect">
-        <p>{{ feedbackMessage }}</p>
+        <div 
+            *ngIf="isSubmitted" 
+            class="test-result" 
+            [class.correct]="isCorrect" 
+            [class.incorrect]="!isCorrect">
+            <p>{{ feedbackMessage }}</p>
+        </div>
     </div>
 </div>

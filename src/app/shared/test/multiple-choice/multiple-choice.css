@@ -1,0 +1,9 @@
+/* Checkbox - matches checkbox styling */
+.choice-option input[type="checkbox"] {
+    width: 15px;
+    height: 15px;
+    margin-right: 1rem;
+    cursor: pointer;
+    accent-color: var(--uni-blau-2);
+    flex-shrink: 0;
+}

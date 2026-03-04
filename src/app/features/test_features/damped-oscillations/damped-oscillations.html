@@ -2,12 +2,13 @@
     <div class="card">
         <h1 class="h1-test">
             <span *ngIf="currentView === 'damped_osc1'">Test: Gedämpfte Schwingungen (1/5)</span>
-            <span *ngIf="currentView === 'intro_exp2'">Einstieg Versuchsaufbau (2/3)</span>
-            <span *ngIf="currentView === 'intro_exp3'">Einstieg Versuchsaufbau (3/3)</span>
-            <span *ngIf="currentView === 'intro_exp4'">Eingangsfrage gedämpfter harmonischer Oszillator</span>
+            <span *ngIf="currentView === 'damped_osc2'">Test: Gedämpfte Schwingungen (2/5)</span>
+            <span *ngIf="currentView === 'damped_osc3'">Test: Gedämpfte Schwingungen (3/5)</span>
+            <span *ngIf="currentView === 'damped_osc4'">Test: Gedämpfte Schwingungen (4/5)</span>
+            <span *ngIf="currentView === 'damped_osc5'">Test: Gedämpfte Schwingungen (5/5)</span>
         </h1>
 
-        <!-- Page 1 -->
+        <!-- page 1 -->
         <div *ngIf="currentView === 'damped_osc1'">
             <app-test-order-images
                 [questionId]="question1.questionId"
@@ -21,6 +22,48 @@
             </app-test-order-images>
         </div>
 
+        <!-- page 2 -->
+        <div *ngIf="currentView === 'damped_osc2'">
+            <app-test-order-images
+                [questionId]="question2.questionId"
+                [question]="question2.question"
+                [questionInstruction]="question2.questionInstruction"
+                [images]="question2.images"
+                [correctOrder]="question2.correctOrder"
+                [maxPoints]="question2.maxPoints"
+                [containerId]="question2.containerId"
+                (onSubmit)="onQuestion2Submit($event)">
+            </app-test-order-images>
+        </div>
+
+        <!-- page 3 -->
+        <div *ngIf="currentView === 'damped_osc3'">
+            <app-test-single-choice
+                [questionId]="question3.questionId"
+                [question]="question3.question"
+                [questionInstruction]="question3.questionInstruction"
+                [options]="question3.options"
+                [correctAnswer]="question3.correctAnswer"
+                [maxPoints]="question3.maxPoints"
+                [containerId]="question3.containerId"
+                (onSubmit)="onQuestion3Submit($event)">
+            </app-test-single-choice>
+        </div>
+
+        <!-- page 4 -->
+        <div *ngIf="currentView === 'damped_osc4'">
+            <app-test-multiple-choice
+                [questionId]="question4.questionId"
+                [question]="question4.question"
+                [questionInstruction]="question4.questionInstruction"
+                [options]="question4.options"
+                [correctAnswers]="question4.correctAnswers"
+                [maxPoints]="question4.maxPoints"
+                [containerId]="question4.containerId"
+                (onSubmit)="onQuestion4Submit($event)">
+            </app-test-multiple-choice>
+        </div>
+
     <!-- forward button - bottom right, conditionally enabled -->
     <div class="button-container">
         <!-- a for links -->
@@ -28,7 +71,7 @@
         <!-- button for actions -->
         <button *ngIf="!isFirstPage" class="btn" (click)="goBack()" [disabled]="!canGoBack">← Zurück</button>
         
-        <button class="btn" (click)="goForward()" [disabled]="!canProceed">
+        <button *ngIf="!isLastPage" class="btn" (click)="goForward()" [disabled]="!canProceed">
             Weiter →
         </button>
     </div>

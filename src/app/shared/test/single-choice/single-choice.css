@@ -1,0 +1,17 @@
+/* Radio button - matches checkbox styling */
+.choice-option input[type="radio"] {
+    width: 15px;
+    height: 15px;
+    margin-right: 1rem;
+    cursor: pointer;
+    accent-color: var(--uni-blau-2);
+    flex-shrink: 0;
+}
+
+.choice-option.disabled input[type="radio"] {
+    cursor: not-allowed;
+}
+
+/* .choice-option.selected {
+    border-color: var(--uni-blau-2);
+} */

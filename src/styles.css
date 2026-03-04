@@ -25,6 +25,7 @@
 
     /* theme variables (light mode) */
     --bg-primary: white;
+    /* --bg-primary: rgb(240, 86, 112); */
     --bg-secondary: var(--altweiss);
     --text-primary: var(--uni-blau-1);
     --text-secondary: var(--uni-blau-2);
@@ -36,8 +37,8 @@
     --button-text-color: white;
     --button-text-color-hover: var(--uni-blau-1);
     --bg-footer: var(--uni-blau-2);
-    --glossary-link-color: var(--uni-blau-2);
-    --glossary-link-color-hover: var(--uni-blau-3);
+    --glossary-link-color: var(--uni-blau-3);
+    --glossary-link-color-hover: var(--uni-blau-4);
     --test-h1-color: var(--physik-gelb)
 }
 

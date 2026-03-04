@@ -1,7 +1,16 @@
-import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, Inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { CommonModule } from '@angular/common';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ResultsTracking } from '../../../core/services/results-tracking';
+
+
+
+declare global {
+	interface Window {
+		MathJax: any;
+    }
+}
 
 
 
@@ -45,7 +54,8 @@ export class ImageChoice implements OnInit {
 
     constructor(
         private sanitizer: DomSanitizer,
-        private trackingService: ResultsTracking
+        private trackingService: ResultsTracking,
+        @Inject(PLATFORM_ID) private platformId: Object
     ) {}
 
 
@@ -86,9 +96,11 @@ export class ImageChoice implements OnInit {
         }
     }
 
+
     isSelected(value: string): boolean {
         return this.selectedValues.has(value);
     }
+    
 
     evaluateAnswer() {
         const selectedAnswers = Array.from(this.selectedValues);
@@ -103,7 +115,7 @@ export class ImageChoice implements OnInit {
         this.isCorrect = allCorrectSelected && noIncorrectSelected;
         this.showResult = true;
 
-        // Track the result
+        // track the result
         this.trackingService.trackQuestionResult(
             this.questionId,
             this.isCorrect,
@@ -117,7 +129,13 @@ export class ImageChoice implements OnInit {
         
         this.onAnswerEvaluated.emit(this.isCorrect);
         this.updateResultMessage(selectedAnswers, allCorrectSelected);
+
+        // render math after evaluating answer
+        setTimeout(() => {
+            this.renderMath();
+        }, 100);
     }
+
 
     updateResultMessage(selectedAnswers: string[], allCorrectSelected: boolean) {
         if (this.isCorrect) {
@@ -131,6 +149,26 @@ export class ImageChoice implements OnInit {
             } else {
                 this.resultMessage = this.sanitizer.bypassSecurityTrustHtml(this.incorrectMessage!);
             }
+        }
+    }
+
+
+    // trigger MathJax rendering
+    renderMath() {
+        if (isPlatformBrowser(this.platformId)) {
+            setTimeout(() => {
+                if (window.MathJax) {
+                    // Get ONLY the result element for THIS question
+                    const resultElement = document.querySelector(`.${this.containerId} .evaluation-result`);
+                    
+                    if (resultElement) {
+                        // Only render THIS specific element
+                        window.MathJax.typesetPromise([resultElement]).catch((err: any) => {
+                            console.error('MathJax rendering error:', err);
+                        });
+                    }
+                }
+            }, 100);
         }
     }
 }

@@ -3,8 +3,10 @@ import { isPlatformBrowser } from '@angular/common';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { TestOrderImages } from '../../../shared/test/order-images/order-images';
 import { TestTracking } from '../../../core/services/test-tracking';
+import { TestOrderImages } from '../../../shared/test/order-images/order-images';
+import { TestSingleChoice } from '../../../shared/test/single-choice/single-choice';
+import { TestMultipleChoice } from '../../../shared/test/multiple-choice/multiple-choice';
 
 
 
@@ -19,13 +21,13 @@ declare global {
 @Component({
     selector: 'app-damped-oscillations',
     standalone: true,
-    imports: [CommonModule, RouterLink, TestOrderImages],
+    imports: [CommonModule, RouterLink, TestOrderImages, TestSingleChoice, TestMultipleChoice],
     templateUrl: './damped-oscillations.html',
     styleUrl: './damped-oscillations.css'
 })
 export class DampedOscillations implements OnInit, OnDestroy {
 	
-	// Question 1 data
+	// question 1 data
     question1 = {
 		questionId: 'damped-osc-1-daempfungsstaerke',
         question: `Bei dem Versuch können Sie die Dämpfung darüber anpassen, dass Sie den Überlappbereich zwischen einem Magneten (eines Magnetfelds) und der Schwungscheibe variieren.
@@ -38,12 +40,73 @@ export class DampedOscillations implements OnInit, OnDestroy {
         ],
         correctOrder: ['strong', 'medium', 'weak'],
         maxPoints: 30,
-        containerId: 'test-question-1'
+        containerId: 'test-question1-container'
     };
 
 
-    // Track submissions
+	// question 2 data
+    question2 = {
+		questionId: 'damped-osc-2-federkonstante',
+        question: `Im Versuch ist eine feste Feder eingebaut, die Federkonstante kann also nicht varriert werden. Was würde aber passieren, wenn man die Federkonstante variieren könnte?
+			Sortieren Sie die Graphen nach der Größe der Federkonstante. 
+			Sortieren Sie die Graphen absteigend, indem Sie den Graphen mit der größten Federkonstante nach oben einsortieren (andere Variablen sind konstant gehalten).`,
+		questionInstruction: 'Frage 2 von 5 (30 Punkte): Sortierung Dämpfungskonstante',
+        images: [
+			{ id: 'weak', imageSrc: 'assets/images/tests/weak_spring_constant.png', label: 'Schwingung A' },
+            { id: 'medium', imageSrc: 'assets/images/tests/medium_spring_constant.png', label: 'Schwingung B' },
+            { id: 'strong', imageSrc: 'assets/images/tests/strong_spring_constant.png', label: 'Schwingung C' }
+        ],
+        correctOrder: ['strong', 'medium', 'weak'],
+        maxPoints: 30,
+        containerId: 'test-question2-container'
+    };
+
+
+	// question 3 data
+    question3 = {
+		questionId: 'damped-osc-3-frequency-damping',
+        question: `Sie haben in einer ersten Messung einer gedämpften Schwingung gesehen, dass das Schwungrad mit einer Frequenz von $\\omega_1=0.3$ Hz geschwungen ist.
+			Nun hat ihr*e Praktikumspartner*in die Wirbelstrombremse weiter über das Schwungrad bewegt - sie erwarten also eine größere Dämpfung.
+			Mit welcher Frequenz $\\omega_2$ erwarten Sie nun das Schwungrad zu schwingen?`,
+		questionInstruction: 'Frage 3 von 5 (10 Punkte): Zusammenhang Frequenz und Dämpfungskonstante',
+        options: [
+            { value: 'answer1', label: '$\\omega_1<\\omega_2$.' },
+            { value: 'answer2', label: '$\\omega_1>\\omega_2$.' },
+            { value: 'answer3', label: 'Die Frequenz ist unanhängig von der Dämpfung.' },
+        ],
+		correctAnswer: 'answer2',
+        maxPoints: 10,
+        containerId: 'test-question3-container'
+    };
+
+
+	// question 4 data
+    question4 = {
+		questionId: 'damped-osc-4-log-decrement',
+        question: `Das logarithmische Dekrement $\\Lambda$ ist eine Hilfsgröße, die man zur Beschreibung gedämpfter Schwingungen verwendet.
+			Das logarithmische Dekrement ergibt sich hierbei in folgender Weise aus dem Verhältnis zwischen Amplituden einer gedämpften Schwingung, die zeitlich genau eine Schwingung auseinanderliegen: 
+			$$\\Lambda = \\ln\\left(\\frac{\\varphi(t)}{\\varphi(t+T)}\\right).$$
+			Hierbei beschreibt $\\varphi(t)$ die Auslenkung aus der Ruhelage und $T$ die Periodendauer. 
+			Was kann über das logarithmische Dekrement bestimmt werden? Markieren Sie alle physikalischen Größen, die direkt mit dem logarithmischen Dekrement zusammenhängen.`,
+		questionInstruction: 'Frage 4 von 5 (20 Punkte): LogarithmischesDekrement',
+		options: [
+			{ value: 'eigenfrequency', label: 'Die Eigenfrequenz des schwingenden Systems $\\omega_0$.' },
+			{ value: 'half_life', label: 'Die Halbwertszeit $t_{1/2}$.' },
+			{ value: 'period', label: 'Die Periodendauer $T$.' },
+			{ value: 'damping', label: 'Die Dämpfungskonstante $\\gamma$.' }
+		],
+		correctAnswers: ['half_life', 'damping'],
+        maxPoints: 20,
+        containerId: 'test-question4-container'
+    };
+
+
+    // track submissions
     question1Submitted = false;
+	question2Submitted = false;
+	question3Submitted = false;
+	question4Submitted = false;
+	question5Submitted = false;
 
 	
     constructor(
@@ -55,26 +118,34 @@ export class DampedOscillations implements OnInit, OnDestroy {
 	
 	
     ngOnInit() {
-		// Start tracking this test
+		// start tracking this test
         this.testTracking.startTest('damped-oscillations', 5, 150); // 5 questions, 150 total points
         
-        // Restore completion state from previous session
+        // restore completion state from previous session
         this.restoreCompletionState();
     }
 	
 	
     ngOnDestroy() {
-		// End tracking when leaving
+		// end tracking when leaving
         this.testTracking.endTest();
     }
 	
 	
     private restoreCompletionState() {
-		// Check if question was already answered
+		// check if question was already answered
         this.question1Submitted = this.testTracking.isQuestionAnswered(this.question1.questionId);
+		this.question2Submitted = this.testTracking.isQuestionAnswered(this.question2.questionId);
+		this.question3Submitted = this.testTracking.isQuestionAnswered(this.question3.questionId);
+		this.question4Submitted = this.testTracking.isQuestionAnswered(this.question4.questionId);
+		// this.question5Submitted = this.testTracking.isQuestionAnswered(this.question5.questionId);
         
         console.log('Restored test completion state:', {
-			q1: this.question1Submitted
+			q1: this.question1Submitted,
+			q2: this.question2Submitted,
+			q3: this.question3Submitted,
+			q4: this.question4Submitted,
+			// q5: this.question5Submitted
         });
     }
 	
@@ -82,7 +153,7 @@ export class DampedOscillations implements OnInit, OnDestroy {
     onQuestion1Submit(result: any) {
 		this.question1Submitted = true;
 		
-        // Track the result (only if not already tracked)
+        // track the result (only if not already tracked)
         if (!this.testTracking.isQuestionAnswered(this.question1.questionId)) {
 			this.testTracking.trackQuestionResult(
 				this.question1.questionId,
@@ -94,6 +165,55 @@ export class DampedOscillations implements OnInit, OnDestroy {
             );
         }
     }
+
+    onQuestion2Submit(result: any) {
+		this.question2Submitted = true;
+
+        // track the result (only if not already tracked)
+        if (!this.testTracking.isQuestionAnswered(this.question2.questionId)) {
+			this.testTracking.trackQuestionResult(
+				this.question2.questionId,
+                result.isCorrect,
+                result.userAnswer,
+                this.question2.correctOrder,
+                result.pointsAwarded,
+                this.question2.maxPoints
+            );
+        }
+	}
+
+    onQuestion3Submit(result: any) {
+        this.question2Submitted = true;
+
+        // Track the result (only if not already tracked)
+        if (!this.testTracking.isQuestionAnswered(this.question3.questionId)) {
+            this.testTracking.trackQuestionResult(
+                this.question3.questionId,
+                result.isCorrect,
+                result.userAnswer,
+                this.question3.correctAnswer,
+                result.pointsAwarded,
+                this.question3.maxPoints
+            );
+        }
+    }
+
+    onQuestion4Submit(result: any) {
+        this.question4Submitted = true;
+
+        // Track the result (only if not already tracked)
+        if (!this.testTracking.isQuestionAnswered(this.question4.questionId)) {
+            this.testTracking.trackQuestionResult(
+                this.question4.questionId,
+                result.isCorrect,
+                result.userAnswer,
+                this.question4.correctAnswers,
+                result.pointsAwarded,
+                this.question4.maxPoints
+            );
+        }
+    }
+
 
 
     // trigger MathJax rendering
@@ -119,15 +239,28 @@ export class DampedOscillations implements OnInit, OnDestroy {
     get isFirstPage(): boolean {
         return this.currentView === 'damped_osc1';
     }
+    // get isMiddlePage(): boolean {
+    //     return (this.currentView !== 'damped_osc1') && (this.currentView !== 'damped_osc6');
+    // }
+    get isLastPage(): boolean {
+        return this.currentView === 'damped_osc6';
+    }
 
 
 
     get canProceed(): boolean {
-		// Can only proceed if all questions on current page are submitted
+		// can only proceed if all questions on current page are submitted
         if (this.currentView === 'damped_osc1') {
 			return this.question1Submitted;
-        }
-        // Add more conditions for other pages
+        } else if (this.currentView === 'damped_osc2') {
+			return this.question2Submitted;
+		} else if (this.currentView === 'damped_osc3') {
+			return this.question3Submitted;
+		} else if (this.currentView === 'damped_osc4') {
+			return this.question4Submitted;
+		} else if (this.currentView === 'damped_osc5') {
+			return this.question5Submitted;
+		}
         return false;
     }
 
@@ -150,7 +283,10 @@ export class DampedOscillations implements OnInit, OnDestroy {
             this.currentView = 'damped_osc2';
             this.renderMath();
         } else if (this.currentView === 'damped_osc4') {
-            this.currentView = 'damped_osc2';
+            this.currentView = 'damped_osc3';
+            this.renderMath();
+        } else if (this.currentView === 'damped_osc5') {
+            this.currentView = 'damped_osc4';
             this.renderMath();
         }
     }
@@ -165,8 +301,11 @@ export class DampedOscillations implements OnInit, OnDestroy {
                 this.currentView = 'damped_osc3';
             } else if (this.currentView === 'damped_osc3') {
                 this.currentView = 'damped_osc4';
-            } else if (this.currentView = 'damped_osc4')
-				this.router.navigate(['damped_osc2']);
+            } else if (this.currentView = 'damped_osc4') {
+				this.router.navigate(['damped_osc5']);
+			} else if (this.currentView = 'damped_osc5') {
+				this.router.navigate(['damped_osc6']);
+			}
             this.renderMath();
         }
     }

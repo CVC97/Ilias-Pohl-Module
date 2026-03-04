@@ -101,7 +101,7 @@ export class ResultsTracking {
 
 
 
-    // Question tracking
+    // question tracking
     trackQuestionResult(
         questionId: string,
         isCorrect: boolean,
@@ -122,11 +122,11 @@ export class ResultsTracking {
         const moduleProgress = this.results.get(this.currentModuleId);
         if (!moduleProgress) return;
 
-        // Check if question was already answered
+        // check if question was already answered
         const existingResult = moduleProgress.results.find(r => r.questionId === questionId);
         
         if (existingResult) {
-            // Re-attempt
+            // re-attempt
             existingResult.attemptCount++;
             existingResult.isCorrect = isCorrect;
             existingResult.selectedAnswers = selectedAnswers;
@@ -136,7 +136,7 @@ export class ResultsTracking {
             console.log(`${sessionId} tried ${questionId} on attempt ${existingResult.attemptCount}, result: ${isCorrect}`);
             console.log('RESLOG:', existingResult);
         } else {
-            // First attempt
+            // first attempt
             const result: QuestionResult = {
                 questionId,
                 moduleId: this.currentModuleId,
@@ -164,7 +164,7 @@ export class ResultsTracking {
     }
 
 
-    // Query methods
+    // query methods
     isQuestionCompleted(questionId: string): boolean {
         if (!this.currentModuleId) return false;
 

@@ -1,1 +1,106 @@
-<p>drag-and-drop works!</p>
+<div class="test-container" [id]="containerId" [class.submitted]="isSubmitted">
+    <div class="test-content">
+        <h3 class="test-question" [innerHTML]="question"></h3>
+        <p class="test-instruction" *ngIf="questionInstruction" [innerHTML]="questionInstruction"></p>
+
+        <div class="drag-drop-layout">
+            <!-- Left side: Result containers with images -->
+            <div class="result-containers">
+                <div 
+                    *ngFor="let container of resultContainers" 
+                    class="result-container"
+                    [class.correct]="isSubmitted && isContainerCorrect(container)"
+                    [class.incorrect]="isSubmitted && !isContainerCorrect(container)">
+                    
+                    <!-- Image on left -->
+                    <div class="container-image">
+                        <img [src]="container.imageSrc" [alt]="container.imageAlt || 'Bild'">
+                    </div>
+
+                    <!-- Drop zone on right -->
+                    <div 
+                        class="drop-zone"
+                        [id]="'container-' + container.id"
+                        cdkDropList
+                        [cdkDropListData]="getAssignedAnswersForDisplay(container)"
+                        [cdkDropListConnectedTo]="getConnectedLists()"
+                        (cdkDropListDropped)="drop($event)">
+                        
+                        <!-- Assigned answers - iterate over full answer objects -->
+                        <div 
+                            *ngFor="let answer of getAssignedAnswersForDisplay(container)" 
+                            class="assigned-answer"
+                            [class.disabled]="isSubmitted"
+                            [class.answer-correct]="isSubmitted && isAnswerCorrect(container, answer.id)"
+                            [class.answer-incorrect]="isSubmitted && !isAnswerCorrect(container, answer.id)"
+                            cdkDrag
+                            [cdkDragData]="answer"
+                            [cdkDragDisabled]="isSubmitted">
+                            
+                            <span [innerHTML]="answer.label"></span>
+                            <button 
+                                *ngIf="!isSubmitted"
+                                class="remove-btn" 
+                                (click)="removeAnswer(container, answer.id)"
+                                title="Entfernen">
+                                ✕
+                            </button>
+
+                            <!-- Show indicator for individual answers after submission -->
+                            <span *ngIf="isSubmitted && isAnswerCorrect(container, answer.id)" class="answer-indicator correct-indicator">✓</span>
+                            <span *ngIf="isSubmitted && !isAnswerCorrect(container, answer.id)" class="answer-indicator incorrect-indicator">✗</span>
+                        </div>
+
+                        <!-- Placeholder when empty -->
+                        <div *ngIf="getAssignedAnswersForDisplay(container).length === 0" class="drop-placeholder">
+                            Antworten hierhin ziehen
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right side: Available answers -->
+            <div class="available-answers-container">
+                <!-- <h4 class="answers-title">Verfügbare Antworten:</h4> -->
+                
+                <div 
+                    id="available-answers"
+                    class="available-answers"
+                    cdkDropList
+                    [cdkDropListData]="availableAnswers"
+                    [cdkDropListConnectedTo]="getConnectedLists()"
+                    (cdkDropListDropped)="drop($event)">
+                    
+                    <div 
+                        *ngFor="let answer of availableAnswers" 
+                        class="draggable-answer"
+                        [class.disabled]="isSubmitted"
+                        cdkDrag
+                        [cdkDragData]="answer"
+                        [cdkDragDisabled]="isSubmitted">
+                        <span [innerHTML]="answer.label"></span>
+                    </div>
+
+                    <div *ngIf="availableAnswers.length === 0 && !isSubmitted" class="no-answers">
+                        Alle Antworten zugeordnet
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <button 
+            class="test-btn test-submit-btn" 
+            (click)="submitAnswer()" 
+            [disabled]="isSubmitted">
+            {{ isSubmitted ? 'Bereits abgegeben' : 'Abgeben' }}
+        </button>
+
+        <div 
+            *ngIf="isSubmitted" 
+            class="test-result" 
+            [class.correct]="isCorrect" 
+            [class.incorrect]="!isCorrect">
+            <p [innerHTML]="feedbackMessage"></p>
+        </div>
+    </div>
+</div>

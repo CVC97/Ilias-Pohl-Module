@@ -7,6 +7,7 @@ import { TestTracking } from '../../../core/services/test-tracking';
 import { TestOrderImages } from '../../../shared/test/order-images/order-images';
 import { TestSingleChoice } from '../../../shared/test/single-choice/single-choice';
 import { TestMultipleChoice } from '../../../shared/test/multiple-choice/multiple-choice';
+import { TestDragDrop } from '../../../shared/test/drag-and-drop/drag-and-drop';
 
 
 
@@ -21,7 +22,7 @@ declare global {
 @Component({
     selector: 'app-damped-oscillations',
     standalone: true,
-    imports: [CommonModule, RouterLink, TestOrderImages, TestSingleChoice, TestMultipleChoice],
+    imports: [CommonModule, RouterLink, TestOrderImages, TestSingleChoice, TestMultipleChoice, TestDragDrop],
     templateUrl: './damped-oscillations.html',
     styleUrl: './damped-oscillations.css'
 })
@@ -100,6 +101,51 @@ export class DampedOscillations implements OnInit, OnDestroy {
         containerId: 'test-question4-container'
     };
 
+	// question 5 data
+    question5 = {
+        questionId: 'damped-osc-5-phase-space',
+        question: `Der Phasenraum beschreibt mögliche Zustände, die ein System annehmen kann über die Angabe der Raum- und einer Geschwindigkeitskoordinate. 
+		Für das Pohlsche Rad kann die Bewegung des Schwungrads angegeben werden über den Auslenkwinkel $\\phi$ und die Winkelgeschwindigkeit $\\dot{\\phi}$.
+
+		Ordnen Sie den gezeigten Phasenraumdarstellungen die korrekten Anfangsbedingungen und Dämpfungskonstanten zu.`,
+        questionInstruction: 'Frage 5 von 5 (60 Punkte): Zuordnung Phasenraum',
+        containers: [
+            { 
+				id: 'spiral1', 
+				imageSrc: 'assets/images/damped_oscillations/phase_space_spiral1_5.png', 
+				imageAlt: 'Spirale 1', 
+				correctAnswerIds: [ 'phi_gr_zero', 'phi_dot_eq_zero', 'gamma_weak' ], 
+				assignedAnswerIds: [] 
+			},
+            { 
+				id: 'spiral2', 
+				imageSrc: 'assets/images/damped_oscillations/phase_space_spiral2_5.png', 
+				imageAlt: 'Spirale 2', 
+				correctAnswerIds: [ 'phi_sm_zero', 'phi_dot_gr_zero', 'gamma_medium' ],
+				 assignedAnswerIds: [] 
+			},
+            { 
+				id: 'spiral3', 
+				imageSrc: 'assets/images/damped_oscillations/phase_space_spiral3_5.png', 
+				imageAlt: 'Spirale 3', 
+				correctAnswerIds: [ 'phi_eq_zero', 'phi_dot_sm_zero'], 
+				assignedAnswerIds: [] }
+        ],
+        answers: [
+			{ id: 'phi_sm_zero', label: '$\\phi(0)<0$' },
+			{ id: 'phi_eq_zero', label: '$\\phi(0)=0$' },
+			{ id: 'phi_gr_zero', label: '$\\phi(0)>0$' },
+			{ id: 'phi_dot_sm_zero', label: '$\\dot{\\phi}(0)<0$' },
+			{ id: 'phi_dot_eq_zero', label: '$\\dot{\\phi}(0)=0$' },
+			{ id: 'phi_dot_gr_zero', label: '$\\dot{\\phi}(0)>0$' },
+			{ id: 'gamma_weak', label: '$\\gamma=0.1$' },
+			{ id: 'gamma_medium', label: '$\\gamma=0.4$' },
+			{ id: 'gamma_strong', label: '$\\gamma=0.8$' },
+        ],
+        maxPoints: 60,
+        containerId: 'test-question5-container'
+    };
+
 
     // track submissions
     question1Submitted = false;
@@ -138,14 +184,14 @@ export class DampedOscillations implements OnInit, OnDestroy {
 		this.question2Submitted = this.testTracking.isQuestionAnswered(this.question2.questionId);
 		this.question3Submitted = this.testTracking.isQuestionAnswered(this.question3.questionId);
 		this.question4Submitted = this.testTracking.isQuestionAnswered(this.question4.questionId);
-		// this.question5Submitted = this.testTracking.isQuestionAnswered(this.question5.questionId);
+		this.question5Submitted = this.testTracking.isQuestionAnswered(this.question5.questionId);
         
         console.log('Restored test completion state:', {
 			q1: this.question1Submitted,
 			q2: this.question2Submitted,
 			q3: this.question3Submitted,
 			q4: this.question4Submitted,
-			// q5: this.question5Submitted
+			q5: this.question5Submitted
         });
     }
 	
@@ -210,6 +256,22 @@ export class DampedOscillations implements OnInit, OnDestroy {
                 this.question4.correctAnswers,
                 result.pointsAwarded,
                 this.question4.maxPoints
+            );
+        }
+    }
+
+
+    onQuestion5Submit(result: any) {
+        this.question5Submitted = true;
+
+        if (!this.testTracking.isQuestionAnswered(this.question5.questionId)) {
+            this.testTracking.trackQuestionResult(
+                this.question5.questionId,
+                result.isCorrect,
+                result.userAnswer,
+                {}, // No simple correctAnswer for drag-drop
+                result.pointsAwarded,
+                this.question5.maxPoints
             );
         }
     }
@@ -302,9 +364,9 @@ export class DampedOscillations implements OnInit, OnDestroy {
             } else if (this.currentView === 'damped_osc3') {
                 this.currentView = 'damped_osc4';
             } else if (this.currentView = 'damped_osc4') {
-				this.router.navigate(['damped_osc5']);
+				this.currentView = 'damped_osc5';
 			} else if (this.currentView = 'damped_osc5') {
-				this.router.navigate(['damped_osc6']);
+				this.currentView = 'damped_osc6';
 			}
             this.renderMath();
         }

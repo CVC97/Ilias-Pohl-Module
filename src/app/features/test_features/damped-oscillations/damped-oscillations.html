@@ -64,6 +64,20 @@
             </app-test-multiple-choice>
         </div>
 
+        <!-- page 5 -->
+        <div *ngIf="currentView === 'damped_osc5'">
+            <app-test-drag-and-drop
+                [questionId]="question5.questionId"
+                [question]="question5.question"
+                [questionInstruction]="question5.questionInstruction"
+                [containers]="question5.containers"
+                [answers]="question5.answers"
+                [maxPoints]="question5.maxPoints"
+                [containerId]="question5.containerId"
+                (onSubmit)="onQuestion5Submit($event)">
+            </app-test-drag-and-drop>
+        </div>
+
     <!-- forward button - bottom right, conditionally enabled -->
     <div class="button-container">
         <!-- a for links -->

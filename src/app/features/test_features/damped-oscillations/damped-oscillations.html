@@ -85,7 +85,8 @@
             <app-end-page
                 [testId]="'damped-oscillations'"
                 [testTitle]="'Gedämpfte Schwingungen'"
-                [thresholds]="performanceThresholds">
+                [thresholds]="performanceThresholds"
+                (resultsCalculated)="onResultsCalculated($event)">
             </app-end-page>
         </div>
 
@@ -99,6 +100,6 @@
         <button *ngIf="!isEndPage" class="btn" (click)="goForward()" [disabled]="!canProceed">Weiter →</button>
         <!-- last test question: Test beenden -->
         <button *ngIf="currentView === 'damped_osc5'" class="btn" (click)="goForward()" [disabled]="!canProceed">Test beenden → </button>
-        <button *ngIf="currentView === 'damped_osc6'" class="btn" (click)="goForward()" [disabled]="!canProceed">{{ continueLinkText }}</button>
+        <button *ngIf="currentView === 'damped_osc6'" class="btn" (click)="goForward()" [disabled]="!canProceed">{{ continueLinkText }} →</button>
     </div>
 </div>

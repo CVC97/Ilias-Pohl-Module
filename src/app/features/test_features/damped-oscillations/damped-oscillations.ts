@@ -35,16 +35,16 @@ export class DampedOscillations implements OnInit, OnDestroy {
             minPercentage: 0,
             maxPercentage: 25,
             level: 'low' as const,
-            message: 'Sie werden sich nun anhand einer interaktiven Simulation anschauen, welchen Einfluss unterschiedliche Parameter auf den Bewegungsverlauf haben.',
+            message: 'Sie werden sich nun anhand einer <b>interaktiven Simulation</b> anschauen, welchen Einfluss unterschiedliche Parameter auf den Bewegungsverlauf haben.',
             continueLink: '/experiment/intro',
             continueLinkText: 'Weiter zur Simulation'
         },
         {
             minPercentage: 25,
-            maxPercentage: 80,
+            maxPercentage: 79,
             level: 'medium' as const,
             message: `
-				Sie werden sich nun noch einmal die theoretischen Grundlagen zu gedämpften Schwingungen erarbeiten. 
+				Sie werden sich nun noch einmal die <b>theoretischen Grundlagen zu gedämpften Schwingungen</b> erarbeiten. 
 				Dazu bearbeiten sie ein interaktives Lernmodul zum Aufstellen und Lösen der Bewegungsgleichung für eine gedämpfte Schwingung 
 				und der Analyse unterschiedlicher experimenteller Einstellungen auf den Bewegungsverlauf.`,
             continueLink: '/learning/resonance',
@@ -54,7 +54,7 @@ export class DampedOscillations implements OnInit, OnDestroy {
             minPercentage: 80,
             maxPercentage: 100,
             level: 'high' as const,
-            message: 'Sie haben ein gutes Grundlagenwissen zu gedämpften Schwingungen und werden nun mit einem Test zu getriebenen Schwingungen fortfahren.',
+            message: 'Sie haben ein gutes Grundlagenwissen zu gedämpften Schwingungen und werden nun mit einem <b>Test zu getriebenen Schwingungen</b> fortfahren.',
             continueLink: '/learning/forced-oscillations',
             continueLinkText: 'Weiter zum Test'
         }
@@ -156,13 +156,13 @@ export class DampedOscillations implements OnInit, OnDestroy {
 				imageSrc: 'assets/images/damped_oscillations/phase_space_spiral2_5.png', 
 				imageAlt: 'Spirale 2', 
 				correctAnswerIds: [ 'phi_sm_zero', 'phi_dot_gr_zero', 'gamma_medium' ],
-				 assignedAnswerIds: [] 
+				assignedAnswerIds: [] 
 			},
             { 
 				id: 'spiral3', 
 				imageSrc: 'assets/images/damped_oscillations/phase_space_spiral3_5.png', 
 				imageAlt: 'Spirale 3', 
-				correctAnswerIds: [ 'phi_eq_zero', 'phi_dot_sm_zero'], 
+				correctAnswerIds: [ 'phi_eq_zero', 'phi_dot_sm_zero', 'gamma_strong'], 
 				assignedAnswerIds: [] }
         ],
         answers: [
@@ -192,15 +192,49 @@ export class DampedOscillations implements OnInit, OnDestroy {
 	// performance handling
 
     // results page data
-    continueLink = '';
-    continueLinkText = '';
+    continueLink = '/';
+    continueLinkText = 'Weiter';
     performanceLevel: 'low' | 'medium' | 'high' = 'low';
+
+    // calculate results directly when navigating to results page
+    private calculateResults() {
+        const testProgress = this.testTracking.getTestResults('damped-oscillations');
+        
+        if (!testProgress) {
+            console.warn('No test results found');
+            return;
+        }
+
+        const totalPoints = testProgress.pointsEarned;
+        const maxPoints = testProgress.maxPoints;
+        const percentage = (totalPoints / maxPoints) * 100;
+
+        // find matching threshold
+        const threshold = this.performanceThresholds.find(t => 
+            percentage >= t.minPercentage && percentage <= t.maxPercentage
+        );
+
+        if (threshold) {
+            this.performanceLevel = threshold.level;
+            this.continueLink = threshold.continueLink;
+            this.continueLinkText = threshold.continueLinkText;
+            
+            console.log('Results calculated:', {
+                percentage,
+                level: this.performanceLevel,
+                continueLink: this.continueLink,
+                continueLinkText: this.continueLinkText
+            });
+        }
+    }
 
     // handle results calculated event
     onResultsCalculated(results: any) {
+        console.log('Results calculated:', results); // Debug log
         this.performanceLevel = results.level;
         this.continueLink = results.continueLink;
         this.continueLinkText = results.continueLinkText;
+        console.log('Continue link text set to:', this.continueLinkText); // Debug log
     }
 
     getPerformanceClass(): string {
@@ -325,7 +359,7 @@ export class DampedOscillations implements OnInit, OnDestroy {
                 this.question5.questionId,
                 result.isCorrect,
                 result.userAnswer,
-                {}, // No simple correctAnswer for drag-drop
+                {},
                 result.pointsAwarded,
                 this.question5.maxPoints
             );
@@ -427,9 +461,11 @@ export class DampedOscillations implements OnInit, OnDestroy {
             } else if (this.currentView === 'damped_osc4') {
 				this.currentView = 'damped_osc5';
 			} else if (this.currentView === 'damped_osc5') {
+				this.calculateResults();
 				this.currentView = 'damped_osc6';
 			} else if (this.currentView === 'damped_osc6') {
-				this.router.navigate([this.continueLink]);
+                console.log('Navigating to:', this.continueLink); // Debug log
+                this.router.navigate([this.continueLink]);
 			}
             this.renderMath();
         }

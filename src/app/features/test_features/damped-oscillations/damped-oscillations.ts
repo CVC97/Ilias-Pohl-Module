@@ -8,6 +8,7 @@ import { TestOrderImages } from '../../../shared/test/order-images/order-images'
 import { TestSingleChoice } from '../../../shared/test/single-choice/single-choice';
 import { TestMultipleChoice } from '../../../shared/test/multiple-choice/multiple-choice';
 import { TestDragDrop } from '../../../shared/test/drag-and-drop/drag-and-drop';
+import { EndPage } from '../../../shared/test/end-page/end-page';
 
 
 
@@ -22,11 +23,43 @@ declare global {
 @Component({
     selector: 'app-damped-oscillations',
     standalone: true,
-    imports: [CommonModule, RouterLink, TestOrderImages, TestSingleChoice, TestMultipleChoice, TestDragDrop],
+    imports: [CommonModule, RouterLink, TestOrderImages, TestSingleChoice, TestMultipleChoice, TestDragDrop, EndPage],
     templateUrl: './damped-oscillations.html',
     styleUrl: './damped-oscillations.css'
 })
 export class DampedOscillations implements OnInit, OnDestroy {
+
+    // Custom thresholds for this test
+    performanceThresholds = [
+        {
+            minPercentage: 0,
+            maxPercentage: 25,
+            level: 'low' as const,
+            message: 'Sie werden sich nun anhand einer interaktiven Simulation anschauen, welchen Einfluss unterschiedliche Parameter auf den Bewegungsverlauf haben.',
+            continueLink: '/experiment/intro',
+            continueLinkText: 'Weiter zur Simulation'
+        },
+        {
+            minPercentage: 25,
+            maxPercentage: 80,
+            level: 'medium' as const,
+            message: `
+				Sie werden sich nun noch einmal die theoretischen Grundlagen zu gedämpften Schwingungen erarbeiten. 
+				Dazu bearbeiten sie ein interaktives Lernmodul zum Aufstellen und Lösen der Bewegungsgleichung für eine gedämpfte Schwingung 
+				und der Analyse unterschiedlicher experimenteller Einstellungen auf den Bewegungsverlauf.`,
+            continueLink: '/learning/resonance',
+            continueLinkText: 'Weiter zu den theoretischen Grundlagen'
+        },
+        {
+            minPercentage: 80,
+            maxPercentage: 100,
+            level: 'high' as const,
+            message: 'Sie haben ein gutes Grundlagenwissen zu gedämpften Schwingungen und werden nun mit einem Test zu getriebenen Schwingungen fortfahren.',
+            continueLink: '/learning/forced-oscillations',
+            continueLinkText: 'Weiter zum Test'
+        }
+    ];
+
 	
 	// question 1 data
     question1 = {
@@ -98,6 +131,7 @@ export class DampedOscillations implements OnInit, OnDestroy {
 		],
 		correctAnswers: ['half_life', 'damping'],
         maxPoints: 20,
+		pointsPerCorrectClick: 5,
         containerId: 'test-question4-container'
     };
 
@@ -153,6 +187,28 @@ export class DampedOscillations implements OnInit, OnDestroy {
 	question3Submitted = false;
 	question4Submitted = false;
 	question5Submitted = false;
+
+
+	// performance handling
+
+    // results page data
+    continueLink = '';
+    continueLinkText = '';
+    performanceLevel: 'low' | 'medium' | 'high' = 'low';
+
+    // handle results calculated event
+    onResultsCalculated(results: any) {
+        this.performanceLevel = results.level;
+        this.continueLink = results.continueLink;
+        this.continueLinkText = results.continueLinkText;
+    }
+
+    getPerformanceClass(): string {
+        if (this.currentView === 'damped_osc6') {
+            return this.performanceLevel;
+        }
+        return '';
+    }
 
 	
     constructor(
@@ -229,7 +285,7 @@ export class DampedOscillations implements OnInit, OnDestroy {
 	}
 
     onQuestion3Submit(result: any) {
-        this.question2Submitted = true;
+        this.question3Submitted = true;
 
         // Track the result (only if not already tracked)
         if (!this.testTracking.isQuestionAnswered(this.question3.questionId)) {
@@ -301,11 +357,11 @@ export class DampedOscillations implements OnInit, OnDestroy {
     get isFirstPage(): boolean {
         return this.currentView === 'damped_osc1';
     }
-    // get isMiddlePage(): boolean {
-    //     return (this.currentView !== 'damped_osc1') && (this.currentView !== 'damped_osc6');
-    // }
-    get isLastPage(): boolean {
-        return this.currentView === 'damped_osc6';
+	// get isLastPage(): boolean {
+	// 	return this.currentView === 'damped_osc5';
+	// }
+    get isEndPage(): boolean {
+        return (this.currentView === 'damped_osc5') || (this.currentView === 'damped_osc6');
     }
 
 
@@ -322,6 +378,8 @@ export class DampedOscillations implements OnInit, OnDestroy {
 			return this.question4Submitted;
 		} else if (this.currentView === 'damped_osc5') {
 			return this.question5Submitted;
+		} else if (this.currentView === 'damped_osc6') {
+			return true;
 		}
         return false;
     }
@@ -350,6 +408,9 @@ export class DampedOscillations implements OnInit, OnDestroy {
         } else if (this.currentView === 'damped_osc5') {
             this.currentView = 'damped_osc4';
             this.renderMath();
+        } else if (this.currentView === 'damped_osc6') {
+            this.currentView = 'damped_osc5';
+            this.renderMath();
         }
     }
 
@@ -363,10 +424,12 @@ export class DampedOscillations implements OnInit, OnDestroy {
                 this.currentView = 'damped_osc3';
             } else if (this.currentView === 'damped_osc3') {
                 this.currentView = 'damped_osc4';
-            } else if (this.currentView = 'damped_osc4') {
+            } else if (this.currentView === 'damped_osc4') {
 				this.currentView = 'damped_osc5';
-			} else if (this.currentView = 'damped_osc5') {
+			} else if (this.currentView === 'damped_osc5') {
 				this.currentView = 'damped_osc6';
+			} else if (this.currentView === 'damped_osc6') {
+				this.router.navigate([this.continueLink]);
 			}
             this.renderMath();
         }

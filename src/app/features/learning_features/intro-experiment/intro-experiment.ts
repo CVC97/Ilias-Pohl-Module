@@ -353,6 +353,9 @@ export class IntroExperiment implements OnInit, OnDestroy {
     get isFirstPage(): boolean {
         return this.currentView === 'intro_exp1';
     }
+    get isLastPage(): boolean {
+        return this.currentView === 'intro_exp4';
+    }
 
 	// page completion tracking
 	page1Complete = true;

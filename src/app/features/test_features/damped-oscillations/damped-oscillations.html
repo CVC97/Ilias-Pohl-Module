@@ -6,6 +6,7 @@
             <span *ngIf="currentView === 'damped_osc3'">Test: Gedämpfte Schwingungen (3/5)</span>
             <span *ngIf="currentView === 'damped_osc4'">Test: Gedämpfte Schwingungen (4/5)</span>
             <span *ngIf="currentView === 'damped_osc5'">Test: Gedämpfte Schwingungen (5/5)</span>
+            <span *ngIf="currentView === 'damped_osc6'">Test: Gedämpfte Schwingungen - Ergebnis</span>
         </h1>
 
         <!-- page 1 -->
@@ -59,6 +60,7 @@
                 [options]="question4.options"
                 [correctAnswers]="question4.correctAnswers"
                 [maxPoints]="question4.maxPoints"
+                [pointsPerCorrectClick]="question4.pointsPerCorrectClick"
                 [containerId]="question4.containerId"
                 (onSubmit)="onQuestion4Submit($event)">
             </app-test-multiple-choice>
@@ -78,15 +80,25 @@
             </app-test-drag-and-drop>
         </div>
 
+        <!-- page 6: test results -->
+        <div *ngIf="currentView === 'damped_osc6'">
+            <app-end-page
+                [testId]="'damped-oscillations'"
+                [testTitle]="'Gedämpfte Schwingungen'"
+                [thresholds]="performanceThresholds">
+            </app-end-page>
+        </div>
+
     <!-- forward button - bottom right, conditionally enabled -->
-    <div class="button-container">
-        <!-- a for links -->
+    <div class="button-container" [class]="getPerformanceClass()">
+        <!-- first page: go back to intro-experiment -->
         <button *ngIf="isFirstPage" routerLink="/learning/intro-experiment" class="btn" [disabled]="!canGoBack">← Zurück zum Versuchsaufbau</button>
-        <!-- button for actions -->
+        <!-- otherwise: go back -->
         <button *ngIf="!isFirstPage" class="btn" (click)="goBack()" [disabled]="!canGoBack">← Zurück</button>
-        
-        <button *ngIf="!isLastPage" class="btn" (click)="goForward()" [disabled]="!canProceed">
-            Weiter →
-        </button>
+        <!-- unless last test-question or end-page: weiter -->
+        <button *ngIf="!isEndPage" class="btn" (click)="goForward()" [disabled]="!canProceed">Weiter →</button>
+        <!-- last test question: Test beenden -->
+        <button *ngIf="currentView === 'damped_osc5'" class="btn" (click)="goForward()" [disabled]="!canProceed">Test beenden → </button>
+        <button *ngIf="currentView === 'damped_osc6'" class="btn" (click)="goForward()" [disabled]="!canProceed">{{ continueLinkText }}</button>
     </div>
 </div>

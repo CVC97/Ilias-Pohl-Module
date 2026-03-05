@@ -38,9 +38,11 @@
         <div 
             *ngIf="isSubmitted" 
             class="test-result" 
-            [class.correct]="isCorrect" 
-            [class.incorrect]="!isCorrect">
+            [class.correct]="isCorrect"
+            [class.partial]="!isCorrect && pointsAwarded > 0"
+            [class.incorrect]="pointsAwarded === 0">
             <p>{{ feedbackMessage }}</p>
+            <div class="points-breakdown" [innerHTML]="pointsBreakdown"></div>
         </div>
     </div>
 </div>

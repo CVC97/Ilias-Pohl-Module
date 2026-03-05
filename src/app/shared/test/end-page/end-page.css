@@ -1,0 +1,125 @@
+.test-results-container {
+    background: white;
+    border-radius: 12px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    border: 2px solid var(--physik-gelb);
+    text-align: center;
+}
+
+.test-results-container.low {
+    /* border-color: #f44336; */
+    background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
+}
+
+.test-results-container.medium {
+    /* border-color: #ff9800; */
+    background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+}
+
+.test-results-container.high {
+    /* border-color: #4caf50; */
+    background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+}
+
+/* Title */
+.results-title {
+    color: var(--uni-blau-1);
+    font-size: 1.8rem;
+    margin-bottom: 2rem;
+    font-weight: 700;
+}
+
+/* Score Display */
+.score-display {
+    margin-bottom: 1rem;
+}
+
+.score-value {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.points-earned {
+    font-size: 4rem;
+    font-weight: 700;
+    color: var(--uni-blau-1);
+    line-height: 1;
+}
+
+.points-separator {
+    font-size: 3rem;
+    color: var(--grau-60);
+}
+
+.points-max {
+    font-size: 3rem;
+    color: var(--grau-80);
+}
+
+.score-label {
+    font-size: 1.2rem;
+    color: var(--grau-80);
+    margin-top: 0.5rem;
+    font-weight: 600;
+}
+
+/* Percentage Display */
+.percentage-display {
+    margin: 2rem 0;
+}
+
+.percentage-value {
+    display: inline-block;
+    font-size: 3rem;
+    font-weight: 700;
+    padding: 1rem 2rem;
+    border-radius: 50px;
+    background: rgba(255, 255, 255, 0.8);
+    color: var(--uni-blau-1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Performance Message */
+.performance-message {
+    margin: 2rem 0;
+}
+
+.performance-message p {
+    font-size: 1.2rem;
+    color: var(--uni-blau-1);
+    line-height: 1.6;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+
+/* Responsive */
+@media (max-width: 768px) {
+    .test-results-container {
+        padding: 2rem 1rem;
+    }
+
+    .results-title {
+        font-size: 1.5rem;
+    }
+
+    .points-earned {
+        font-size: 3rem;
+    }
+
+    .points-separator,
+    .points-max {
+        font-size: 2rem;
+    }
+
+    .percentage-value {
+        font-size: 2.5rem;
+    }
+
+    .performance-message p {
+        font-size: 1rem;
+    }
+}

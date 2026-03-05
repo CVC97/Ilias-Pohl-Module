@@ -202,7 +202,7 @@ button.btn {
     background: var(--button-color);
     border: none;
     border-radius: 6px;
-    box-shadow: 0 4px 12px rgba(33, 150, 243, 0.3);
+    box-shadow: 0 4px 12px var(--shadow-color);
     
     /* Interaction */
     cursor: pointer;
@@ -219,7 +219,7 @@ button.btn {
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 12px rgba(33, 150, 243, 0.3);
+    box-shadow: 0 4px 12px var(--shadow-color);
 }
 
 .btn:disabled {

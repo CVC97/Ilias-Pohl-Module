@@ -2,14 +2,10 @@ import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TestTracking } from '../../../core/services/test-tracking';
 
-
-
 interface ChoiceOption {
     value: string;
     label: string;
 }
-
-
 
 @Component({
     selector: 'app-test-multiple-choice',
@@ -26,30 +22,28 @@ export class TestMultipleChoice implements OnInit {
     @Input() correctAnswers!: string[]; // Multiple correct answers
     @Input() maxPoints!: number;
     @Input() containerId!: string;
+    @Input() pointsPerCorrectClick: number = 5; // Points for each correct selection/deselection
     
-
     @Output() onSubmit = new EventEmitter<{
         isCorrect: boolean;
         userAnswer: string[];
         pointsAwarded: number;
+        pointsBreakdown: string;
     }>();
-
 
     selectedAnswers: Set<string> = new Set();
     isSubmitted = false;
     isCorrect = false;
     pointsAwarded = 0;
     feedbackMessage = '';
-
+    pointsBreakdown = '';
 
     constructor(private testTracking: TestTracking) {}
-
 
     ngOnInit() {
         // Check if this question was already answered
         this.restorePreviousAnswer();
     }
-
 
     private restorePreviousAnswer() {
         const previousResult = this.testTracking.getQuestionResult(this.questionId);
@@ -61,24 +55,23 @@ export class TestMultipleChoice implements OnInit {
             this.pointsAwarded = previousResult.pointsAwarded;
             this.selectedAnswers = new Set(previousResult.userAnswer as string[]);
             
+            // Recalculate points breakdown for display
+            this.calculatePointsBreakdown();
+            
             // Restore feedback message
-            if (this.isCorrect) {
-                this.feedbackMessage = `✓ Richtig! Sie haben ${this.pointsAwarded} von ${this.maxPoints} Punkten erreicht.`;
-            } else {
-                this.feedbackMessage = `✗ Leider falsch. Sie haben 0 von ${this.maxPoints} Punkten erreicht.`;
-            }
+            this.feedbackMessage = this.buildFeedbackMessage();
             
             // Notify parent that this question is already answered
             this.onSubmit.emit({
                 isCorrect: this.isCorrect,
                 userAnswer: Array.from(this.selectedAnswers),
-                pointsAwarded: this.pointsAwarded
+                pointsAwarded: this.pointsAwarded,
+                pointsBreakdown: this.pointsBreakdown
             });
             
             console.log(`Restored test question: ${this.questionId} (${this.pointsAwarded}/${this.maxPoints} points)`);
         }
     }
-
 
     toggleOption(value: string) {
         if (this.isSubmitted) return; // Can't change after submission
@@ -90,53 +83,71 @@ export class TestMultipleChoice implements OnInit {
         }
     }
 
-
     isSelected(value: string): boolean {
         return this.selectedAnswers.has(value);
     }
 
-
     isCorrectAnswer(value: string): boolean {
         return this.correctAnswers.includes(value);
     }
-	
+
+    // Calculate partial points with breakdown
+    private calculatePointsBreakdown() {
+        let correctClicks = 0;
+        let totalClickableOptions = this.options.length;
+
+        this.options.forEach(option => {
+            const isCorrect = this.correctAnswers.includes(option.value);
+            const isSelected = this.selectedAnswers.has(option.value);
+
+            // Award points if:
+            // - Correct answer is selected (checked when should be checked)
+            // - Incorrect answer is NOT selected (unchecked when should be unchecked)
+            if ((isCorrect && isSelected) || (!isCorrect && !isSelected)) {
+                correctClicks++;
+            }
+        });
+
+        this.pointsAwarded = correctClicks * this.pointsPerCorrectClick;
+        
+        // Build breakdown string
+        this.pointsBreakdown = `${correctClicks} von ${totalClickableOptions} korrekte Entscheidungen × ${this.pointsPerCorrectClick} Punkte = ${this.pointsAwarded} Punkte`;
+        this.pointsBreakdown += `<br><strong>Gesamt: ${this.pointsAwarded} von ${this.maxPoints} Punkten</strong>`;
+
+        // Check if completely correct (all points earned)
+        this.isCorrect = this.pointsAwarded === this.maxPoints;
+    }
+
+    // Build feedback message
+    private buildFeedbackMessage(): string {
+        if (this.isCorrect) {
+            return `✓ Perfekt! Sie haben alle ${this.pointsAwarded} von ${this.maxPoints} Punkten erreicht.`;
+        } else if (this.pointsAwarded > 0) {
+            return `○ Teilweise richtig. Sie haben ${this.pointsAwarded} von ${this.maxPoints} Punkten erreicht.`;
+        } else {
+            return `✗ Leider falsch. Sie haben 0 von ${this.maxPoints} Punkten erreicht.`;
+        }
+    }
 
     submitAnswer() {
         if (this.isSubmitted) return; // Already submitted
-        if (this.selectedAnswers.size === 0) {
-            alert('Bitte wählen Sie mindestens eine Antwort aus.');
-            return;
-        }
 
         this.isSubmitted = true;
 
         const userAnswers = Array.from(this.selectedAnswers);
 
-        // Check if correct (all correct selected AND no incorrect selected)
-        const allCorrectSelected = this.correctAnswers.every(answer =>
-            userAnswers.includes(answer)
-        );
-        const noIncorrectSelected = userAnswers.every(answer =>
-            this.correctAnswers.includes(answer)
-        );
+        // Calculate partial points
+        this.calculatePointsBreakdown();
 
-        this.isCorrect = allCorrectSelected && noIncorrectSelected;
-
-        // Award points
-        this.pointsAwarded = this.isCorrect ? this.maxPoints : 0;
-
-        // Feedback
-        if (this.isCorrect) {
-            this.feedbackMessage = `✓ Richtig! Sie haben ${this.pointsAwarded} von ${this.maxPoints} Punkten erreicht.`;
-        } else {
-            this.feedbackMessage = `✗ Leider falsch. Sie haben 0 von ${this.maxPoints} Punkten erreicht.`;
-        }
+        // Build feedback message
+        this.feedbackMessage = this.buildFeedbackMessage();
 
         // Emit result
         this.onSubmit.emit({
             isCorrect: this.isCorrect,
             userAnswer: userAnswers,
-            pointsAwarded: this.pointsAwarded
+            pointsAwarded: this.pointsAwarded,
+            pointsBreakdown: this.pointsBreakdown
         });
     }
 }

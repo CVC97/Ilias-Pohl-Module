@@ -45,8 +45,9 @@ src/
     |   |
     |   └───test/                               // test formats (TBD)
     |       └───order_image/ 
-    |       └───single_choice/
+    |       └───single-choice/
     |       └───multiple-choice /
+    |       └───drag-and-drop /
     |   
     └───features/                               // code for the individual subpages
             └───home/                           // home page
@@ -66,7 +67,7 @@ src/
 
 ```
 
-## Project Services and Components
+## Project Services and Shared Components
 
 ### Services
 
@@ -79,7 +80,7 @@ Project-wide services providing functionality.
 - **data-export.ts:** exports page and question tracking (TBD)
 
 
-### Evaluation Features
+### Evaluation Formats
 
 Each Q+A box type has its own modularised code provided globally, these formats do exist.
 
@@ -89,6 +90,16 @@ Each Q+A box type has its own modularised code provided globally, these formats 
 - **image-choice:** multiple choice of images (aligned in rows of three)
 - **drag-drop:** TBD
 
+
+### Test Formats
+
+- **order-images:** orders images by dragging them up / down
+- **single-choice:** self-explantory
+- **multiple-choice:** self-explantory
+- **drag-and-drop:** answers are assigned to images
+
+
+## Features
 
 ### Glossary Features
 
@@ -125,6 +136,10 @@ The subpages of the learning module and the questionID of each Q+A box found in 
 
 - **damped-oscillations:**
     - *damped-osc-1-daempfungsstaerke*
+    - *damped-osc-2-federkonstante*
+    - *damped-osc-3-frequency-damping*
+    - *damped-osc-4-log-decrement*
+    - *damped-osc-5-phase-space*
 
 
 ### Sidepath Features

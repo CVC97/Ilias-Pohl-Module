@@ -37,11 +37,14 @@ export class TestDragDrop implements OnInit, AfterViewInit {
     @Input() answers!: DraggableAnswer[];
     @Input() maxPoints!: number;
     @Input() containerId!: string;
+    @Input() pointsPerCorrectAnswer: number = 5; // Points for each correct answer placement
+    @Input() pointsPerPerfectContainer: number = 5; // Bonus points for completely correct container
     
     @Output() onSubmit = new EventEmitter<{
         isCorrect: boolean;
         userAnswer: { [containerId: string]: string[] };
         pointsAwarded: number;
+        pointsBreakdown: string;
     }>();
 
     resultContainers: ResultContainer[] = [];
@@ -50,6 +53,7 @@ export class TestDragDrop implements OnInit, AfterViewInit {
     isCorrect = false;
     pointsAwarded = 0;
     feedbackMessage = '';
+    pointsBreakdown = '';
 
     constructor(
         private testTracking: TestTracking,
@@ -95,18 +99,18 @@ export class TestDragDrop implements OnInit, AfterViewInit {
             // Remove used answers from available
             this.availableAnswers = this.availableAnswers.filter(a => !usedAnswerIds.has(a.id));
             
+            // Recalculate points breakdown for display
+            this.calculatePointsBreakdown();
+            
             // Restore feedback message
-            if (this.isCorrect) {
-                this.feedbackMessage = `✓ Richtig! Sie haben ${this.pointsAwarded} von ${this.maxPoints} Punkten erreicht.`;
-            } else {
-                this.feedbackMessage = `✗ Leider falsch. Sie haben 0 von ${this.maxPoints} Punkten erreicht.`;
-            }
+            this.feedbackMessage = this.buildFeedbackMessage();
             
             // Notify parent that this question is already answered
             this.onSubmit.emit({
                 isCorrect: this.isCorrect,
                 userAnswer: userAnswer,
-                pointsAwarded: this.pointsAwarded
+                pointsAwarded: this.pointsAwarded,
+                pointsBreakdown: this.pointsBreakdown
             });
             
             console.log(`Restored test question: ${this.questionId} (${this.pointsAwarded}/${this.maxPoints} points)`);
@@ -135,16 +139,9 @@ export class TestDragDrop implements OnInit, AfterViewInit {
         return ['available-answers', ...containerIds];
     }
 
-    // Handle drop event - FIXED VERSION
+    // Handle drop event
     drop(event: CdkDragDrop<DraggableAnswer[]>) {
         if (this.isSubmitted) return;
-
-        console.log('Drop event:', {
-            previousContainer: event.previousContainer.id,
-            currentContainer: event.container.id,
-            previousIndex: event.previousIndex,
-            currentIndex: event.currentIndex
-        });
 
         if (event.previousContainer === event.container) {
             // Same list - just reorder
@@ -159,15 +156,12 @@ export class TestDragDrop implements OnInit, AfterViewInit {
             const sourceListId = event.previousContainer.id;
             const targetListId = event.container.id;
 
-            console.log('Moving answer:', answer);
-
             // Remove from source
             if (sourceListId === 'available-answers') {
                 // Remove from available answers array
                 const index = this.availableAnswers.findIndex(a => a.id === answer.id);
                 if (index !== -1) {
                     this.availableAnswers.splice(index, 1);
-                    console.log('Removed from available answers');
                 }
             } else {
                 // Remove from source container
@@ -177,7 +171,6 @@ export class TestDragDrop implements OnInit, AfterViewInit {
                     const index = sourceContainer.assignedAnswerIds.indexOf(answer.id);
                     if (index !== -1) {
                         sourceContainer.assignedAnswerIds.splice(index, 1);
-                        console.log('Removed from source container:', sourceContainerId);
                     }
                 }
             }
@@ -186,14 +179,12 @@ export class TestDragDrop implements OnInit, AfterViewInit {
             if (targetListId === 'available-answers') {
                 // Add back to available answers
                 this.availableAnswers.push(answer);
-                console.log('Added to available answers');
             } else {
                 // Add to target container
                 const targetContainerId = targetListId.replace('container-', '');
                 const targetContainer = this.resultContainers.find(c => c.id === targetContainerId);
                 if (targetContainer) {
                     targetContainer.assignedAnswerIds.push(answer.id);
-                    console.log('Added to target container:', targetContainerId, 'Answer ID:', answer.id);
                 }
             }
         }
@@ -233,7 +224,7 @@ export class TestDragDrop implements OnInit, AfterViewInit {
             .filter(a => a !== undefined) as DraggableAnswer[];
     }
 
-    // Check if container has correct answers
+    // Check if container has correct answers (all correct, no incorrect)
     isContainerCorrect(container: ResultContainer): boolean {
         if (container.assignedAnswerIds.length !== container.correctAnswerIds.length) {
             return false;
@@ -257,6 +248,54 @@ export class TestDragDrop implements OnInit, AfterViewInit {
         return container.correctAnswerIds.includes(answerId);
     }
 
+    // Count correct answers in a container
+    countCorrectAnswersInContainer(container: ResultContainer): number {
+        return container.assignedAnswerIds.filter(id => 
+            container.correctAnswerIds.includes(id)
+        ).length;
+    }
+
+    // Calculate partial points with breakdown
+    private calculatePointsBreakdown() {
+        let correctAnswersCount = 0;
+        let perfectContainersCount = 0;
+
+        this.resultContainers.forEach(container => {
+            const correctInContainer = this.countCorrectAnswersInContainer(container);
+            correctAnswersCount += correctInContainer;
+
+            if (this.isContainerCorrect(container)) {
+                perfectContainersCount++;
+            }
+        });
+
+        const pointsFromCorrectAnswers = correctAnswersCount * this.pointsPerCorrectAnswer;
+        const pointsFromPerfectContainers = perfectContainersCount * this.pointsPerPerfectContainer;
+
+        this.pointsAwarded = pointsFromCorrectAnswers + pointsFromPerfectContainers;
+        
+        // Build breakdown string
+        this.pointsBreakdown = `${correctAnswersCount} korrekte Zuordnungen × ${this.pointsPerCorrectAnswer} Punkte = ${pointsFromCorrectAnswers} Punkte`;
+        if (perfectContainersCount > 0) {
+            this.pointsBreakdown += `<br>${perfectContainersCount} vollständig korrekte Container × ${this.pointsPerPerfectContainer} Bonuspunkte = ${pointsFromPerfectContainers} Bonuspunkte`;
+        }
+        this.pointsBreakdown += `<br><strong>Gesamt: ${this.pointsAwarded} von ${this.maxPoints} Punkten</strong>`;
+
+        // Check if completely correct (all points earned)
+        this.isCorrect = this.pointsAwarded === this.maxPoints;
+    }
+
+    // Build feedback message
+    private buildFeedbackMessage(): string {
+        if (this.isCorrect) {
+            return `✓ Perfekt! Sie haben alle ${this.pointsAwarded} von ${this.maxPoints} Punkten erreicht.`;
+        } else if (this.pointsAwarded > 0) {
+            return `○ Teilweise richtig. Sie haben ${this.pointsAwarded} von ${this.maxPoints} Punkten erreicht.`;
+        } else {
+            return `✗ Leider falsch. Sie haben 0 von ${this.maxPoints} Punkten erreicht.`;
+        }
+    }
+
     submitAnswer() {
         if (this.isSubmitted) return;
 
@@ -268,24 +307,18 @@ export class TestDragDrop implements OnInit, AfterViewInit {
             userAnswer[container.id] = [...container.assignedAnswerIds];
         });
 
-        // Check if all containers correct
-        this.isCorrect = this.resultContainers.every(c => this.isContainerCorrect(c));
+        // Calculate partial points
+        this.calculatePointsBreakdown();
 
-        // Award points
-        this.pointsAwarded = this.isCorrect ? this.maxPoints : 0;
-
-        // Feedback
-        if (this.isCorrect) {
-            this.feedbackMessage = `✓ Richtig! Sie haben ${this.pointsAwarded} von ${this.maxPoints} Punkten erreicht.`;
-        } else {
-            this.feedbackMessage = `✗ Leider falsch. Sie haben 0 von ${this.maxPoints} Punkten erreicht.`;
-        }
+        // Build feedback message
+        this.feedbackMessage = this.buildFeedbackMessage();
 
         // Emit result
         this.onSubmit.emit({
             isCorrect: this.isCorrect,
             userAnswer: userAnswer,
-            pointsAwarded: this.pointsAwarded
+            pointsAwarded: this.pointsAwarded,
+            pointsBreakdown: this.pointsBreakdown
         });
     }
 }

@@ -1,0 +1,30 @@
+<div class="test-results-container" [class]="getPerformanceClass()">
+    <!-- <h2 class="results-title">{{ testTitle }} - Ergebnis</h2> -->
+    
+    <!-- Score Display -->
+    <div class="score-display">
+        <div class="score-value">
+            <span class="points-earned">{{ totalPoints }}</span>
+            <span class="points-separator">/</span>
+            <span class="points-max">{{ maxPoints }}</span>
+        </div>
+        <div class="score-label">Punkte</div>
+    </div>
+
+    <!-- Percentage Display -->
+    <div class="percentage-display">
+        <span class="percentage-value">{{ percentage | number:'1.0-1' }}%</span>
+    </div>
+
+    <!-- Performance Message -->
+    <div class="performance-message">
+        <p>{{ performanceMessage }}</p>
+    </div>
+
+    <!-- Continue Button -->
+    <!-- <div class="continue-action">
+        <a [routerLink]="continueLink" class="btn btn-continue">
+            {{ continueLinkText }}
+        </a>
+    </div> -->
+</div>

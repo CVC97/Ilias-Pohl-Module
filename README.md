@@ -146,4 +146,21 @@ The subpages of the learning module and the questionID of each Q+A box found in 
 
 ### Target Features
 
+- **simulation:**
+- **chaos:**
+- **common-free:**
+- **common-technical:**
+- **setup-free:**
+- **setup-concrete:**
+- **evaluation-comparison:**
+
 ### Simulation Features
+
+- **undamped-oscillations-theory:**
+- **damped-oscillations-theory:**
+- **driven-oscillations-theory:**
+- **expanded-driven-oscillations-theory:**
+- **undamped-oscillations-experiment:**
+- **damped-oscillations-experiment:**
+- **driven-oscillations-experiment:**
+- **expanded-driven-oscillations-experiment:**

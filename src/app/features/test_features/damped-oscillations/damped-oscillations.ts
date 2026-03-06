@@ -27,7 +27,7 @@ declare global {
     templateUrl: './damped-oscillations.html',
     styleUrl: './damped-oscillations.css'
 })
-export class DampedOscillations implements OnInit, OnDestroy {
+export class TestDampedOscillations implements OnInit, OnDestroy {
 
     // Custom thresholds for this test
     performanceThresholds = [
@@ -68,9 +68,9 @@ export class DampedOscillations implements OnInit, OnDestroy {
 			Ziehen Sie die Bilder in die richtige Reihenfolge (stärkste Dämpfung oben, schwächste unten).`,
 		questionInstruction: 'Frage 1 von 5 (30 Punkte): Sortierung Dämpfungskonstante',
         images: [
-			{ id: 'weak', imageSrc: 'assets/images/tests/weak_damping.png', label: 'Schwingung A' },
-            { id: 'medium', imageSrc: 'assets/images/tests/medium_damping.png', label: 'Schwingung B' },
-            { id: 'strong', imageSrc: 'assets/images/tests/strong_damping.png', label: 'Schwingung C' }
+			{ id: 'weak', imageSrc: 'assets/images/damped_oscillations/weak_damping_1.png', label: 'Schwingung A' },
+            { id: 'medium', imageSrc: 'assets/images/damped_oscillations/medium_damping_1.png', label: 'Schwingung B' },
+            { id: 'strong', imageSrc: 'assets/images/damped_oscillations/strong_damping_1.png', label: 'Schwingung C' }
         ],
         correctOrder: ['strong', 'medium', 'weak'],
         maxPoints: 30,
@@ -86,9 +86,9 @@ export class DampedOscillations implements OnInit, OnDestroy {
 			Sortieren Sie die Graphen absteigend, indem Sie den Graphen mit der größten Federkonstante nach oben einsortieren (andere Variablen sind konstant gehalten).`,
 		questionInstruction: 'Frage 2 von 5 (30 Punkte): Sortierung Dämpfungskonstante',
         images: [
-			{ id: 'weak', imageSrc: 'assets/images/tests/weak_spring_constant.png', label: 'Schwingung A' },
-            { id: 'medium', imageSrc: 'assets/images/tests/medium_spring_constant.png', label: 'Schwingung B' },
-            { id: 'strong', imageSrc: 'assets/images/tests/strong_spring_constant.png', label: 'Schwingung C' }
+			{ id: 'weak', imageSrc: 'assets/images/damped_oscillations/weak_spring_constant_2.png', label: 'Schwingung A' },
+            { id: 'medium', imageSrc: 'assets/images/damped_oscillations/medium_spring_constant_2.png', label: 'Schwingung B' },
+            { id: 'strong', imageSrc: 'assets/images/damped_oscillations/strong_spring_constant_2.png', label: 'Schwingung C' }
         ],
         correctOrder: ['strong', 'medium', 'weak'],
         maxPoints: 30,
@@ -218,23 +218,14 @@ export class DampedOscillations implements OnInit, OnDestroy {
             this.performanceLevel = threshold.level;
             this.continueLink = threshold.continueLink;
             this.continueLinkText = threshold.continueLinkText;
-            
-            console.log('Results calculated:', {
-                percentage,
-                level: this.performanceLevel,
-                continueLink: this.continueLink,
-                continueLinkText: this.continueLinkText
-            });
         }
     }
 
     // handle results calculated event
     onResultsCalculated(results: any) {
-        console.log('Results calculated:', results); // Debug log
         this.performanceLevel = results.level;
         this.continueLink = results.continueLink;
         this.continueLinkText = results.continueLinkText;
-        console.log('Continue link text set to:', this.continueLinkText); // Debug log
     }
 
     getPerformanceClass(): string {
@@ -275,14 +266,6 @@ export class DampedOscillations implements OnInit, OnDestroy {
 		this.question3Submitted = this.testTracking.isQuestionAnswered(this.question3.questionId);
 		this.question4Submitted = this.testTracking.isQuestionAnswered(this.question4.questionId);
 		this.question5Submitted = this.testTracking.isQuestionAnswered(this.question5.questionId);
-        
-        console.log('Restored test completion state:', {
-			q1: this.question1Submitted,
-			q2: this.question2Submitted,
-			q3: this.question3Submitted,
-			q4: this.question4Submitted,
-			q5: this.question5Submitted
-        });
     }
 	
 	
@@ -464,7 +447,6 @@ export class DampedOscillations implements OnInit, OnDestroy {
 				this.calculateResults();
 				this.currentView = 'damped_osc6';
 			} else if (this.currentView === 'damped_osc6') {
-                console.log('Navigating to:', this.continueLink); // Debug log
                 this.router.navigate([this.continueLink]);
 			}
             this.renderMath();

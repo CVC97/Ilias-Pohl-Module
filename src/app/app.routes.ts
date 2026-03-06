@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { Home } from './features/home/home';
 import { Glossary } from './features/glossary/glossary';
 
+// glossary features
 import { Amplitude } from './features/glossary_features/amplitude/amplitude';
 import { CriticalDamping } from './features/glossary_features/critical-damping/critical-damping';
 import { DampingCoefficient } from './features/glossary_features/damping-coefficient/damping-coefficient';
@@ -14,14 +15,21 @@ import { InhomDgl } from './features/glossary_features/inhom-dgl/inhom-dgl';
 import { AngularFrequency } from './features/glossary_features/angular-frequency/angular-frequency';
 import { MomentOfInertia } from './features/glossary_features/moment-of-inertia/moment-of-inertia';
 
+// learning features
 import { IntroExperiment } from './features/learning_features/intro-experiment/intro-experiment';
-import { DampedOscillations } from './features/test_features/damped-oscillations/damped-oscillations';
+
+// test features
+import { TestDampedOscillations } from './features/test_features/damped-oscillations/damped-oscillations';
+
+// simulation features
+import { SimDampedOscillationsExperiment } from './features/simulation_features/damped-oscillations-experiment/damped-oscillations-experiment';
 
 
 
 export const routes: Routes = [
     { path: '', component: Home , title: 'Pohlsches Rad'},
     { path: 'glossary', component: Glossary , title: 'Pohlsches Rad - Begriffe'},
+
     { path: 'glossary/amplitude', component: Amplitude, title: 'Amplitude'},
 	{ path: 'glossary/critical-damping', component: CriticalDamping, title: 'Aperiodischer Grenzfall'},
 	{ path: 'glossary/damping-coefficient', component: DampingCoefficient, title: 'Dämpungskoeffizient'},
@@ -35,5 +43,8 @@ export const routes: Routes = [
 	{ path: 'glossary/moment-of-inertia', component: MomentOfInertia, title: 'Trägheitsmoment'},
 
 	{ path: 'learning/intro-experiment', component: IntroExperiment, title: 'Einstieg Versuchsaufbau'},
-	{ path: 'test/damped-oscillations', component: DampedOscillations, title: 'Einstieg Versuchsaufbau'},
+
+	{ path: 'test/damped-oscillations', component: TestDampedOscillations, title: 'Test: Gedämpfte Schwingungen'},
+
+	{ path: 'simulation/damped-oscillations-experiment', component: SimDampedOscillationsExperiment, title: 'Simulation: Gedämpfte Schwingungen'},
 ]

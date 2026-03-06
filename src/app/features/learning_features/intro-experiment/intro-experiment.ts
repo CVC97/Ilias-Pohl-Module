@@ -223,9 +223,11 @@ export class IntroExperiment implements OnInit, OnDestroy {
 		Klicken Sie hier, damit sich der Test in einem neuen Tab öffnet.
 		Kehren Sie anschließend in diesen Tab zurück, um hier zu erfahren, wie es für Sie weitergeht.`,
 		incompleteMessage: `✗ Einige der von die ausgewählten Bewegungsformen entsprechen nicht dem, was man aus einem Experiment erwarten würde. 
-			Hier findest du eine Simulation des Experiments. Verändere die Dämpfung und die Anfangsbedingungen, um zu sehen, wie sich die Bewegung des Schwungrads verändert:`,
+			Hier findest du eine <a target="_blank" rel="noopener noreferrer" href="simulation/damped-oscillations-experiment" class="glossary-link">Simulation des Experiments</a>. 
+            Verändere die Dämpfung und die Anfangsbedingungen, um zu sehen, wie sich die Bewegung des Schwungrads verändert:`,
         incorrectMessage: `✗ Einige der von die ausgewählten Bewegungsformen entsprechen nicht dem, was man aus einem Experiment erwarten würde. 
-			Hier findest du eine Simulation des Experiments. Verändere die Dämpfung und die Anfangsbedingungen, um zu sehen, wie sich die Bewegung des Schwungrads verändert:`
+			Hier findest du eine <a target="_blank" rel="noopener noreferrer" href="simulation/damped-oscillations-experiment" class="glossary-link">Simulation des Experiments</a>.
+            Verändere die Dämpfung und die Anfangsbedingungen, um zu sehen, wie sich die Bewegung des Schwungrads verändert:`
 	};
 
 

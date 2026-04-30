@@ -254,6 +254,49 @@ export class TestTracking {
     }
 
 
+    // Populate the in-memory map from flat backend rows (grouped by test_id).
+    restoreFromBackend(rows: any[]): void {
+        const grouped = new Map<string, any[]>();
+        for (const row of rows) {
+            if (!grouped.has(row.test_id)) grouped.set(row.test_id, []);
+            grouped.get(row.test_id)!.push(row);
+        }
+
+        for (const [testId, testRows] of grouped) {
+            const results: TestQuestionResult[] = testRows.map(r => ({
+                questionId:    r.question_id,
+                testId:        r.test_id,
+                isCorrect:     Boolean(r.is_correct),
+                userAnswer:    r.user_answer,
+                correctAnswer: r.correct_answer,
+                pointsAwarded: r.points_awarded,
+                maxPoints:     r.max_points,
+                timestamp:     new Date(r.answered_at).getTime(),
+                timestampISO:  r.answered_at,
+                sessionId:     r.session_id
+            }));
+
+            const pointsEarned = results.reduce((sum, r) => sum + r.pointsAwarded, 0);
+            const maxPoints    = results.reduce((sum, r) => sum + r.maxPoints, 0);
+
+            this.tests.set(testId, {
+                testId,
+                sessionId:         testRows[0].session_id,
+                startTime:         new Date(testRows[0].answered_at).getTime(),
+                questionsAnswered: results.length,
+                totalQuestions:    results.length,
+                pointsEarned,
+                maxPoints,
+                percentageScore:   maxPoints > 0 ? (pointsEarned / maxPoints) * 100 : 0,
+                results
+            });
+        }
+
+        this.saveToStorage();
+        console.log('Test results restored from backend.');
+    }
+
+
     // Cleanup
     clearTests() {
         this.tests.clear();

@@ -1,8 +1,9 @@
-import { Component, signal } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { Header } from './shared/header/header';
 import { Footer } from './shared/footer/footer';
 import { Analytics } from './core/services/analytics';
+import { DataExport } from './core/services/data-export';
 
 
 
@@ -15,10 +16,15 @@ import { Analytics } from './core/services/analytics';
 
 
 
-export class App {
+export class App implements OnInit {
     protected readonly title = signal('ilias-pohl-module');
 
-    constructor(private analytics: Analytics) {
-        // Service is initialized automatically
+    constructor(
+        private _analytics: Analytics,
+        private dataExport: DataExport
+    ) {}
+
+    ngOnInit() {
+        this.dataExport.loadProgress();
     }
 }

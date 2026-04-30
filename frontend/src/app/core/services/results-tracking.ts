@@ -258,6 +258,42 @@ export class ResultsTracking {
     }
 
 	
+    // Populate the in-memory map from flat backend rows (grouped by module_id).
+    restoreFromBackend(rows: any[]): void {
+        const grouped = new Map<string, any[]>();
+        for (const row of rows) {
+            if (!grouped.has(row.module_id)) grouped.set(row.module_id, []);
+            grouped.get(row.module_id)!.push(row);
+        }
+
+        for (const [moduleId, moduleRows] of grouped) {
+            const results: QuestionResult[] = moduleRows.map(r => ({
+                questionId:      r.question_id,
+                moduleId:        r.module_id,
+                isCorrect:       Boolean(r.is_correct),
+                selectedAnswers: r.selected_answers ?? [],
+                correctAnswers:  r.correct_answers  ?? [],
+                timestamp:       new Date(r.answered_at).getTime(),
+                timestampISO:    r.answered_at,
+                attemptCount:    r.attempt_count,
+                sessionId:       r.session_id
+            }));
+
+            this.results.set(moduleId, {
+                moduleId,
+                sessionId:         moduleRows[0].session_id,
+                startTime:         new Date(moduleRows[0].answered_at).getTime(),
+                questionsAnswered: results.length,
+                questionsCorrect:  results.filter(r => r.isCorrect).length,
+                results
+            });
+        }
+
+        this.saveToStorage();
+        console.log('Module results restored from backend.');
+    }
+
+
     // Cleanup
     clearResults() {
         this.results.clear();

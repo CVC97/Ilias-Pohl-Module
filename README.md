@@ -2,108 +2,168 @@
 
 Lernmodul zum Experiment "Der Pohlsche Resonator" des Grundpraktikums zur Experimentalphysik I der Georg-August Universität Göttingen.
 
-The project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.1.4. with strong help of Claude (Sonnet 4.5).
+The project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.1.4. with strong help of Claude (Sonnet 4.5 / 4.6).
 
 
 ## Project Structure Tree
 
-The directory tree is as follows:
-
+```
+ilias_bridge.html                               // entry point served from ILIAS; username form + redirect
+docker-compose.yml                              // local MySQL container (dev only)
+.gitignore
+README.md
+│
+├── frontend/                                   // Angular application
+│   │   angular.json                            // defines location of stylesheets, icons, etc.
+│   │   proxy.conf.json                         // dev proxy: /api → localhost:3000
+│   │
+│   └── src/
+│       │   index.html                          // main .html
+│       │   styles.css                          // main stylesheet
+│       │   styles_glossary.css                 // stylesheet for the glossary
+│       │   styles_evaluation.css               // stylesheet for the evaluation types
+│       │   styles_test.css                     // stylesheet for the test evaluations
+│       │
+│       └── assets/                             // images, icons, etc.
+│       │
+│       └── app/
+│           │   app.html                        // general page structure
+│           │   app.routes.ts                   // contains all the routing
+│           │
+│           └── core/
+│           │   └── services/                   // project-wide services
+│           │           theme.ts                // light / dark mode toggling
+│           │           session.ts              // session ID management + rogue user detection
+│           │           analytics.ts            // page visit tracking
+│           │           results-tracking.ts     // learning module answer logging
+│           │           test-tracking.ts        // test answer logging (single-submission)
+│           │           data-export.ts          // aggregates all tracking; saves to backend
+│           │
+│           └── shared/
+│           │   └── footer/                     // footer component
+│           │   └── header/                     // header component
+│           │   │
+│           │   └── evaluation/                 // Q+A types for learning pages (retryable)
+│           │   │   └── single-choice/
+│           │   │   └── multiple-choice/
+│           │   │   └── multiple-choice-image/
+│           │   │   └── image-choice/
+│           │   │   └── drag-and-drop/
+│           │   │
+│           │   └── test/                       // Q+A types for test pages (single-submission)
+│           │       └── order-images/
+│           │       └── single-choice/
+│           │       └── multiple-choice/
+│           │       └── drag-and-drop/
+│           │       └── end-page/               // results display; triggers progress save
+│           │
+│           └── features/                       // individual pages
+│               └── home/
+│               └── glossary/
+│               └── glossary_features/          // individual glossary entries
+│               │   │   glossary-base.ts
+│               │   └── amplitude/
+│               │   └── ...
+│               │
+│               └── learning_features/
+│               └── test_features/
+│               └── sidepath_features/
+│               └── target_features/
+│               └── simulation_features/
+│
+└── backend/                                    // Express API + MySQL integration
+        server.js                               // Express entry point (port 3000)
+        db.js                                   // MySQL connection pool
+        schema.sql                              // database schema (run once to initialise)
+        package.json
+        .env                                    // DB credentials (gitignored)
+        .env.example                            // template for .env
+        │
+        └── routes/
+                users.js                        // POST /api/users/check, POST /api/users/create
+                progress.js                     // POST /api/progress/save, GET /api/progress/:username
 ```
 
-angular.json                                    // defines location of stylesheets, icons, etc.
-src/
-|   index.html                                  // main .html
-|   styles.css                                  // main stylesheet
-|   styles_glossary.css                         // stylesheet for the glossary 
-|   styles_evaluation.css                       // stylesheet for the evaluation types
-|   styles_test.css                             // stylesheet for the test evaluations
-|
-└───assets/                                     // contains image, icons, etc.
-|
-└───app/
-    |   app.html                                // general page structure
-    |   app.routes.ts                           // contains all the routing
-    |
-    └───core/
-    |   └───services/                           // services to provide fuctionality
-    |           theme.ts                        // light / dark mode toggling
-    |           session.ts                      // session ID management
-    |           analytics.ts                    // page tracking
-    |           results-tracking.ts             // results tracking
-    |           data-export.ts                  // data export
-    |
-    └───shared/
-    |   └───footer/                             // all footer code
-    |   └───header/                             // all header code
-    |   └───evaluation/                         // all Q+A types globally defined as features
-    |   |   └───single-choice/ 
-    |   |   └───multiple-choice /
-    |   |   └───multiple-choice-image/
-    |   |   └───image-choice/
-    |   |   └───drag-drop/
-    |   |
-    |   └───test/                               // test formats (TBD)
-    |       └───order_image/ 
-    |       └───single-choice/
-    |       └───multiple-choice /
-    |       └───drag-and-drop /
-    |   
-    └───features/                               // code for the individual subpages
-            └───home/                           // home page
-            └───glossary/                       // glossary overview page
-            └───glossary_features/              // contains the individual glossary entries
-            |   |   glossary-base.ts            // base component for all glossary items
-            |   |
-            |   └───amplitude/
-            |   └─── ...
-            |
-            └───learning_features/              // " the " learning subpages
-            └───test_features/                  // " the " tests / decision questions
-            └───sidepath_features/              // " the " sidepath pages
-            └───target_features/                // " the " target pages
-            └───simulation_features/            // " the " simulation pages
 
+## Running Locally
 
+Three processes must be running simultaneously:
+
+**1. Database (Docker):**
+```bash
+sudo docker compose up
 ```
 
-## Project Services and Shared Components
+**2. Backend:**
+```bash
+cd backend && node server.js
+```
 
-### Services
+**3. Frontend:**
+```bash
+cd frontend && npx ng serve
+```
 
-Project-wide services providing functionality.
+Then open **`http://localhost:3000/bridge`** to enter the module via the bridge page.
+The Angular app is accessible directly at **`http://localhost:4200`** (rogue user session, no DB writes).
+
+
+## Backend API
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/api/users/check` | Check if a username exists; returns user data if found |
+| POST | `/api/users/create` | Register a new user |
+| POST | `/api/progress/save` | Save analytics, module results, and test results for a user |
+| GET | `/api/progress/:username` | Load all saved progress for a user |
+
+
+## Database Schema
+
+| Table | Purpose |
+|-------|---------|
+| `users` | One row per registered username |
+| `page_visits` | Page visit durations per session |
+| `module_results` | Learning module question answers (retryable) |
+| `test_results` | Test question answers (single-submission) |
+
+Initialise with:
+```bash
+docker exec -i ilias_pohl_db mysql -u pohl_user -ppohl_password ilias_pohl < backend/schema.sql
+```
+
+
+## Project Services
+
+### Frontend Services
 
 - **theme.ts:** toggles light / dark mode
-- **session.ts:** manages session ID pulled from ILIAS / randomly generated
-- **analytics.ts:** tracks page visiting times
-- **results-tracking.ts:** logs answers on each submission
-- **data-export.ts:** exports page and question tracking (TBD)
+- **session.ts:** reads `session_id` from URL (set by bridge page), falls back to generating a `rogue_user_` identifier for direct access; exposes `isRogueUser()`
+- **analytics.ts:** tracks page visit durations on route changes
+- **results-tracking.ts:** logs learning question answers; allows retries, increments `attemptCount`
+- **test-tracking.ts:** logs test question answers; blocks re-submission of the same question
+- **data-export.ts:** aggregates all three tracking services; calls `saveProgress()` on test completion and on `beforeunload`; silently skips rogue users
 
 
-### Evaluation Formats
+### Evaluation Formats (Learning Pages)
 
-Each Q+A box type has its own modularised code provided globally, these formats do exist.
-
-- **single-choice:** TBD
-- **multiple-choice:** ordinary multiple choice box
-- **multiple-choice-image:** multiple choice box regarding an image on the left
-- **image-choice:** multiple choice of images (aligned in rows of three)
-- **drag-drop:** TBD
-
+- **single-choice:** single correct answer
+- **multiple-choice:** multiple correct answers
+- **multiple-choice-image:** multiple choice with a reference image
+- **image-choice:** choose between images arranged in a grid
+- **drag-and-drop:** match items by dragging
 
 ### Test Formats
 
-- **order-images:** orders images by dragging them up / down
-- **single-choice:** self-explantory
-- **multiple-choice:** self-explantory
-- **drag-and-drop:** answers are assigned to images
+- **order-images:** sort images by dragging them up / down
+- **single-choice:** single correct answer
+- **multiple-choice:** multiple correct answers
+- **drag-and-drop:** assign answers to images
 
 
 ## Features
 
 ### Glossary Features
-
-The individual entries of the glossary. Either accessible via reference on the individual pages of the learning module (main purpose) or directly from the home page (possibly removed later).
 
 - **amplitude** ("Amplitude")
 - **angular-frequency** ("Kreisfrequenz")
@@ -119,9 +179,6 @@ The individual entries of the glossary. Either accessible via reference on the i
 
 
 ### Learning Features
-
-The subpages of the learning module and the questionID of each Q+A box found in them. These subpages do contain intra-page compartimentalisation at times. 
-
 
 - **intro-experiment:**
     - *intro-exp-1-schwungrad*
@@ -153,6 +210,7 @@ The subpages of the learning module and the questionID of each Q+A box found in 
 - **setup-free:**
 - **setup-concrete:**
 - **evaluation-comparison:**
+
 
 ### Simulation Features
 

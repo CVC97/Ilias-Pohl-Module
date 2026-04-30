@@ -55,6 +55,35 @@ export class DataExport {
     }
 
 
+    // Fetches saved progress from the backend and hydrates the tracking services.
+    async loadProgress(): Promise<void> {
+        if (!isPlatformBrowser(this.platformId)) return;
+        if (this.sessionService.isRogueUser()) return;
+
+        const username = this.sessionService.getSessionId();
+        if (!username) return;
+
+        try {
+            const response = await fetch(`${this.API_BASE}/progress/${encodeURIComponent(username)}`);
+            if (response.status === 404) return;  // new user, no progress yet
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+            const data = await response.json();
+
+            if (data.moduleResults?.length) {
+                this.resultsService.restoreFromBackend(data.moduleResults);
+            }
+            if (data.testResults?.length) {
+                this.testService.restoreFromBackend(data.testResults);
+            }
+
+            console.log('Progress loaded from backend.');
+        } catch (err) {
+            console.error('Failed to load progress:', err);
+        }
+    }
+
+
     // Saves all progress to the backend. Silently skips rogue users.
     async saveProgress(): Promise<void> {
         if (!isPlatformBrowser(this.platformId)) return;

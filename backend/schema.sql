@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS page_visits (
   page        VARCHAR(255) NOT NULL,
   duration_s  DECIMAL(10, 2),
   visited_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (user_id) REFERENCES users(id)
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS module_results (
@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS module_results (
   correct_answers  JSON,
   attempt_count    INT DEFAULT 1,
   answered_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (user_id) REFERENCES users(id)
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS test_results (
@@ -44,5 +44,5 @@ CREATE TABLE IF NOT EXISTS test_results (
   points_awarded INT,
   max_points     INT,
   answered_at    TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (user_id) REFERENCES users(id)
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );

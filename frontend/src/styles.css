@@ -25,18 +25,17 @@
     --electric-blue: #00BCD4;
 
     /* theme variables (light mode) */
-    --bg-primary: white;
-    /* --bg-primary: rgb(240, 86, 112); */
+    --bg-primary: #f0f2f5;
     --bg-secondary: var(--altweiss);
     --text-primary: var(--uni-blau-1);
     --text-secondary: var(--uni-blau-2);
-    --card-bg: rgba(255, 255, 255, 0.95);
-    --border-color: rgba(33, 150, 243, 0.1);
-    --shadow-color: rgba(33, 150, 243, 0.2);
+    --card-bg: #ffffff;
+    --border-color: rgba(21, 50, 104, 0.08);
+    --shadow-color: rgba(21, 50, 104, 0.12);
     --button-color: var(--uni-blau-1);
-    --button-color-hover: white;
+    --button-color-hover: rgb(30, 68, 140);
     --button-text-color: white;
-    --button-text-color-hover: var(--uni-blau-1);
+    --button-text-color-hover: white;
     --bg-footer: var(--uni-blau-2);
     --glossary-link-color: var(--uni-blau-3);
     --glossary-link-color-hover: var(--uni-blau-4);
@@ -159,7 +158,7 @@ main {
     background: var(--card-bg);
     border-radius: 12px;
     padding: 2rem;
-    box-shadow: 0 8px 16px var(--shadow-color);
+    box-shadow: 0 2px 16px var(--shadow-color);
     border: 1px solid var(--border-color);
 }
 
@@ -203,24 +202,17 @@ button.btn {
     background: var(--button-color);
     border: none;
     border-radius: 6px;
-    box-shadow: 0 4px 12px var(--shadow-color);
-    
+    box-shadow: 0 2px 8px var(--shadow-color);
+
     /* Interaction */
     cursor: pointer;
     transition: all 0.3s ease;
 }
 
 .btn:hover {
-    display: inline-block;
-    padding: 0.75rem 1.5rem;
     background: var(--button-color-hover);
     color: var(--button-text-color-hover);
-    border: none;
-    border-radius: 6px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 12px var(--shadow-color);
+    box-shadow: 0 2px 8px var(--shadow-color);
 }
 
 .btn:disabled {
@@ -231,11 +223,11 @@ button.btn {
 }
 
 .btn-primary {
-    background: linear-gradient(135deg, var(--uni-blau-2), var(--bright-blue));
+    background: var(--uni-blau-2);
 }
 
 .btn-secondary {
-    background: linear-gradient(135deg, var(--sky-blue), var(--electric-blue));
+    background: var(--uni-blau-4);
 }
 
 /* Navigation styles (for future nav bar) */

@@ -10,198 +10,252 @@
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #f5f5f5;
-        }
-        
-        #loading {
+            background: #f0f2f5;
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 100vh;
-            background: white;
+            min-height: 100vh;
         }
-        
+
+        .card {
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 16px rgba(21, 50, 104, 0.12);
+            padding: 48px 40px;
+            width: 100%;
+            max-width: 420px;
+            text-align: center;
+        }
+
+        .logo-bar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 32px;
+        }
+
+        .logo-bar svg {
+            flex-shrink: 0;
+        }
+
+        .logo-bar span {
+            font-size: 13px;
+            color: rgb(21, 50, 104);
+            font-weight: 600;
+            text-align: left;
+            line-height: 1.3;
+        }
+
+        h1 {
+            font-size: 20px;
+            color: rgb(21, 50, 104);
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            font-size: 14px;
+            color: rgb(100, 100, 100);
+            margin-bottom: 32px;
+            line-height: 1.5;
+        }
+
+        .form-group {
+            text-align: left;
+            margin-bottom: 24px;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: rgb(59, 59, 58);
+            margin-bottom: 8px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1.5px solid #d0d5dd;
+            border-radius: 6px;
+            font-size: 15px;
+            color: rgb(21, 50, 104);
+            outline: none;
+            transition: border-color 0.15s;
+        }
+
+        input[type="text"]:focus {
+            border-color: rgb(21, 50, 104);
+        }
+
+        input[type="text"].error {
+            border-color: #d93025;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 11px;
+            background: rgb(21, 50, 104);
+            color: #ffffff;
+            border: none;
+            border-radius: 6px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.15s, opacity 0.15s;
+        }
+
+        .btn:hover:not(:disabled) {
+            background: rgb(30, 68, 140);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* Status messages */
+        .status {
+            margin-top: 20px;
+            font-size: 13px;
+            min-height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .status.info    { color: rgb(21, 50, 104); }
+        .status.success { color: #1a7340; }
+        .status.error   { color: #d93025; }
+        .status.hidden  { visibility: hidden; }
+
+        /* Spinner (inline) */
         .spinner {
-            border: 4px solid rgba(0, 95, 155, 0.1);
-            border-left-color: rgb(0, 95, 155);
+            border: 2px solid rgba(21, 50, 104, 0.2);
+            border-left-color: rgb(21, 50, 104);
             border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            animation: spin 1s linear infinite;
+            width: 14px;
+            height: 14px;
+            flex-shrink: 0;
+            animation: spin 0.8s linear infinite;
         }
-        
+
         @keyframes spin {
             to { transform: rotate(360deg); }
-        }
-        
-        #info {
-            margin-top: 20px;
-            padding: 20px;
-            background: #e3f2fd;
-            border-radius: 8px;
-            max-width: 600px;
-            text-align: center;
-        }
-        
-        #info h2 {
-            color: rgb(21, 50, 104);
-            margin-bottom: 10px;
-        }
-        
-        #info p {
-            color: rgb(59, 59, 58);
-            line-height: 1.6;
-        }
-        
-        #info code {
-            background: white;
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-family: monospace;
-            color: rgb(0, 95, 155);
-        }
-        
-        iframe {
-            width: 100%;
-            height: 100vh;
-            border: none;
-            display: none;
-        }
-        
-        iframe.loaded {
-            display: block;
-        }
-        
-        #error {
-            display: none;
-            padding: 40px;
-            text-align: center;
-            color: #c62828;
-        }
-        
-        #error.show {
-            display: block;
         }
     </style>
 </head>
 <body>
-    <!-- Loading screen -->
-    <div id="loading">
-        <div class="spinner"></div>
-        <div id="info">
-            <h2>Lernmodul wird geladen...</h2>
-            <p id="session-info">Session ID wird gelesen...</p>
+    <div class="card">
+        <div class="logo-bar">
+            <!-- Simplified Göttingen university icon placeholder -->
+            <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect width="36" height="36" rx="4" fill="rgb(21,50,104)"/>
+                <text x="18" y="24" font-size="16" text-anchor="middle" fill="white" font-family="serif" font-weight="bold">P</text>
+            </svg>
+            <span>Lernmodul<br>Pohlscher Resonator</span>
+        </div>
+
+        <h1>Willkommen</h1>
+        <p class="subtitle">
+            Bitte geben Sie Ihren Benutzernamen ein,<br>um fortzufahren.
+        </p>
+
+        <div class="form-group">
+            <label for="username">Benutzername</label>
+            <input
+                type="text"
+                id="username"
+                placeholder="z. B. max.mustermann"
+                autocomplete="off"
+                autocapitalize="none"
+                spellcheck="false"
+            />
+        </div>
+
+        <button class="btn" id="submit-btn" onclick="handleSubmit()">Weiter</button>
+
+        <div class="status hidden" id="status">
+            <div class="spinner" id="spinner" style="display:none"></div>
+            <span id="status-text"></span>
         </div>
     </div>
-    
-    <!-- Error screen -->
-    <div id="error">
-        <h2>⚠️ Keine aktive Session</h2>
-        <p>Bitte melden Sie sich im Framework an, um auf das Lernmodul zuzugreifen.</p>
-    </div>
-    
-    <!-- The actual learning module iframe -->
-    <iframe id="learning-module" title="Pohlscher Resonator Lernmodul"></iframe>
 
     <script>
-        // Configuration
-        const LEARNING_MODULE_URL = 'https://wwwuser.gwdguser.de/physik.didaktik/oer/pohl/';
-        const SHOW_DEBUG_INFO = true; // Set to false in production
-        
-        // Get PHPSESSID cookie
-        function getCookie(name) {
-            const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
-            return match ? match[2] : null;
+        // ── Configuration ─────────────────────────────────────────────────────────
+        // API is always relative — the bridge is served from the same server as the API.
+        const API_BASE = '/api';
+        // In local dev the bridge runs on :3000 (Express) and Angular on :4200.
+        // In production both live on the same origin, so '/' is correct.
+        const MODULE_URL = window.location.port === '3000' ? 'http://localhost:4200' : '/';
+        // ─────────────────────────────────────────────────────────────────────────
+
+        const input     = document.getElementById('username');
+        const submitBtn = document.getElementById('submit-btn');
+        const statusEl  = document.getElementById('status');
+        const spinnerEl = document.getElementById('spinner');
+        const statusTxt = document.getElementById('status-text');
+
+        input.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') handleSubmit();
+            input.classList.remove('error');
+        });
+
+        function setStatus(type, text, showSpinner = false) {
+            statusEl.className = `status ${type}`;
+            statusTxt.textContent = text;
+            spinnerEl.style.display = showSpinner ? 'block' : 'none';
         }
-        
-        // Get all cookies for debugging
-        function getAllCookies() {
-            const cookies = {};
-            document.cookie.split(';').forEach(cookie => {
-                const [name, value] = cookie.trim().split('=');
-                cookies[name] = value;
-            });
-            return cookies;
-        }
-        
-        // Initialize
-        function init() {
-            const sessionId = getCookie('PHPSESSID');
-            const infoElement = document.getElementById('session-info');
-            
-            if (SHOW_DEBUG_INFO) {
-                console.log('=== SESSION DEBUG INFO ===');
-                console.log('PHPSESSID:', sessionId);
-                console.log('All cookies:', getAllCookies());
-                console.log('Current URL:', window.location.href);
-                console.log('========================');
+
+        async function handleSubmit() {
+            const username = input.value.trim();
+
+            if (!username) {
+                input.classList.add('error');
+                setStatus('error', 'Bitte einen Benutzernamen eingeben.');
+                return;
             }
-            
-            if (sessionId) {
-                // Display session info
-                infoElement.innerHTML = `
-                    <p>Session gefunden!</p>
-                    ${SHOW_DEBUG_INFO ? '<p>Session ID: <code>' + sessionId + '</code></p>' : ''}
-                `;
-                
-                // Build URL with session ID as query parameter
-                const moduleUrl = `${LEARNING_MODULE_URL}?session_id=${encodeURIComponent(sessionId)}`;
-                
-                if (SHOW_DEBUG_INFO) {
-                    console.log('Loading module URL:', moduleUrl);
+
+            submitBtn.disabled = true;
+            setStatus('info', 'Wird überprüft…', true);
+
+            try {
+                // 1. Check whether the user already exists.
+                const checkRes = await fetch(`${API_BASE}/users/check`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username }),
+                });
+
+                if (!checkRes.ok) throw new Error(`check failed: ${checkRes.status}`);
+                const checkData = await checkRes.json();
+
+                if (!checkData.exists) {
+                    // 2. New user — register them.
+                    setStatus('info', 'Neuer Benutzer wird angelegt…', true);
+                    const createRes = await fetch(`${API_BASE}/users/create`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ username }),
+                    });
+
+                    if (!createRes.ok) throw new Error(`create failed: ${createRes.status}`);
                 }
-                
-                // Load the learning module in iframe
-                const iframe = document.getElementById('learning-module');
-                iframe.src = moduleUrl;
-                
-                // Hide loading screen once iframe loads
-                iframe.onload = function() {
-                    document.getElementById('loading').style.display = 'none';
-                    iframe.classList.add('loaded');
-                    
-                    if (SHOW_DEBUG_INFO) {
-                        console.log('Learning module loaded successfully');
-                    }
-                };
-                
-                // Handle iframe load errors
-                iframe.onerror = function() {
-                    document.getElementById('loading').style.display = 'none';
-                    document.getElementById('error').classList.add('show');
-                    document.getElementById('error').innerHTML = `
-                        <h2>⚠️ Fehler beim Laden</h2>
-                        <p>Das Lernmodul konnte nicht geladen werden.</p>
-                        ${SHOW_DEBUG_INFO ? '<p>Überprüfen Sie die Konsole für Details.</p>' : ''}
-                    `;
-                };
-                
-            } else {
-                // No session found
-                console.error('No PHPSESSID cookie found');
-                document.getElementById('loading').style.display = 'none';
-                document.getElementById('error').classList.add('show');
-                
-                if (SHOW_DEBUG_INFO) {
-                    document.getElementById('error').innerHTML += `
-                        <p style="margin-top: 20px; font-size: 0.9em; color: #666;">
-                            Debug: Keine Session-Cookie gefunden.<br>
-                            Verfügbare Cookies: <code>${Object.keys(getAllCookies()).join(', ')}</code>
-                        </p>
-                    `;
-                }
+
+                // 3. Redirect to the Angular module, passing the username as session_id.
+                setStatus('success', 'Weiterleitung zum Lernmodul…');
+                const target = `${MODULE_URL}?session_id=${encodeURIComponent(username)}`;
+                window.location.href = target;
+
+            } catch (err) {
+                console.error('Bridge error:', err);
+                setStatus('error', 'Verbindung zum Server fehlgeschlagen. Bitte versuchen Sie es erneut.');
+                submitBtn.disabled = false;
             }
-        }
-        
-        // Run on page load
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', init);
-        } else {
-            init();
         }
     </script>
 </body>

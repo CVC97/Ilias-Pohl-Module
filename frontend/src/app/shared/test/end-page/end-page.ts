@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
-import { TestTracking, TestProgress } from '../../../core/services/test-tracking';
+import { TestTracking } from '../../../core/services/test-tracking';
+import { DataExport } from '../../../core/services/data-export';
 
 
 
@@ -19,7 +19,7 @@ interface PerformanceThreshold {
 @Component({
     selector: 'app-end-page',
     standalone: true,
-    imports: [CommonModule, RouterLink],
+    imports: [CommonModule],
     templateUrl: './end-page.html',
     styleUrl: './end-page.css'
 })
@@ -61,10 +61,14 @@ export class EndPage implements OnInit {
     continueLink = '';
     continueLinkText = '';
 
-    constructor(private testTracking: TestTracking) {}
+    constructor(
+        private testTracking: TestTracking,
+        private dataExport: DataExport
+    ) {}
 
     ngOnInit() {
         this.calculateResults();
+        this.dataExport.saveProgress();
     }
 
     private calculateResults() {

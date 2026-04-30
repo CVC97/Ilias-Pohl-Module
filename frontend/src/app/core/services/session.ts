@@ -121,7 +121,7 @@ export class Session {
 	
 	// generate a session if no session detected
 	private generateSessionId(): string {
-		return 'rogue_user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+		return 'rogue_user_' + Date.now() + '_' + Math.random().toString(36).substring(2, 11);
 	}
 
 
@@ -133,6 +133,11 @@ export class Session {
 
     hasValidSession(): boolean {
         return this.sessionId !== null && this.sessionId.length > 0;
+    }
+
+
+    isRogueUser(): boolean {
+        return this.sessionId !== null && this.sessionId.startsWith('rogue_user_');
     }
 
 

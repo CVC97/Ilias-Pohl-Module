@@ -51,21 +51,21 @@
 
 /* dark mode */
 [data-theme="dark"] {
-    --bg-primary: rgb(51, 51, 51);
-    --bg-secondary: rgb(48, 48, 48);
-    --text-primary: var(--altweiss);
-    --text-secondary: rgb(180, 180, 180);
-    --card-bg: rgb(32, 32, 32);
-    --border-color: var(--grau-90);
-    --shadow-color: var(--grau-80);
-    --button-color: var(--uni-blau-4);
-    --button-color-hover: var(--bg-primary);
-    --button-text-color: white;
+    --bg-primary:              #111827;   /* page background  — deep navy-dark         */
+    --bg-secondary:            #0f172a;   /* deepest layer    — footer, secondary areas */
+    --text-primary:            rgb(226, 232, 240);  /* cool off-white                  */
+    --text-secondary:          rgb(148, 163, 184);  /* muted blue-gray                 */
+    --card-bg:                 #1e293b;   /* elevated surface — clearly above bg        */
+    --border-color:            rgba(148, 163, 184, 0.12);
+    --shadow-color:            rgba(0, 0, 0, 0.4);
+    --button-color:            rgb(0, 145, 200);    /* uni-blau-3 — vibrant on dark     */
+    --button-color-hover:      rgb(0, 175, 230);    /* brighter on hover                */
+    --button-text-color:       white;
     --button-text-color-hover: white;
-    --bg-footer: var(--uni-blau-3);
-    --glossary-link-color: var(--uni-blau-3);
+    --bg-footer: var(--uni-blau-2);
+    --glossary-link-color:     var(--uni-blau-3);
     --glossary-link-color-hover: var(--uni-blau-4);
-    --test-h1-color: var(--physik-gelb)
+    --test-h1-color:           var(--physik-gelb)
 }
 
 html, body {

@@ -8,14 +8,31 @@ The project was generated using [Angular CLI](https://github.com/angular/angular
 ## Project Structure Tree
 
 ```
-ilias_bridge.html                               // entry point served from ILIAS; username form + redirect
+ilias_bridge.html                               // entry point from ILIAS; username + key form
+.htaccess                                       // production routing: /api/* → PHP, rest → index.html
 docker-compose.yml                              // local MySQL container (dev only)
 .gitignore
 README.md
 │
+├── api/                                        // PHP backend
+│       config.php                              // DB credentials + module config (gitignored)
+│       config.example.php                      // template for config.php
+│       db.php                                  // PDO connection (singleton)
+│       module.php                              // resolves MODULE_NAME → modules.id
+│       router.php                              // local dev router (php -S only)
+│       schema.sql                              // database schema (run once to initialise)
+│       │
+│       ├── users/
+│       │       check.php                       // POST /api/users/check
+│       │       create.php                      // POST /api/users/create
+│       │
+│       └── progress/
+│               save.php                        // POST /api/progress/save
+│               load.php                        // GET  /api/progress/{username}
+│
 ├── frontend/                                   // Angular application
 │   │   angular.json                            // defines location of stylesheets, icons, etc.
-│   │   proxy.conf.json                         // dev proxy: /api → localhost:3000
+│   │   proxy.conf.json                         // dev proxy: /api → localhost:8000
 │   │
 │   └── src/
 │       │   index.html                          // main .html
@@ -37,7 +54,7 @@ README.md
 │           │           analytics.ts            // page visit tracking
 │           │           results-tracking.ts     // learning module answer logging
 │           │           test-tracking.ts        // test answer logging (single-submission)
-│           │           data-export.ts          // aggregates all tracking; saves to backend
+│           │           data-export.ts          // aggregates all tracking; saves to / loads from API
 │           │
 │           └── shared/
 │           │   └── footer/                     // footer component
@@ -70,67 +87,83 @@ README.md
 │               └── sidepath_features/
 │               └── target_features/
 │               └── simulation_features/
-│
-└── backend/                                    // Express API + MySQL integration
-        server.js                               // Express entry point (port 3000)
-        db.js                                   // MySQL connection pool
-        schema.sql                              // database schema (run once to initialise)
-        package.json
-        .env                                    // DB credentials (gitignored)
-        .env.example                            // template for .env
-        │
-        └── routes/
-                users.js                        // POST /api/users/check, POST /api/users/create
-                progress.js                     // POST /api/progress/save, GET /api/progress/:username
 ```
 
 
 ## Running Locally
 
-Three processes must be running simultaneously:
+**First-time setup** — copy and fill in the API config:
+```bash
+cp api/config.example.php api/config.php
+# edit api/config.php with your local DB credentials
+```
+
+Three processes must be running simultaneously, each in its own terminal:
 
 **1. Database (Docker):**
 ```bash
 sudo docker compose up
 ```
 
-**2. Backend:**
+**2. PHP API** (run from project root):
 ```bash
-cd backend && node server.js
+php -S localhost:8000 api/router.php
 ```
 
-**3. Frontend:**
+**3. Angular dev server:**
 ```bash
 cd frontend && npx ng serve
 ```
 
-Then open **`http://localhost:3000/bridge`** to enter the module via the bridge page.
-The Angular app is accessible directly at **`http://localhost:4200`** (rogue user session, no DB writes).
+Then open **`http://localhost:8000/bridge`** — serve `ilias_bridge.html` from the PHP server
+so the bridge and API share the same origin.  
+The Angular app is also accessible directly at **`http://localhost:4200`** (rogue user session, no DB writes).
 
 
-## Backend API
+## Deploying to the Server
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | `/api/users/check` | Check if a username exists; returns user data if found |
-| POST | `/api/users/create` | Register a new user |
-| POST | `/api/progress/save` | Save analytics, module results, and test results for a user |
-| GET | `/api/progress/:username` | Load all saved progress for a user |
+1. Build the Angular app:
+   ```bash
+   cd frontend && npx ng build --base-href /your-base-path/
+   ```
+2. Upload to the server:
+   - `frontend/dist/.../browser/` → server base path (static files)
+   - `api/` → server base path `/api/`
+   - `ilias_bridge.html` → server base path
+   - `.htaccess` → server base path
+3. Create `api/config.php` on the server (from `config.example.php`) with production credentials.
+4. Set `RewriteBase` in `.htaccess` to match the server sub-path.
+5. Run `api/schema.sql` once in phpMyAdmin to create the tables.
+
+
+## API
+
+| Method | Endpoint | File | Description |
+|--------|----------|------|-------------|
+| POST | `/api/users/check` | `users/check.php` | Validate course key; check if username exists |
+| POST | `/api/users/create` | `users/create.php` | Register a new user |
+| POST | `/api/progress/save` | `progress/save.php` | Save analytics, module results, and test results |
+| GET | `/api/progress/{username}` | `progress/load.php` | Load all saved progress for a user |
 
 
 ## Database Schema
 
 | Table | Purpose |
 |-------|---------|
-| `users` | One row per registered username |
+| `modules` | One row per learning module (e.g. `pohl`) — scopes all user data |
+| `users` | One row per username per module; same username allowed across different modules |
 | `page_visits` | Page visit durations per session |
 | `module_results` | Learning module question answers (retryable) |
 | `test_results` | Test question answers (single-submission) |
 
-Initialise with:
-```bash
-docker exec -i ilias_pohl_db mysql -u pohl_user -ppohl_password ilias_pohl < backend/schema.sql
+Run `api/schema.sql` once in phpMyAdmin (select the `interapt` database first, skip the first two lines).
+
+To delete a user and all their data:
+```sql
+DELETE FROM users WHERE username = 'max.mustermann'
+AND module_id = (SELECT id FROM modules WHERE name = 'pohl');
 ```
+All related rows in `page_visits`, `module_results`, and `test_results` cascade automatically.
 
 
 ## Project Services
@@ -142,7 +175,7 @@ docker exec -i ilias_pohl_db mysql -u pohl_user -ppohl_password ilias_pohl < bac
 - **analytics.ts:** tracks page visit durations on route changes
 - **results-tracking.ts:** logs learning question answers; allows retries, increments `attemptCount`
 - **test-tracking.ts:** logs test question answers; blocks re-submission of the same question
-- **data-export.ts:** aggregates all three tracking services; calls `saveProgress()` on test completion and on `beforeunload`; silently skips rogue users
+- **data-export.ts:** aggregates all three tracking services; calls `saveProgress()` on test completion and on `beforeunload`; calls `loadProgress()` on app startup to restore previous session; silently skips rogue users
 
 
 ### Evaluation Formats (Learning Pages)

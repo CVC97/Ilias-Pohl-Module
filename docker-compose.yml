@@ -5,14 +5,14 @@ services:
     restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_DATABASE: ilias_pohl
+      MYSQL_DATABASE: interapt
       MYSQL_USER: pohl_user
       MYSQL_PASSWORD: pohl_password
     ports:
       - "3306:3306"
     volumes:
       - db_data:/var/lib/mysql
-      - ./backend/schema.sql:/docker-entrypoint-initdb.d/schema.sql:ro
+      - ./api/schema.sql:/docker-entrypoint-initdb.d/schema.sql:ro
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-prootpassword"]
       interval: 10s

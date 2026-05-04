@@ -147,6 +147,21 @@
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
+
+        /* Inline user-existence feedback between fields and button */
+        .user-check-result {
+            font-size: 13px;
+            padding: 8px 12px;
+            border-radius: 6px;
+            margin-bottom: 16px;
+            text-align: center;
+            line-height: 1.4;
+            min-height: 55px;  /* reserves space before any content appears */
+        }
+        .user-check-result.known   { background: #e8f5e9; color: #1a7340; }
+        .user-check-result.new     { background: #e8f0fb; color: rgb(21, 50, 104); }
+        .user-check-result.error   { background: #fdecea; color: #d93025; }
+        .user-check-result.hidden  { visibility: hidden; }
     </style>
 </head>
 <body>
@@ -165,7 +180,7 @@
 
         <h1>Willkommen</h1>
         <p class="subtitle">
-            Bitte geben Sie Ihren Benutzernamen ein,<br>um fortzufahren.
+            Bitte geben Sie Ihren Benutzernamen<br>und den Kursschlüssel ein.
         </p>
 
         <div class="form-group">
@@ -180,7 +195,19 @@
             />
         </div>
 
-        <button class="btn" id="submit-btn" onclick="handleSubmit()">Weiter</button>
+        <div class="form-group">
+            <label for="key">Kursschlüssel</label>
+            <input
+                type="password"
+                id="key"
+                placeholder="Schlüssel eingeben"
+                autocomplete="off"
+            />
+        </div>
+
+        <div class="user-check-result hidden" id="user-check-result"></div>
+
+        <button class="btn" id="submit-btn" onclick="handleSubmit()" disabled>Weiter</button>
 
         <div class="status hidden" id="status">
             <div class="spinner" id="spinner" style="display:none"></div>
@@ -197,15 +224,26 @@
         const MODULE_URL = window.location.port === '3000' ? 'http://localhost:4200' : '/';
         // ─────────────────────────────────────────────────────────────────────────
 
-        const input     = document.getElementById('username');
-        const submitBtn = document.getElementById('submit-btn');
-        const statusEl  = document.getElementById('status');
-        const spinnerEl = document.getElementById('spinner');
-        const statusTxt = document.getElementById('status-text');
+        const usernameInput   = document.getElementById('username');
+        const keyInput        = document.getElementById('key');
+        const submitBtn       = document.getElementById('submit-btn');
+        const statusEl        = document.getElementById('status');
+        const spinnerEl       = document.getElementById('spinner');
+        const statusTxt       = document.getElementById('status-text');
+        const userCheckResult = document.getElementById('user-check-result');
 
-        input.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') handleSubmit();
-            input.classList.remove('error');
+        let userExists = null; // set after a successful check
+
+        // Reset check state whenever either field is edited after a check.
+        [usernameInput, keyInput].forEach(el => {
+            el.addEventListener('input', () => {
+                el.classList.remove('error');
+                userExists = null;
+                submitBtn.disabled = true;
+                userCheckResult.className = 'user-check-result hidden';
+            });
+            el.addEventListener('blur', tryCheck);
+            el.addEventListener('keydown', (e) => { if (e.key === 'Enter') tryCheck(); });
         });
 
         function setStatus(type, text, showSpinner = false) {
@@ -214,48 +252,78 @@
             spinnerEl.style.display = showSpinner ? 'block' : 'none';
         }
 
-        async function handleSubmit() {
-            const username = input.value.trim();
+        function showCheckResult(type, text) {
+            userCheckResult.className = `user-check-result ${type}`;
+            userCheckResult.textContent = text;
+        }
 
-            if (!username) {
-                input.classList.add('error');
-                setStatus('error', 'Bitte einen Benutzernamen eingeben.');
-                return;
-            }
+        function delay(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
 
-            submitBtn.disabled = true;
+        // Fires on blur — runs the check only when both fields are non-empty.
+        async function tryCheck() {
+            const username = usernameInput.value.trim();
+            const key      = keyInput.value.trim();
+            if (!username || !key || userExists !== null) return;
+
             setStatus('info', 'Wird überprüft…', true);
 
             try {
-                // 1. Check whether the user already exists.
                 const checkRes = await fetch(`${API_BASE}/users/check`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ username }),
+                    body: JSON.stringify({ username, key }),
                 });
 
-                if (!checkRes.ok) throw new Error(`check failed: ${checkRes.status}`);
-                const checkData = await checkRes.json();
+                setStatus('hidden', '');
 
-                if (!checkData.exists) {
-                    // 2. New user — register them.
-                    setStatus('info', 'Neuer Benutzer wird angelegt…', true);
+                if (checkRes.status === 401) {
+                    keyInput.classList.add('error');
+                    showCheckResult('error', 'Kursschlüssel ungültig.');
+                    return;
+                }
+                if (!checkRes.ok) throw new Error(`check failed: ${checkRes.status}`);
+
+                const data = await checkRes.json();
+                userExists = data.exists;
+
+                if (userExists) {
+                    showCheckResult('known', `Bekannter Benutzer – Ihr Fortschritt wird geladen.`);
+                } else {
+                    showCheckResult('new', `Neuer Benutzer – Sie werden beim Betreten angelegt.`);
+                }
+
+                submitBtn.disabled = false;
+
+            } catch (err) {
+                console.error('Check error:', err);
+                setStatus('error', 'Verbindung zum Server fehlgeschlagen.');
+            }
+        }
+
+        // "Weiter" only runs after the check has already passed.
+        async function handleSubmit() {
+            const username = usernameInput.value.trim();
+
+            submitBtn.disabled = true;
+            setStatus('info', userExists ? 'Willkommen zurück! Fortschritt wird geladen…' : 'Neuer Benutzer wird angelegt…', true);
+
+            try {
+                if (!userExists) {
                     const createRes = await fetch(`${API_BASE}/users/create`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ username }),
                     });
-
                     if (!createRes.ok) throw new Error(`create failed: ${createRes.status}`);
                 }
 
-                // 3. Redirect to the Angular module, passing the username as session_id.
-                setStatus('success', 'Weiterleitung zum Lernmodul…');
-                const target = `${MODULE_URL}?session_id=${encodeURIComponent(username)}`;
-                window.location.href = target;
+                await delay(1500);
+                window.location.href = `${MODULE_URL}?session_id=${encodeURIComponent(username)}`;
 
             } catch (err) {
-                console.error('Bridge error:', err);
+                console.error('Submit error:', err);
                 setStatus('error', 'Verbindung zum Server fehlgeschlagen. Bitte versuchen Sie es erneut.');
                 submitBtn.disabled = false;
             }

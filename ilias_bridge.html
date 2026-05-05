@@ -217,11 +217,15 @@
 
     <script>
         // ── Configuration ─────────────────────────────────────────────────────────
-        // API is always relative — the bridge is served from the same server as the API.
-        const API_BASE = '/api';
-        // In local dev the bridge runs on :3000 (Express) and Angular on :4200.
-        // In production both live on the same origin, so '/' is correct.
-        const MODULE_URL = window.location.port === '3000' ? 'http://localhost:4200' : '/';
+        // Relative path — works regardless of which sub-path the module lives at.
+        const API_BASE = 'api';
+
+        // In local dev the bridge is on :8000 and Angular on :4200.
+        // In production both share the same origin and sub-path.
+        const basePath = window.location.pathname.substring(
+            0, window.location.pathname.lastIndexOf('/') + 1
+        );
+        const MODULE_URL = window.location.port === '8000' ? 'http://localhost:4200' : basePath;
         // ─────────────────────────────────────────────────────────────────────────
 
         const usernameInput   = document.getElementById('username');

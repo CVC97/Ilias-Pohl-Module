@@ -6,6 +6,7 @@
 $path = ltrim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
 
 $static = [
+    'bridge'            => __DIR__ . '/../ilias_bridge.html',
     'api/users/check'   => __DIR__ . '/users/check.php',
     'api/users/create'  => __DIR__ . '/users/create.php',
     'api/progress/save' => __DIR__ . '/progress/save.php',

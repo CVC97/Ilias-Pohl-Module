@@ -124,16 +124,35 @@ The Angular app is also accessible directly at **`http://localhost:4200`** (rogu
 
 1. Build the Angular app:
    ```bash
-   cd frontend && npx ng build --base-href /your-base-path/
+   cd frontend && ng build --base-href ng build --base-href "https://interapt.uni-goettingen.de/pohl/"
    ```
 2. Upload to the server:
-   - `frontend/dist/.../browser/` → server base path (static files)
+   - `frontend/dist/.../browser/` → server base path (static files), rename `browser/` to `pohl/` and upload to server
    - `api/` → server base path `/api/`
    - `ilias_bridge.html` → server base path
    - `.htaccess` → server base path
 3. Create `api/config.php` on the server (from `config.example.php`) with production credentials.
 4. Set `RewriteBase` in `.htaccess` to match the server sub-path.
-5. Run `api/schema.sql` once in phpMyAdmin to create the tables.
+<!-- 5. Run `api/schema.sql` once in phpMyAdmin to create the tables. -->
+
+The final structure on the server is supposed to look like this:
+
+```
+pohl/                        ← your base path
+├── index.html               ← Angular app entry point
+├── (Angular static files)
+├── ilias_bridge.html       
+├── .htaccess                ← routes Angular URLs + /api/* calls
+└── api/
+    ├── db.php               ← shared DB connection
+    ├── module.php           ← shared getModuleId() helper
+    ├── users/
+    │   ├── check.php        ← POST /api/users/check
+    │   └── create.php       ← POST /api/users/create
+    └── progress/
+        ├── save.php         ← POST /api/progress/save
+        └── load.php         ← GET  /api/progress/load?username=...
+```
 
 
 ## API

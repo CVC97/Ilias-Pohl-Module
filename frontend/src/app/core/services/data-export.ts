@@ -56,16 +56,17 @@ export class DataExport {
 
 
     // Fetches saved progress from the backend and hydrates the tracking services.
-    async loadProgress(): Promise<void> {
-        if (!isPlatformBrowser(this.platformId)) return;
-        if (this.sessionService.isRogueUser()) return;
+    // Returns the last visited page for resuming, or null for new/rogue users.
+    async loadProgress(): Promise<string | null> {
+        if (!isPlatformBrowser(this.platformId)) return null;
+        if (this.sessionService.isRogueUser()) return null;
 
         const username = this.sessionService.getSessionId();
-        if (!username) return;
+        if (!username) return null;
 
         try {
             const response = await fetch(`${this.API_BASE}/progress/${encodeURIComponent(username)}`);
-            if (response.status === 404) return;  // new user, no progress yet
+            if (response.status === 404) return null;  // new user, no progress yet
             if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
             const data = await response.json();
@@ -77,9 +78,19 @@ export class DataExport {
                 this.testService.restoreFromBackend(data.testResults);
             }
 
-            console.log('Progress loaded from backend.');
+            // Find the last meaningful page (ignore root and session-redirect URLs).
+            const meaningful = (data.pageVisits ?? []).filter(
+                (v: any) => v.page && v.page.length > 1 && !v.page.startsWith('/?')
+            );
+            const lastPage: string | null = meaningful.length
+                ? meaningful[meaningful.length - 1].page
+                : null;
+
+            console.log('Progress loaded from backend. Last page:', lastPage);
+            return lastPage;
         } catch (err) {
             console.error('Failed to load progress:', err);
+            return null;
         }
     }
 

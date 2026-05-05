@@ -1,5 +1,5 @@
 import { Component, OnInit, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
 import { Header } from './shared/header/header';
 import { Footer } from './shared/footer/footer';
 import { Analytics } from './core/services/analytics';
@@ -21,10 +21,13 @@ export class App implements OnInit {
 
     constructor(
         private _analytics: Analytics,
-        private dataExport: DataExport
+        private dataExport: DataExport,
+        private router: Router
     ) {}
 
     ngOnInit() {
-        this.dataExport.loadProgress();
+        this.dataExport.loadProgress().then(lastPage => {
+            if (lastPage) this.router.navigateByUrl(lastPage);
+        });
     }
 }

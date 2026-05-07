@@ -368,11 +368,12 @@ export class IntroExperiment implements OnInit, OnDestroy {
 
     // ability to proceed in the module: depending on the Q+A performance (all questions have to be answered)
     get canProceed(): boolean {
-        if (this.currentView === 'intro_exp1') return this.page1Complete;
-        if (this.currentView === 'intro_exp2') return this.page2Complete;
-        if (this.currentView === 'intro_exp3') return this.page3Complete;
-		if (this.currentView === 'intro_exp4') return this.page4Complete;
-        return false;
+        // if (this.currentView === 'intro_exp1') return this.page1Complete;
+        // if (this.currentView === 'intro_exp2') return this.page2Complete;
+        // if (this.currentView === 'intro_exp3') return this.page3Complete;
+		// if (this.currentView === 'intro_exp4') return this.page4Complete;
+        // return false;
+        return true;
     }
 
 

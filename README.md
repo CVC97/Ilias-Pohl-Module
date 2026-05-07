@@ -112,7 +112,7 @@ php -S localhost:8000 api/router.php
 
 **3. Angular dev server:**
 ```bash
-cd frontend && npx ng serve
+cd frontend && ng serve
 ```
 
 Then open **`http://localhost:8000/bridge`** — serve `ilias_bridge.html` from the PHP server
@@ -141,7 +141,7 @@ The final structure on the server is supposed to look like this:
 pohl/                        ← your base path
 ├── index.html               ← Angular app entry point
 ├── (Angular static files)
-├── ilias_bridge.html       
+├── ilias_bridge.html        ← handles login / session management
 ├── .htaccess                ← routes Angular URLs + /api/* calls
 └── api/
     ├── db.php               ← shared DB connection
@@ -175,14 +175,14 @@ pohl/                        ← your base path
 | `module_results` | Learning module question answers (retryable) |
 | `test_results` | Test question answers (single-submission) |
 
-Run `api/schema.sql` once in phpMyAdmin (select the `interapt` database first, skip the first two lines).
+<!-- Run `api/schema.sql` once in phpMyAdmin (select the `interapt` database first, skip the first two lines).
 
 To delete a user and all their data:
 ```sql
 DELETE FROM users WHERE username = 'max.mustermann'
 AND module_id = (SELECT id FROM modules WHERE name = 'pohl');
 ```
-All related rows in `page_visits`, `module_results`, and `test_results` cascade automatically.
+All related rows in `page_visits`, `module_results`, and `test_results` cascade automatically. -->
 
 
 ## Project Services

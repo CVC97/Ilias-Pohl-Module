@@ -386,15 +386,24 @@ export class TestDampedOscillations implements OnInit, OnDestroy {
     get canProceed(): boolean {
 		// can only proceed if all questions on current page are submitted
         if (this.currentView === 'damped_osc1') {
-			return this.question1Submitted;
+			// return this.question1Submitted;
+            return true;
         } else if (this.currentView === 'damped_osc2') {
-			return this.question2Submitted;
+			// return this.question2Submitted;
+            return true;
 		} else if (this.currentView === 'damped_osc3') {
-			return this.question3Submitted;
+			// return this.question3Submitted;
+            return true;
 		} else if (this.currentView === 'damped_osc4') {
-			return this.question4Submitted;
+			// return this.question4Submitted;
+            return true;
 		} else if (this.currentView === 'damped_osc5') {
-			return this.question5Submitted;
+			return (
+                this.question1Submitted && 
+                this.question2Submitted &&
+                this.question3Submitted &&
+                this.question4Submitted &&
+                this.question5Submitted) ;
 		} else if (this.currentView === 'damped_osc6') {
 			return true;
 		}

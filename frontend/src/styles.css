@@ -251,3 +251,39 @@ nav a:hover {
 .text-center {
     text-align: center;
 }
+
+/* ── Glossary overlay ─────────────────────────────────────────────────────── */
+.glossary-overlay-backdrop {
+    background: rgba(0, 0, 0, 0.45);
+}
+
+/* Strip the inner .container / .card double-styling inside the overlay */
+.glossary-overlay-panel .container {
+    padding: 0;
+    max-width: 100%;
+}
+
+.glossary-overlay-panel .card {
+    box-shadow: none;
+    border: none;
+    border-radius: 0;
+    padding: 1.5rem;
+    background: transparent;
+}
+
+.glossary-overlay-panel .button-container {
+    display: none;
+}
+
+/* inline glossary trigger links — works in both templates and sanitized strings */
+a.glossary-link {
+    color: var(--glossary-link-color);
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+a.glossary-link:hover {
+    color: var(--glossary-link-color-hover);
+    border-bottom-color: var(--glossary-link-color-hover);
+}

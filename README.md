@@ -86,7 +86,9 @@ README.md
 │               └── test_features/
 │               └── sidepath_features/
 │               └── target_features/
-│               └── simulation_features/
+│
+└── public/
+    └── simulations/                            // standalone HTML simulation pages (static)
 ```
 
 
@@ -266,11 +268,16 @@ All related rows in `page_visits`, `module_results`, and `test_results` cascade 
 
 ### Simulation Features
 
-- **undamped-oscillations-theory:**
-- **damped-oscillations-theory:**
-- **driven-oscillations-theory:**
-- **expanded-driven-oscillations-theory:**
-- **undamped-oscillations-experiment:**
-- **damped-oscillations-experiment:**
-- **driven-oscillations-experiment:**
-- **expanded-driven-oscillations-experiment:**
+Angular component:
+- **damped-oscillations-experiment** → `/simulation/damped-oscillations-experiment`
+
+Standalone HTML pages (in `frontend/public/simulations/`):
+- **undamped-linear** → `/simulation/undamped-linear`
+- **damped-linear** → `/simulation/damped-linear`
+- **damped-driven-linear** → `/simulation/damped-driven-linear`
+- **damped-driven-rot** → `/simulation/damped-driven-rot`
+- **damped-rot** → `/simulation/damped-rot`
+- **damped-rot-advanced** → `/simulation/damped-rot-advanced`
+- **damped-rot-v2** → `/simulation/damped-rot-v2`
+- **damped-driven-rot-intro** → `/simulation/damped-driven-rot-intro`
+- **damped-driven-rot-advanced** → `/simulation/damped-driven-rot-advanced`

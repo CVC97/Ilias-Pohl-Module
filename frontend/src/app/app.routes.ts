@@ -1,4 +1,8 @@
-import { Routes } from '@angular/router';
+import { Component } from '@angular/core';
+import { CanActivateFn, Routes } from '@angular/router';
+import { DOCUMENT } from '@angular/common';
+import { inject } from '@angular/core';
+
 import { Home } from './features/home/home';
 import { Glossary } from './features/glossary/glossary';
 
@@ -24,27 +28,53 @@ import { TestDampedOscillations } from './features/test_features/damped-oscillat
 // simulation features
 import { SimDampedOscillationsExperiment } from './features/simulation_features/damped-oscillations-experiment/damped-oscillations-experiment';
 
+// ── Standalone HTML simulations ───────────────────────────────────────────────
+// Plain HTML pages served as static files from public/simulations/.
+// The guard redirects the browser there; SimulationRedirect is never rendered.
+
+@Component({ template: '', standalone: true })
+class SimulationRedirect {}
+
+function sim(file: string): CanActivateFn {
+    return () => {
+        inject(DOCUMENT).location.href = `simulations/${file}`;
+        return false;
+    };
+}
+// ─────────────────────────────────────────────────────────────────────────────
+
 
 
 export const routes: Routes = [
-    { path: '', component: Home , title: 'Pohlsches Rad'},
-    { path: 'glossary', component: Glossary , title: 'Pohlsches Rad - Begriffe'},
+    { path: '', component: Home, title: 'Pohlsches Rad' },
+    { path: 'glossary', component: Glossary, title: 'Pohlsches Rad - Begriffe' },
 
-    { path: 'glossary/amplitude', component: Amplitude, title: 'Amplitude'},
-	{ path: 'glossary/critical-damping', component: CriticalDamping, title: 'Aperiodischer Grenzfall'},
-	{ path: 'glossary/damping-coefficient', component: DampingCoefficient, title: 'Dämpungskoeffizient'},
-	{ path: 'glossary/angular-momentum', component: AngularMomentum, title: 'Drehmoment'},
-	{ path: 'glossary/natural-frequency', component: NaturalFrequency, title: 'Eigenschwingfrequenz'},
-	{ path: 'glossary/exponential-ansatz', component: ExponentialAnsatz, title: 'Exponentialansatz'},
-	{ path: 'glossary/spring-constant', component: SpringConstant, title: 'Federkonstante'},
-	{ path: 'glossary/hom-dgl', component: HomDgl, title: 'Homogene DGL'},
-	{ path: 'glossary/inhom-dgl', component: InhomDgl, title: 'Inhomogene DGL'},
-	{ path: 'glossary/angular-frequency', component: AngularFrequency, title: 'Kreisfrequenz'},
-	{ path: 'glossary/moment-of-inertia', component: MomentOfInertia, title: 'Trägheitsmoment'},
+    { path: 'glossary/amplitude',           component: Amplitude,           title: 'Amplitude' },
+    { path: 'glossary/critical-damping',    component: CriticalDamping,     title: 'Aperiodischer Grenzfall' },
+    { path: 'glossary/damping-coefficient', component: DampingCoefficient,  title: 'Dämpungskoeffizient' },
+    { path: 'glossary/angular-momentum',    component: AngularMomentum,     title: 'Drehmoment' },
+    { path: 'glossary/natural-frequency',   component: NaturalFrequency,    title: 'Eigenschwingfrequenz' },
+    { path: 'glossary/exponential-ansatz',  component: ExponentialAnsatz,   title: 'Exponentialansatz' },
+    { path: 'glossary/spring-constant',     component: SpringConstant,      title: 'Federkonstante' },
+    { path: 'glossary/hom-dgl',             component: HomDgl,              title: 'Homogene DGL' },
+    { path: 'glossary/inhom-dgl',           component: InhomDgl,            title: 'Inhomogene DGL' },
+    { path: 'glossary/angular-frequency',   component: AngularFrequency,    title: 'Kreisfrequenz' },
+    { path: 'glossary/moment-of-inertia',   component: MomentOfInertia,     title: 'Trägheitsmoment' },
 
-	{ path: 'learning/intro-experiment', component: IntroExperiment, title: 'Einstieg Versuchsaufbau'},
+    { path: 'learning/intro-experiment', component: IntroExperiment, title: 'Einstieg Versuchsaufbau' },
 
-	{ path: 'test/damped-oscillations', component: TestDampedOscillations, title: 'Test: Gedämpfte Schwingungen'},
+    { path: 'test/damped-oscillations', component: TestDampedOscillations, title: 'Test: Gedämpfte Schwingungen' },
 
-	{ path: 'simulation/damped-oscillations-experiment', component: SimDampedOscillationsExperiment, title: 'Simulation: Gedämpfte Schwingungen'},
-]
+    { path: 'simulation/damped-oscillations-experiment', component: SimDampedOscillationsExperiment, title: 'Simulation: Gedämpfte Schwingungen' },
+
+    // Standalone HTML simulations — redirect to static files in public/simulations/
+    { path: 'simulation/theory-undamped',             			canActivate: [sim('Simulation_01_Einstieg_undamped_linear.html')],              component: SimulationRedirect, title: 'Simulation: Ungedämpfte Schwingung' },
+    { path: 'simulation/theory-damped',               			canActivate: [sim('Simulation_02_Einstieg_damped_linear.html')],                component: SimulationRedirect, title: 'Simulation: Gedämpfte Schwingung' },
+    { path: 'simulation/theory-damped-driven',        			canActivate: [sim('Simulation_03_Einstieg_damped_driven_linear.html')],         component: SimulationRedirect, title: 'Simulation: Gedämpfte getriebene Schwingung' },
+    { path: 'simulation/theory-damped-driven-davanced', 		canActivate: [sim('Simulation_04_Vertiefung_damped_driven_rot.html')],          component: SimulationRedirect, title: 'Simulation: Gedämpfte getriebene Drehschwingung' },
+    // { path: 'simulation/experiment-damped',               		canActivate: [sim('Simulation_11_Einstieg_damped_rot_20251107.html')],          component: SimulationRedirect, title: 'Simulation: Gedämpfte Drehschwingung' },
+    // { path: 'simulation/damped-rot-advanced',         canActivate: [sim('Simulation_12_Vertiefung_damped_rot_20251107.html')],        component: SimulationRedirect, title: 'Simulation: Gedämpfte Drehschwingung (Vertiefung)' },
+    { path: 'simulation/experiment-damped',               		canActivate: [sim('Simulation_12_Vertiefung_damped_rot.html')],                 component: SimulationRedirect, title: 'Simulation: Gedämpfte Drehschwingung v2' },
+    { path: 'simulation/experiment-damped-driven',     			canActivate: [sim('Simulation_13_Einleitung_damped_driven_rot_202511072.html')], component: SimulationRedirect, title: 'Simulation: Getriebene Drehschwingung (Einleitung)' },
+    { path: 'simulation/experiment-damped-driven-advanced',  	canActivate: [sim('Simulation_14_Vertiefung_damped_driven_rot.html')],          component: SimulationRedirect, title: 'Simulation: Getriebene Drehschwingung (Vertiefung)' },
+];

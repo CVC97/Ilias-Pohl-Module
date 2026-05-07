@@ -421,7 +421,8 @@ export class TestDampedOscillations implements OnInit, OnDestroy {
     // going back shows the previous subpage / home page
     goBack() {
 		if (this.currentView === 'damped_osc1') {
-            this.router.navigate(['learning/intro-experiment']);
+            this.router.navigate(['/learning/intro-experiment'], { queryParams: { page: 4 } });
+            return;
         } else if (this.currentView === 'damped_osc2') {
             this.currentView = 'damped_osc1';
             this.renderMath();

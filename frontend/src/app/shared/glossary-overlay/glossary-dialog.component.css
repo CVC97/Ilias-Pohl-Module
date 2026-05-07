@@ -1,0 +1,53 @@
+:host {
+    display: flex;
+    flex-direction: column;
+    background: var(--card-bg);
+    border-radius: 12px;
+    max-height: 82vh;
+    overflow: hidden;
+}
+
+.overlay-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+    flex-shrink: 0;
+}
+
+.overlay-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    opacity: 0.6;
+}
+
+.overlay-close {
+    background: none;
+    border: none;
+    font-size: 1.1rem;
+    color: var(--text-primary);
+    cursor: pointer;
+    padding: 0.3rem 0.6rem;
+    border-radius: 4px;
+    line-height: 1;
+    transition: background 0.15s;
+}
+
+.overlay-close:hover {
+    background: var(--border-color);
+}
+
+.overlay-body {
+    overflow-y: auto;
+    flex: 1;
+}
+
+.overlay-missing {
+    padding: 2rem;
+    color: var(--text-primary);
+    opacity: 0.6;
+}

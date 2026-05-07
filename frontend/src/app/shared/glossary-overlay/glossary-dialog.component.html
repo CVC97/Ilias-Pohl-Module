@@ -1,0 +1,12 @@
+<div class="overlay-header">
+    <span class="overlay-title">Begriffserklärung</span>
+    <button class="overlay-close" (click)="close()" aria-label="Schließen">✕</button>
+</div>
+
+<div class="overlay-body">
+    @if (component) {
+        <ng-container [ngComponentOutlet]="component" [ngComponentOutletInjector]="overlayInjector" />
+    } @else {
+        <p class="overlay-missing">Begriff nicht gefunden: {{ data.term }}</p>
+    }
+</div>

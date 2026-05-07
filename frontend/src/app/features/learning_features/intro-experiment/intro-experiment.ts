@@ -1,12 +1,13 @@
-import { Component, OnInit, Inject, PLATFORM_ID, OnDestroy } from '@angular/core';
+import { Component, OnInit, Inject, PLATFORM_ID, OnDestroy, HostListener } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { CommonModule } from '@angular/common';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { MultipleChoiceImage } from '../../../shared/evaluation/multiple-choice-image/multiple-choice-image';
 import { MultipleChoice } from '../../../shared/evaluation/multiple-choice/multiple-choice';
 import { ImageChoice } from '../../../shared/evaluation/image-choice/image-choice';
 import { ResultsTracking } from '../../../core/services/results-tracking';
+import { GlossaryOverlay } from '../../../shared/glossary-overlay/glossary-overlay.service';
 
 
 
@@ -29,9 +30,21 @@ export class IntroExperiment implements OnInit, OnDestroy {
     constructor(
 		private sanitizer: DomSanitizer,
         @Inject(PLATFORM_ID) private platformId: Object,
+        private route: ActivatedRoute,
         private router: Router,
-		private trackingService: ResultsTracking
+		private trackingService: ResultsTracking,
+        public glossaryOverlay: GlossaryOverlay
     ) {}
+
+    @HostListener('click', ['$event'])
+    onGlossaryLink(event: MouseEvent) {
+        const link = (event.target as HTMLElement)
+            ?.closest('a[href^="#glossary-"]') as HTMLAnchorElement | null;
+        if (!link) return;
+        event.preventDefault();
+        const term = link.getAttribute('href')!.replace('#glossary-', '');
+        this.glossaryOverlay.open(term);
+    }
 
 
 	// +++ QA data +++
@@ -284,6 +297,12 @@ export class IntroExperiment implements OnInit, OnDestroy {
 	introExperimentText!: SafeHtml;
 
     ngOnInit() {
+        // restore subpage from URL query param
+        const page = this.route.snapshot.queryParamMap.get('page');
+        if (page && ['1','2','3','4'].includes(page)) {
+            this.currentView = `intro_exp${page}`;
+        }
+
         // start tracking this module
         this.trackingService.startModule('intro-experiment');
 
@@ -293,18 +312,22 @@ export class IntroExperiment implements OnInit, OnDestroy {
 		// sanitized string to enable LaTeX rendering
         this.introExperimentText = this.sanitizer.bypassSecurityTrustHtml(`
             Das Schwungrad ist in dem Versuch im Schwerpunkt aufgehängt. Durch das Anbringen zusätzliche 
-            Massestücke wirkt ein zusätzliches <a target="_blank" rel="noopener noreferrer" href="glossary/angular-momentum?from=module" class="glossary-link">Drehmoment</a>, 
+            Massestücke wirkt ein zusätzliches
+            <a href="#glossary-angular-momentum" class="glossary-link">Drehmoment</a>, 
             über das die Feder näher charakterisiert werden kann. 
             Um diesen Zusammenhang nachzuvollziehen, betrachten wir zunächst das Schwungrad ohne den zusätzlichen 
             Antrieb (s. Abbildung).
             <br><br>
             Auf ein zusätzliches Massestück mit der Masse $m_{zm}$ wirkt die Kraft $\\vec{F}_{zm} = m_{zm}\\vec{g}$, 
-            wodurch auf das Schwungrad das <a target="_blank" rel="noopener noreferrer" href="glossary/angular-momentum?from=module" class="glossary-link">Drehmoment</a> 
+            wodurch auf das Schwungrad das 
+            <a href="#glossary-angular-momentum" class="glossary-link">Drehmoment</a>
             $\\vec{M}_{zm} = \\vec{r} \\times \\vec{F}_{zm}$, bzw. 
             $|\\vec{M}_{zm}| = m_{zm}gR\\sin(\\varphi)$ wirkt.
             <br><br>
-            Im stationären Fall gleichen sich das zusätzliche <a target="_blank" rel="noopener noreferrer" href="glossary/angular-momentum?from=module" class="glossary-link">Drehmoment</a> 
-            und das rücktreibende <a target="_blank" rel="noopener noreferrer" href="glossary/angular-momentum?from=module" class="glossary-link">Drehmoment</a> der 
+            Im stationären Fall gleichen sich das zusätzliche 
+            <a href="#glossary-angular-momentum" class="glossary-link">Drehmoment</a> 
+            und das rücktreibende 
+            <span class="glossary-link" data-glossary="angular-moment>Drehmoment</span> der 
             Feder aus: $(M_{\\text{Feder}} = -D\\varphi)$.
         `);
     }
@@ -349,7 +372,17 @@ export class IntroExperiment implements OnInit, OnDestroy {
 
 
 	// +++ in-page navigation +++
-	
+
+    private updateUrl() {
+        const page = this.currentView.replace('intro_exp', '');
+        this.router.navigate([], {
+            relativeTo: this.route,
+            queryParams: { page },
+            queryParamsHandling: 'merge',
+            replaceUrl: true
+        });
+    }
+
     // navigation helpers
 	currentView: string = 'intro_exp1';
     get isFirstPage(): boolean {
@@ -388,16 +421,16 @@ export class IntroExperiment implements OnInit, OnDestroy {
     goBack() {
         if (this.currentView === 'intro_exp1') {
             this.router.navigate(['/']);
+            return;
         } else if (this.currentView === 'intro_exp2') {
             this.currentView = 'intro_exp1';
-            this.renderMath();
         } else if (this.currentView === 'intro_exp3') {
             this.currentView = 'intro_exp2';
-            this.renderMath();
         } else if (this.currentView === 'intro_exp4') {
             this.currentView = 'intro_exp3';
-            this.renderMath();
         }
+        this.updateUrl();
+        this.renderMath();
     }
 
 
@@ -410,8 +443,11 @@ export class IntroExperiment implements OnInit, OnDestroy {
                 this.currentView = 'intro_exp3';
             } else if (this.currentView === 'intro_exp3') {
                 this.currentView = 'intro_exp4';
-            } else if (this.currentView = 'into_exp4')
-				this.router.navigate(['/test/damped-oscillations']);
+            } else if (this.currentView === 'intro_exp4') {
+                this.router.navigate(['/test/damped-oscillations']);
+                return;
+            }
+            this.updateUrl();
             this.renderMath();
         }
     }

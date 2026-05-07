@@ -326,10 +326,12 @@ export class IntroExperiment implements OnInit, OnDestroy {
             <br><br>
             Im stationären Fall gleichen sich das zusätzliche 
             <a href="#glossary-angular-momentum" class="glossary-link">Drehmoment</a> 
-            und das rücktreibende 
-            <span class="glossary-link" data-glossary="angular-moment>Drehmoment</span> der 
+            und das rücktreibende
+            <a href="#glossary-angular-momentum" class="glossary-link">Drehmoment</a>  der
             Feder aus: $(M_{\\text{Feder}} = -D\\varphi)$.
         `);
+
+        this.renderMath();
     }
 
 

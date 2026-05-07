@@ -62,14 +62,6 @@ export abstract class GlossaryBase implements OnInit, AfterViewInit {
         if (this.isBrowser) {
             setTimeout(() => {
                 if (window.MathJax) {
-                    // Clear previous MathJax containers
-                    const mjxContainers = document.querySelectorAll('mjx-container');
-                    mjxContainers.forEach(container => {
-                        if (container.children.length > 0) {
-                            container.remove();
-                        }
-                    });
-                    
                     window.MathJax.typesetPromise();
                 }
             }, 100);

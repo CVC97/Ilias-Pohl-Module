@@ -22,9 +22,6 @@ declare global {
 	templateUrl: './spring-constant.html',
 	styleUrl: './spring-constant.css',
 })
-
-
-
 export class SpringConstant extends GlossaryBase {
     spring_constantText!: SafeHtml;
     spring_constantFormulaText!: SafeHtml;

@@ -22,9 +22,6 @@ declare global {
 	templateUrl: './angular-frequency.html',
 	styleUrl: './angular-frequency.css',
 })
-
-
-
 export class AngularFrequency extends GlossaryBase {
     angular_frequencyText!: SafeHtml;
     angular_frequencyFormulaText!: SafeHtml;

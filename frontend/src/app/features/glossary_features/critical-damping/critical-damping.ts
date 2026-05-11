@@ -20,7 +20,6 @@ declare global {
 	templateUrl: './critical-damping.html',
 	styleUrl: './critical-damping.css',
 })
-
 export class CriticalDamping extends GlossaryBase {
     critical_dampingText!: SafeHtml;
     critical_dampingFormulaText!: SafeHtml;

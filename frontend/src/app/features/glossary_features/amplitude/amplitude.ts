@@ -14,9 +14,6 @@ import { GlossaryBase } from '../glossary-base';
     templateUrl: './amplitude.html',
     styleUrl: './amplitude.css',
 })
-
-
-
 export class Amplitude extends GlossaryBase {
     amplitudeText!: SafeHtml;
     amplitudeFormulaText!: SafeHtml;

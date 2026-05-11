@@ -22,9 +22,6 @@ declare global {
 	templateUrl: './inhom-dgl.html',
 	styleUrl: './inhom-dgl.css',
 })
-
-
-
 export class InhomDgl extends GlossaryBase {
     inhom_dglFormulaText!: SafeHtml;
 

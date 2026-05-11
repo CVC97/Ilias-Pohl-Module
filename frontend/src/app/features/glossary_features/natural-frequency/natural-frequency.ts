@@ -14,9 +14,6 @@ import { GlossaryBase } from '../glossary-base';
 	templateUrl: './natural-frequency.html',
 	styleUrl: './natural-frequency.css',
 })
-
-
-
 export class NaturalFrequency extends GlossaryBase {
     natural_frequencyText!: SafeHtml;
     undamped_natural_frequencyFormulaText!: SafeHtml;

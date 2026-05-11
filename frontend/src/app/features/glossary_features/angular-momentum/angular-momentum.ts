@@ -14,9 +14,6 @@ import { GlossaryBase } from '../glossary-base';
     templateUrl: './angular-momentum.html',
     styleUrl: './angular-momentum.css',
 })
-
-
-
 export class AngularMomentum extends GlossaryBase {
     angular_momentumText!: SafeHtml;
     angular_momentumFormulaText!: SafeHtml;

@@ -22,9 +22,6 @@ declare global {
 	templateUrl: './hom-dgl.html',
 	styleUrl: './hom-dgl.css',
 })
-
-
-
 export class HomDgl extends GlossaryBase {
     hom_dglFormulaText!: SafeHtml;
 

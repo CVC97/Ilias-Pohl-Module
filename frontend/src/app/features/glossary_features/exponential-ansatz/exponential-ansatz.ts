@@ -22,9 +22,6 @@ declare global {
 	templateUrl: './exponential-ansatz.html',
 	styleUrl: './exponential-ansatz.css',
 })
-
-
-
 export class ExponentialAnsatz extends GlossaryBase {
     exponential_ansatzText!: SafeHtml;
     exponential_ansatzFormulaText1!: SafeHtml;

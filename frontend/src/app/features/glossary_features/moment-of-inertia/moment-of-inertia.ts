@@ -21,9 +21,6 @@ declare global {
 	templateUrl: './moment-of-inertia.html',
 	styleUrl: './moment-of-inertia.css',
 })
-
-
-
 export class MomentOfInertia extends GlossaryBase {
     moiText!: SafeHtml;
     moiFormulaText!: SafeHtml;

@@ -1,15 +1,18 @@
 # See https://docs.github.com/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
 
 # Compiled output
-/dist
+/frontend/dist
 /tmp
 /out-tsc
 /bazel-out
 
 # Node
-/node_modules
+/frontend/node_modules
 npm-debug.log
 yarn-error.log
+
+# API config (contains credentials)
+/api/config.php
 
 # IDEs and editors
 .idea/
@@ -30,7 +33,7 @@ yarn-error.log
 .history/*
 
 # Miscellaneous
-/.angular/cache
+/frontend/.angular/cache
 .sass-cache/
 /connect.lock
 /coverage
@@ -42,3 +45,7 @@ __screenshots__/
 # System files
 .DS_Store
 Thumbs.db
+
+# specifically ignoring the introduction readme
+.learning_module_readme.md
+# learning_module_readme.html

@@ -22,9 +22,6 @@ declare global {
 	templateUrl: './damping-coefficient.html',
 	styleUrl: './damping-coefficient.css',
 })
-
-
-
 export class DampingCoefficient extends GlossaryBase {
     damping_coefficientText!: SafeHtml;
 

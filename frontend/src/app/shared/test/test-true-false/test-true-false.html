@@ -1,0 +1,64 @@
+<div class="test-container" [id]="containerId" [class.submitted]="isSubmitted">
+    <div class="test-content">
+        <h3 class="test-question">{{ question }}</h3>
+        <p class="test-instruction">{{ questionInstruction }}</p>
+        <div class="statements-container">
+            @for (statement of statements; track statement.id; let i = $index) {
+            <div
+                class="statement-item"
+                [class.selected]="getSelectedValue(statement.id) !== null"
+                [class.correct]="isSubmitted && isCorrectStatement(statement.id)"
+                [class.incorrect]="isSubmitted && getSelectedValue(statement.id) === 'false' && statement.isCorrect"
+                [class.disabled]="isSubmitted">
+
+                <div class="statement-text">{{ statement.text }}</div>
+                
+                <div class="statement-options">
+                    <button 
+                        type="button"
+                        class="option-btn"
+                        [class.selected]="getSelectedValue(statement.id) === 'true'"
+                        [disabled]="isSubmitted"
+                        (click)="toggleStatement(statement.id, 'true')">
+                        Wahr
+                    </button>
+                    
+                    <button 
+                        type="button"
+                        class="option-btn"
+                        [class.selected]="getSelectedValue(statement.id) === 'false'"
+                        [disabled]="isSubmitted"
+                        (click)="toggleStatement(statement.id, 'false')">
+                        Falsch
+                    </button>
+                </div>
+                
+                @if (isSubmitted) {
+                <div class="statement-indicator">
+                    <span *ngIf="isCorrectStatement(statement.id)" class="indicator correct-indicator">✓</span>
+                    <span *ngIf="!isCorrectStatement(statement.id) && getSelectedValue(statement.id) === 'true'" class="indicator incorrect-indicator">✗</span>
+                </div>
+                }
+            </div>
+            }
+        </div>
+
+        <button
+            class="test-btn test-submit-btn"
+            (click)="submitAnswer()"
+            [disabled]="isSubmitted">
+            {{ isSubmitted ? 'Bereits abgegeben' : 'Abgeben' }}
+        </button>
+
+        @if (isSubmitted) {
+        <div
+            class="test-result"
+            [class.correct]="isCorrect"
+            [class.partial]="!isCorrect && pointsAwarded > 0"
+            [class.incorrect]="pointsAwarded === 0">
+            <p>{{ feedbackMessage }}</p>
+            <div class="points-breakdown" [innerHTML]="pointsBreakdown"></div>
+        </div>
+        }
+    </div>
+</div>

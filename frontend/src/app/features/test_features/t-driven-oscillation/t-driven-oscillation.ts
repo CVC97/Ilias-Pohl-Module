@@ -51,16 +51,15 @@ export class TDrivenOscillation implements OnInit, OnDestroy {
     wobei $\\varphi(t)$ die Winkelauslenkung, $\\omega_0$ bzw. $\\omega_e$ die Eigenfrequenz des ungedämpften bzw. gedämpften Oszillators, $\\beta$ die Dämpfungskonstante, $N$ und $\\omega$ die Amplitude und Frequenz des Antriebs beschreiben. $\\varphi_0\$ und $\\Phi\$ sind Hilfsgrößen, die sich aus den Anfangsbedingungen ergeben.<br><br>
     Welche der Aussagen zu dieser Gesamtlösung sind korrekt? `,
 		questionInstruction: 'Frage 1 von 4 (35 Punkte): Analyse der Gleichung',
-		options: [
-			{ value: 'first_ext', label: 'Der erste Summand beschreibt die Dynamik des Schwungrads ohne äußeren Antrieb.' },
-			{ value: 'first_damp', label: 'Der erste Summand beschreibt die Dynamik des Schwungrads ohne Dämpfung.' },
-            { value: 'first_time', label: 'Der erste Summand ist bei einem gedämpften System nach einer gewissen Zeit zu vernachlässigen -- er spielt nur zu Beginn der Schwingung eine Rolle.' },
-			{ value: 'second_time', label: 'Der zweite Summand ist bei einem gedämpften System nach einer gewissen Zeit zu vernachlässigen -- er spielt nur zu Beginn der Schwingung eine Rolle.' },
-			{ value: 'init_vel', label: 'Die Anfangsgeschwindigkeit bestimmt die maximale Auslenkung des Schwungrads zu allen Zeiten.' }
-			{ value: 'damp_frequ', label: 'Die Dämpfung spielt für die Schwingungsfrequenz des gedämpft schwingenden Rades nach einer bestimmten Zeit keine Rolle mehr. Entscheidend ist nur, mit welcher Frequenz der Antrieb das Rad schwingen lässt.' }
-			{ value: 'const', label: 'Aufgrund des äußeren Antriebs ist die Schwingung zu allen Zeiten gleichmäßig und periodisch.' }      
+		statements: [
+			{ id: 'first_ext', text: 'Der erste Summand beschreibt die Dynamik des Schwungrads ohne äußeren Antrieb.', isCorrect: true },
+			{ id: 'first_damp', text: 'Der erste Summand beschreibt die Dynamik des Schwungrads ohne Dämpfung.', isCorrect: false  },
+            { id: 'first_time', text: 'Der erste Summand ist bei einem gedämpften System nach einer gewissen Zeit zu vernachlässigen -- er spielt nur zu Beginn der Schwingung eine Rolle.', isCorrect: true  },
+			{ id: 'second_time', text: 'Der zweite Summand ist bei einem gedämpften System nach einer gewissen Zeit zu vernachlässigen -- er spielt nur zu Beginn der Schwingung eine Rolle.' , isCorrect: false },
+			{ id: 'init_vel', text: 'Die Anfangsgeschwindigkeit bestimmt die maximale Auslenkung des Schwungrads zu allen Zeiten.' , isCorrect: false },
+			{ id: 'damp_frequ', text: 'Die Dämpfung spielt für die Schwingungsfrequenz des gedämpft schwingenden Rades nach einer bestimmten Zeit kaum noch eine Rolle. Entscheidend ist nur, mit welcher Frequenz der Antrieb das Rad schwingen lässt.' , isCorrect: true },
+			{ id: 'const', text: 'Aufgrund des äußeren Antriebs ist die Schwingung zu allen Zeiten gleichmäßig und periodisch.' , isCorrect: false }      
 		],
-		correctAnswers: ['first_ext','first_time','damp_frequ'],
         maxPoints: 35,
 		pointsPerCorrectClick: 5
     };
@@ -105,22 +104,22 @@ Bei welcher der Graphen ist der Einschwingvorgang abgeschlossen?`,
 
 	// question 4 data
     question4 = {
-		questionId: 'driven-osc-t-1-resonance_damping',
+        questionId: 'driven-osc-t-1-resonance_damping',
         question: `Wie verändert sich die Messung, wenn Sie die Dämpfung des Systems vergrößern? <br>
-        Überlegen Sie was passiert, wenn man nur diesen Parameter ändert und alle anderen konstant hält.<br><br>
-        Je größer die Dämpfung des Systems, desto`,
-		questionInstruction: 'Frage 4 von 4 (30 Punkte): Einfluss der Dämpfung',
-		options: [
-			{ value: 'answer1', label: '... größer die Resonanzfrequenz.' },
-			{ value: 'answer2', label: '... kleiner ist der Phasenversatz zwischen der Schwingung des Antriebs und der des Schwungrads bei großen Frequenzen ($\\omega > \\omega_0$).' },
-            { value: 'answer3', label: '... breiter der Resonanzpeak der Amplitude.' },
-			{ value: 'answer4', label: '... größer die Resonanzfrequenz.' },
-    		{ value: 'answer5', label: '... größer die Amplitude bei der Resonanzfrequenz.' },
-			{ value: 'answer6', label: '... größer die Abweichung der Resonanzfrequenz von der Eigenfrequenz des ungedämpften Systems ($\\omega_0$).' },
+        Überlegen Sie was passiert, wenn man nur die Dämpfung ändert und alle anderen konstant hält.<br><br>
+        Welche der folgenden Aussagen sind korrekt?<br><br>
+        Je größer die Dämpfung, desto ... `,
+        questionInstruction: 'Frage 4 von 4 (30 Punkte): Einfluss der Dämpfung',
+        statements: [
+            { id: 'answer1', text: '... größer die Resonanzfrequenz.', isCorrect: false },
+            { id: 'answer2', text: '... kleiner ist der Phasenversatz zwischen der Schwingung des Antriebs und der des Schwungrads bei großen Frequenzen ($\\omega > \\omega_0$).', isCorrect: false },
+            { id: 'answer3', text: '... breiter der Resonanzpeak der Amplitude.', isCorrect: true },
+            { id: 'answer4', text: '... größer die Resonanzfrequenz.', isCorrect: false },
+            { id: 'answer5', text: '... größer die Amplitude bei der Resonanzfrequenz.', isCorrect: false },
+            { id: 'answer6', text: '... größer die Abweichung der Resonanzfrequenz von der Eigenfrequenz des ungedämpften Systems ($\\omega_0$).', isCorrect: true },
         ],
-		correctAnswers: ['half_life', 'damping'],
         maxPoints: 30,
-		pointsPerCorrectClick: 5,
+        pointsPerCorrectClick: 5,
         containerId: 'test-question4-container'
     };
 

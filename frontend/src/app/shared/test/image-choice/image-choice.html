@@ -1,0 +1,47 @@
+<div class="test-container" [id]="containerId" [class.submitted]="isSubmitted">
+    <div class="test-content">
+        <h3 class="test-question">{{ question }}</h3>
+        <p class="test-instruction">{{ questionInstruction }}</p>        
+        <div class="image-options-grid">
+            <div 
+                *ngFor="let option of options; let i = index"
+                class="image-option"
+                [class.selected]="selectedAnswer === option.value"
+                [class.correct]="isSubmitted && option.value === correctAnswer"
+                [class.incorrect]="isSubmitted && selectedAnswer === option.value && !isCorrect"
+                [class.disabled]="isSubmitted"
+                (click)="toggleSelection(option.value)">
+                
+                <div class="image-wrapper">
+                    <img [src]="option.imageSrc" [alt]="option.label || 'Option ' + (i+1)">
+                    <div class="image-checkbox">
+                        <input 
+                            type="checkbox" 
+                            [name]="'containerId"
+
+                            [checked]="selctedAnswer === option.value"
+                            [disabled]="isSubmitted"
+                            (click)="$event.stopPropagation()">
+                    </div>
+                </div>
+                
+                <span *ngIf="option.label" class="image-label">{{ option.label }}</span>
+            </div>
+        </div>
+        
+        <button 
+            class="test-btn test-submit-btn" 
+            (click)="submitAnswer()"
+            [disabled]="isSubmitted">
+            {{ isSubmitted ? 'Bereits abgegeben' : 'Abgeben' }}
+        </button>
+        
+        <div
+            *ngIf="isSubmitted"  
+            class="test-result" 
+             [class.correct]="isCorrect" 
+             [class.incorrect]="!isCorrect">
+            <p>{{ feedbackMessage }}</p>
+        </div>
+    </div>
+</div>

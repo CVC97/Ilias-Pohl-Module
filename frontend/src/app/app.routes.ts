@@ -24,6 +24,7 @@ import { IntroExperiment } from './features/learning_features/intro-experiment/i
 
 // test features
 import { TestDampedOscillations } from './features/test_features/damped-oscillations/damped-oscillations';
+import { TDrivenOscillation } from './features/test_features/t-driven-oscillation/t-driven-oscillation';
 
 // simulation features
 import { SimDampedOscillationsExperiment } from './features/simulation_features/damped-oscillations-experiment/damped-oscillations-experiment';
@@ -64,6 +65,8 @@ export const routes: Routes = [
     { path: 'learning/intro-experiment', component: IntroExperiment, title: 'Einstieg Versuchsaufbau' },
 
     { path: 'test/damped-oscillations', component: TestDampedOscillations, title: 'Test: Gedämpfte Schwingungen' },
+
+    { path:  'test/driven-oscillations-t', component: TDrivenOscillation, title: 'Test: Getriebene Schwingungen'},
 
     { path: 'simulation/damped-oscillations-experiment', component: SimDampedOscillationsExperiment, title: 'Simulation: Gedämpfte Schwingungen' },
 

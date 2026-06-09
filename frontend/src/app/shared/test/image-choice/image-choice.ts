@@ -1,5 +1,4 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { TestTracking } from '../../../core/services/test-tracking';
 
 
@@ -15,7 +14,7 @@ interface ImageOption {
 @Component({
     selector: 'app-test-image-choice',
     standalone: true,
-    imports: [CommonModule],
+    imports: [],
     templateUrl: './image-choice.html',
     styleUrl: './image-choice.css'
 })

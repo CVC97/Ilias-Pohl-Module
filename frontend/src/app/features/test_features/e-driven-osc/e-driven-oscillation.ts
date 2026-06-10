@@ -9,13 +9,14 @@ import { TestSingleChoice } from '../../../shared/test/single-choice/single-choi
 import { TestImageChoice } from '../../../shared/test/image-choice/image-choice';
 import { TestMultipleChoice } from '../../../shared/test/multiple-choice/multiple-choice';
 import { TestDragDrop } from '../../../shared/test/drag-and-drop/drag-and-drop';
+import { TestTrueFalse } from '../../../shared/test/test-true-false/test-true-false';
 import { EndPage } from '../../../shared/test/end-page/end-page';
 
 @Component({
-  selector: 'app-t-driven-oscillation',
+  selector: 'app-e-driven-oscillation',
   imports: [],
-  templateUrl: './t-driven-oscillation.html',
-  styleUrl: './t-driven-oscillation.css',
+  templateUrl: './e-driven-oscillation.html',
+  styleUrl: './e-driven-oscillation.css',
 })
 
 export class TDrivenOscillation implements OnInit, OnDestroy {
@@ -45,7 +46,7 @@ export class TDrivenOscillation implements OnInit, OnDestroy {
 	
 	// question 1 data
     question1 = {
-		questionId: 'driven-osc-t-1-gesamtgleichung',
+		questionId: 'driven-osc-e-1-gesamtgleichung',
         question: `Die Gesamtlösung für den getriebenen, gedämpften harmonischen Oszillator kann in folgender Weise geschrieben werden:<br><br>
     \$\\varphi(t) = {\\varphi_0 \\cos(\\omega_e t + \\Phi) \\mathrm{e}^{-\\beta t}}+ { \\frac{N}{\\sqrt{(\\omega_0^2 - \\omega^2)^2 + 4\\beta^2\\omega^2}} \\cos\\left(\\omega t - \\arctan\\left(\\frac{2\\beta\\omega}{\\omega_0^2 - \\omega^2}\\right) \\right)} ,\$<br><br>
     wobei $\\varphi(t)$ die Winkelauslenkung, $\\omega_0$ bzw. $\\omega_e$ die Eigenfrequenz des ungedämpften bzw. gedämpften Oszillators, $\\beta$ die Dämpfungskonstante, $N$ und $\\omega$ die Amplitude und Frequenz des Antriebs beschreiben. $\\varphi_0\$ und $\\Phi\$ sind Hilfsgrößen, die sich aus den Anfangsbedingungen ergeben.<br><br>
@@ -54,10 +55,10 @@ export class TDrivenOscillation implements OnInit, OnDestroy {
 		statements: [
 			{ id: 'first_ext', text: 'Der erste Summand beschreibt die Dynamik des Schwungrads ohne äußeren Antrieb.', isCorrect: true },
 			{ id: 'first_damp', text: 'Der erste Summand beschreibt die Dynamik des Schwungrads ohne Dämpfung.', isCorrect: false  },
-            { id: 'first_time', text: 'Der erste Summand ist bei einem gedämpften System nach einer gewissen Zeit zu vernachlässigen -- er spielt nur zu Beginn der Schwingung eine Rolle.', isCorrect: true  },
-			{ id: 'second_time', text: 'Der zweite Summand ist bei einem gedämpften System nach einer gewissen Zeit zu vernachlässigen -- er spielt nur zu Beginn der Schwingung eine Rolle.' , isCorrect: false },
+            { id: 'first_time', text: 'Der erste Summand ist bei einem realen gedämpften System nach einer gewissen Zeit zu vernachlässigen -- er spielt nur zu Beginn der Schwingung eine Rolle.', isCorrect: true  },
+			{ id: 'second_time', text: 'Der zweite Summand ist bei einem realen gedämpften System nach einer gewissen Zeit zu vernachlässigen -- er spielt nur zu Beginn der Schwingung eine Rolle.' , isCorrect: false },
 			{ id: 'init_vel', text: 'Die Anfangsgeschwindigkeit bestimmt die maximale Auslenkung des Schwungrads zu allen Zeiten.' , isCorrect: false },
-			{ id: 'damp_frequ', text: 'Die Dämpfung spielt für die Schwingungsfrequenz des gedämpft schwingenden Rades nach einer bestimmten Zeit kaum noch eine Rolle. Entscheidend ist nur, mit welcher Frequenz der Antrieb das Rad schwingen lässt.' , isCorrect: true },
+			{ id: 'damp_frequ', text: 'Die Schwingungsfrequenz ist beim realen System nach einer Weile unabhängig von der Dämpfung, sie wird von der Frequenz des Antriebs bestimmt.' , isCorrect: true },
 			{ id: 'const', text: 'Aufgrund des äußeren Antriebs ist die Schwingung zu allen Zeiten gleichmäßig und periodisch.' , isCorrect: false }      
 		],
         maxPoints: 35,
@@ -67,7 +68,7 @@ export class TDrivenOscillation implements OnInit, OnDestroy {
 
 	// question 2 data
     question2 = {
-		questionId: 'driven-osc-t-1-einschwingen',
+		questionId: 'driven-osc-e-2-einschwingen',
         question: `Bei einer gedämpften, getriebenen Schwingung, gibt es zunächst eine sogenannte Einschwingphase, bevor sich eine stationäre Schwingung stabilisiert. Wann die Einschwingphase abgeschlossen ist, kann man sehr gut an der Phasenraumdarstellung ablesen.
 Im folgenden sind vier Phasenraumdiagramme für unterschiedliche Anfangsbedingungen und Einstellungen gezeigt. Der erste Messwert ist jeweils mit einem grauen, der letzte mit einem roten Kreuz markiert.<br><br>
 Bei welcher der Graphen ist der Einschwingvorgang abgeschlossen?`,
@@ -85,7 +86,7 @@ Bei welcher der Graphen ist der Einschwingvorgang abgeschlossen?`,
 
 	// question 3 data
     question3 = {
-		questionId: 'driven-osc-t-1-resonance_freq',
+		questionId: 'driven-osc-e-3-resonance_freq',
         question: `Die folgenden Graphen zeigen "Resonanzkurven" für die Amplitude der Schwingung (nach dem Einschwingvorgang).
         Sie zeigen hierbei das Ergebnis mehrerer Messungen. Bei den Messungen wird jeweils die Frequenz verändert und die Amplitude des Schwungkörpers nach dem Einschwingvorgang gemessen.
         Die Amplitude des Antriebs und die Dämpfung sind über die Messungen konstant gehalten.<br><br>
@@ -104,11 +105,11 @@ Bei welcher der Graphen ist der Einschwingvorgang abgeschlossen?`,
 
 	// question 4 data
     question4 = {
-        questionId: 'driven-osc-t-1-resonance_damping',
-        question: `Wie verändert sich die Messung, wenn Sie die Dämpfung des Systems vergrößern? <br>
-        Überlegen Sie was passiert, wenn man nur die Dämpfung ändert und alle anderen konstant hält.<br><br>
+        questionId: 'driven-osc-e-4-resonance_damping',
+        question: `Wie verändert sich die Messung, wenn Sie den Überlapp zwischen dem Magneten (Wirbelstrombremse) und dem Schwungrad vergrößern? <br>
+        Überlegen Sie was passiert, wenn Sie nur diese Einstellung am Aufbau ändern und alle anderen konstant halten.<br><br>
         Welche der folgenden Aussagen sind korrekt?<br><br>
-        Je größer die Dämpfung, desto ... `,
+        Je größer der Überlapp, desto ... `,
         questionInstruction: 'Frage 4 von 4 (30 Punkte): Einfluss der Dämpfung',
         statements: [
             { id: 'answer1', text: '... größer die Resonanzfrequenz.', isCorrect: false },
@@ -138,7 +139,7 @@ Bei welcher der Graphen ist der Einschwingvorgang abgeschlossen?`,
 
     // calculate results directly when navigating to results page
     private calculateResults() {
-        const testProgress = this.testTracking.getTestResults('driven-oscillations');
+        const testProgress = this.testTracking.getTestResults('e-driven-oscillations');
         
         if (!testProgress) {
             console.warn('No test results found');
@@ -186,7 +187,7 @@ Bei welcher der Graphen ist der Einschwingvorgang abgeschlossen?`,
 	
     ngOnInit() {
 		// start tracking this test
-        this.testTracking.startTest('driven-oscillations', 4, 80); // 4 questions, 80 total points
+        this.testTracking.startTest('e-driven-oscillations', 4, 80); // 4 questions, 80 total points
         
         // restore completion state from previous session
         this.restoreCompletionState();

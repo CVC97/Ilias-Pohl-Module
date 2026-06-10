@@ -13,19 +13,21 @@
 
                 <div class="statement-text">{{ statement.text }}</div>
                 
-                <div class="statement-options">
+                <div class="statement-options" style="display: flex; justify-content: center; align-items: center; gap: 10px;">
                     <button 
                         type="button"
-                        class="option-btn"
+                        class="testtf-btn"
                         [class.selected]="getSelectedValue(statement.id) === 'true'"
                         [disabled]="isSubmitted"
                         (click)="toggleStatement(statement.id, 'true')">
                         Wahr
                     </button>
-                    
+
+                    <span style="margin: 0 10px;"></span>
+
                     <button 
                         type="button"
-                        class="option-btn"
+                        class="testtf-btn"
                         [class.selected]="getSelectedValue(statement.id) === 'false'"
                         [disabled]="isSubmitted"
                         (click)="toggleStatement(statement.id, 'false')">

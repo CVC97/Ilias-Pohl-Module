@@ -85,7 +85,7 @@ export class TDampedOscillation implements OnInit, OnDestroy  {
 	// question 3 data
     question3 = {
 		questionId: 'damped-osc-3-frequency-damping',
-        question: `Welchen Einfluss hat eine größere Dämpfung auf die Frequenz der Schwingung? <br>
+        question: `Welchen Einfluss hat eine größere Dämpfung auf die Frequenz der Schwingung?<br>
       Sei $\\omega_1$ die Schwingungsfrequenz bei einer niedrigen Dämpfung und $\\omega_2$ die Schwingungsfrequenz bei einer stärkeren Dämpfung.
       Was gilt dann für das Verhältnis zwischen den beiden Schwingungsfrequenzen?`,
 		questionInstruction: 'Frage 3 von 5 (10 Punkte): Zusammenhang Frequenz und Dämpfungskonstante',
@@ -150,9 +150,9 @@ export class TDampedOscillation implements OnInit, OnDestroy  {
 				assignedAnswerIds: [] }
         ],
         answers: [
-			{ id: 'omega_sm_gamma', label: '$\\omega_0^2<gamma^2$' },
-			{ id: 'omega_eq_gamma', label: '$\\omega_0^2=gamma^2$' },
-			{ id: 'omega_gr_gamma', label: '$\\omega_0^2>gamma^2$' },
+			{ id: 'omega_sm_gamma', label: '$\\omega_0^2<\\gamma^2$' },
+			{ id: 'omega_eq_gamma', label: '$\\omega_0^2=\\gamma^2$' },
+			{ id: 'omega_gr_gamma', label: '$\\omega_0^2>\\gamma^2$' },
 			{ id: 'aperiod', label: 'Aperiodischer Grenzfall' },
 			{ id: 'kriech', label: 'Kriechfall' },
 			{ id: 'schwing', label: 'Schwingfall' },

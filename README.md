@@ -213,6 +213,8 @@ All related rows in `page_visits`, `module_results`, and `test_results` cascade 
 - **single-choice:** single correct answer
 - **multiple-choice:** multiple correct answers
 - **drag-and-drop:** assign answers to images
+- **image-choice:** single correct answer for images
+- **test-true-false:** assess individual statements for accuracy
 
 
 ## Features

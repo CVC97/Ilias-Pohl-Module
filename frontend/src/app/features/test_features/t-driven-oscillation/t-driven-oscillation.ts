@@ -217,7 +217,7 @@ Bei welcher der Graphen ist der Einschwingvorgang abgeschlossen?`,
 				this.question1.questionId,
                 result.isCorrect,
                 result.userAnswer,
-                this.question1.correctAnswers,
+                [],
                 result.pointsAwarded,
                 this.question1.maxPoints
             );
@@ -265,7 +265,7 @@ Bei welcher der Graphen ist der Einschwingvorgang abgeschlossen?`,
                 this.question4.questionId,
                 result.isCorrect,
                 result.userAnswer,
-                this.question4.correctAnswers,
+                [],
                 result.pointsAwarded,
                 this.question4.maxPoints
             );

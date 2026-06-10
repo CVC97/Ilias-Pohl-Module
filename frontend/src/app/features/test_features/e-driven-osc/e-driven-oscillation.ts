@@ -55,10 +55,10 @@ export class TDrivenOscillation implements OnInit, OnDestroy {
 		statements: [
 			{ id: 'first_ext', text: 'Der erste Summand beschreibt die Dynamik des Schwungrads ohne äußeren Antrieb.', isCorrect: true },
 			{ id: 'first_damp', text: 'Der erste Summand beschreibt die Dynamik des Schwungrads ohne Dämpfung.', isCorrect: false  },
-            { id: 'first_time', text: 'Der erste Summand ist bei einem gedämpften System nach einer gewissen Zeit zu vernachlässigen -- er spielt nur zu Beginn der Schwingung eine Rolle.', isCorrect: true  },
-			{ id: 'second_time', text: 'Der zweite Summand ist bei einem gedämpften System nach einer gewissen Zeit zu vernachlässigen -- er spielt nur zu Beginn der Schwingung eine Rolle.' , isCorrect: false },
+            { id: 'first_time', text: 'Der erste Summand ist bei einem realen gedämpften System nach einer gewissen Zeit zu vernachlässigen -- er spielt nur zu Beginn der Schwingung eine Rolle.', isCorrect: true  },
+			{ id: 'second_time', text: 'Der zweite Summand ist bei einem realen gedämpften System nach einer gewissen Zeit zu vernachlässigen -- er spielt nur zu Beginn der Schwingung eine Rolle.' , isCorrect: false },
 			{ id: 'init_vel', text: 'Die Anfangsgeschwindigkeit bestimmt die maximale Auslenkung des Schwungrads zu allen Zeiten.' , isCorrect: false },
-			{ id: 'damp_frequ', text: 'Die Dämpfung spielt für die Schwingungsfrequenz des gedämpft schwingenden Rades nach einer bestimmten Zeit kaum noch eine Rolle. Entscheidend ist nur, mit welcher Frequenz der Antrieb das Rad schwingen lässt.' , isCorrect: true },
+			{ id: 'damp_frequ', text: 'Die Schwingungsfrequenz ist beim realen System nach einer Weile unabhängig von der Dämpfung, sie wird von der Frequenz des Antriebs bestimmt.' , isCorrect: true },
 			{ id: 'const', text: 'Aufgrund des äußeren Antriebs ist die Schwingung zu allen Zeiten gleichmäßig und periodisch.' , isCorrect: false }      
 		],
         maxPoints: 35,
@@ -68,7 +68,7 @@ export class TDrivenOscillation implements OnInit, OnDestroy {
 
 	// question 2 data
     question2 = {
-		questionId: 'driven-osc-e-1-einschwingen',
+		questionId: 'driven-osc-e-2-einschwingen',
         question: `Bei einer gedämpften, getriebenen Schwingung, gibt es zunächst eine sogenannte Einschwingphase, bevor sich eine stationäre Schwingung stabilisiert. Wann die Einschwingphase abgeschlossen ist, kann man sehr gut an der Phasenraumdarstellung ablesen.
 Im folgenden sind vier Phasenraumdiagramme für unterschiedliche Anfangsbedingungen und Einstellungen gezeigt. Der erste Messwert ist jeweils mit einem grauen, der letzte mit einem roten Kreuz markiert.<br><br>
 Bei welcher der Graphen ist der Einschwingvorgang abgeschlossen?`,
@@ -86,7 +86,7 @@ Bei welcher der Graphen ist der Einschwingvorgang abgeschlossen?`,
 
 	// question 3 data
     question3 = {
-		questionId: 'driven-osc-e-1-resonance_freq',
+		questionId: 'driven-osc-e-3-resonance_freq',
         question: `Die folgenden Graphen zeigen "Resonanzkurven" für die Amplitude der Schwingung (nach dem Einschwingvorgang).
         Sie zeigen hierbei das Ergebnis mehrerer Messungen. Bei den Messungen wird jeweils die Frequenz verändert und die Amplitude des Schwungkörpers nach dem Einschwingvorgang gemessen.
         Die Amplitude des Antriebs und die Dämpfung sind über die Messungen konstant gehalten.<br><br>
@@ -105,7 +105,7 @@ Bei welcher der Graphen ist der Einschwingvorgang abgeschlossen?`,
 
 	// question 4 data
     question4 = {
-        questionId: 'driven-osc-e-1-resonance_damping',
+        questionId: 'driven-osc-e-4-resonance_damping',
         question: `Wie verändert sich die Messung, wenn Sie den Überlapp zwischen dem Magneten (Wirbelstrombremse) und dem Schwungrad vergrößern? <br>
         Überlegen Sie was passiert, wenn Sie nur diese Einstellung am Aufbau ändern und alle anderen konstant halten.<br><br>
         Welche der folgenden Aussagen sind korrekt?<br><br>
@@ -218,7 +218,7 @@ Bei welcher der Graphen ist der Einschwingvorgang abgeschlossen?`,
 				this.question1.questionId,
                 result.isCorrect,
                 result.userAnswer,
-                this.question1.correctAnswers,
+                [],
                 result.pointsAwarded,
                 this.question1.maxPoints
             );
@@ -266,7 +266,7 @@ Bei welcher der Graphen ist der Einschwingvorgang abgeschlossen?`,
                 this.question4.questionId,
                 result.isCorrect,
                 result.userAnswer,
-                this.question4.correctAnswers,
+                [],
                 result.pointsAwarded,
                 this.question4.maxPoints
             );

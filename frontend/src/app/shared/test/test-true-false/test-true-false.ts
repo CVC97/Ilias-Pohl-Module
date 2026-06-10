@@ -23,7 +23,7 @@ export class TestTrueFalse implements OnInit{
   @Input() pointsPerCorrectClick: number = 5;
   @Output() onSubmit = new EventEmitter<{
     isCorrect: boolean;
-    userAnswer: { statementId: string; selected: 'true' | 'false'[]};
+    userAnswer: { statementId: string; selected: 'true' | 'false'}[];
     pointsAwarded: number;
     pointsBreakdown: string;
   }>();

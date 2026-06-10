@@ -10,45 +10,33 @@ import { TestMultipleChoice } from '../../../shared/test/multiple-choice/multipl
 import { TestDragDrop } from '../../../shared/test/drag-and-drop/drag-and-drop';
 import { EndPage } from '../../../shared/test/end-page/end-page';
 
-
-
 declare global {
 	interface Window {
 		MathJax: any;
     }
 }
 
-
-
 @Component({
-    selector: 'app-damped-oscillations',
-    standalone: true,
-    imports: [CommonModule, RouterLink, TestOrderImages, TestSingleChoice, TestMultipleChoice, TestDragDrop, EndPage],
-    templateUrl: './damped-oscillations.html',
-    styleUrl: './damped-oscillations.css'
+  selector: 'app-t-damped-oscillation',
+  imports: [CommonModule, RouterLink, TestOrderImages, TestSingleChoice, TestMultipleChoice, TestDragDrop, EndPage],
+  templateUrl: './t-damped-oscillation.html',
+  styleUrl: './t-damped-oscillation.css',
 })
-export class TestDampedOscillations implements OnInit, OnDestroy {
-
+export class TDampedOscillation implements OnInit, OnDestroy  {
     // Custom thresholds for this test
     performanceThresholds = [
         {
             minPercentage: 0,
-            maxPercentage: 25,
-            level: 'low' as const,
-            message: 'Sie werden sich nun anhand einer <b>interaktiven Simulation</b> anschauen, welchen Einfluss unterschiedliche Parameter auf den Bewegungsverlauf haben.',
-            continueLink: '/experiment/intro',
-            continueLinkText: 'Weiter zur Simulation'
-        },
-        {
-            minPercentage: 25,
             maxPercentage: 79,
-            level: 'medium' as const,
-            message: `
-				Sie werden sich nun noch einmal die <b>theoretischen Grundlagen zu gedämpften Schwingungen</b> erarbeiten. 
-				Dazu bearbeiten sie ein interaktives Lernmodul zum Aufstellen und Lösen der Bewegungsgleichung für eine gedämpfte Schwingung 
-				und der Analyse unterschiedlicher experimenteller Einstellungen auf den Bewegungsverlauf.`,
-            continueLink: '/learning/resonance',
-            continueLinkText: 'Weiter zu den theoretischen Grundlagen'
+            level: 'low' as const,
+            message: 'In Bezug auf getriebene Schwingungen fehlen Ihnen noch einige Aspekte. \
+            Entscheiden Sie selber, wie Sie fortfahren möchten. \
+            Sie können sich entweder zunächst mit den Bewegungsmustern anhand einer interaktiven Simulation vertraut machen, \
+            oder die theoretischen Grundlagen in einem interaktiven Lernmodul erarbeiten.',
+            continueLink: '/experiment/intro',
+            continueLinkText: 'Weiter zur Simulation',
+            continueLink2: '/experiment/intro',
+            continueLinkText2: 'Weiter zu den theoretischen Grundlagen'
         },
         {
             minPercentage: 80,
@@ -60,15 +48,13 @@ export class TestDampedOscillations implements OnInit, OnDestroy {
         }
     ];
 
-	
 	// question 1 data
     question1 = {
 		questionId: 'damped-osc-1-daempfungsstaerke',
-        question: `Bei dem Versuch können Sie die Dämpfung darüber anpassen, dass Sie den Überlappbereich zwischen einem Magneten (eines Magnetfelds) und der Schwungscheibe variieren.
-			Ziehen Sie die Bilder in die richtige Reihenfolge (stärkste Dämpfung oben, schwächste unten).`,
+        question: `Sortieren Sie die drei Graphen entsprechend der Größe der Dämpfungskonstante. Beginnen Sie oben mit der niedrigsten Dämpfungskonstante.`,
 		questionInstruction: 'Frage 1 von 5 (30 Punkte): Sortierung Dämpfungskonstante',
         images: [
-			{ id: 'weak', imageSrc: 'assets/images/damped_oscillations/weak_damping_1.png', label: 'Schwingung A' },
+			      { id: 'weak', imageSrc: 'assets/images/damped_oscillations/weak_damping_1.png', label: 'Schwingung A' },
             { id: 'medium', imageSrc: 'assets/images/damped_oscillations/medium_damping_1.png', label: 'Schwingung B' },
             { id: 'strong', imageSrc: 'assets/images/damped_oscillations/strong_damping_1.png', label: 'Schwingung C' }
         ],
@@ -81,12 +67,12 @@ export class TestDampedOscillations implements OnInit, OnDestroy {
 	// question 2 data
     question2 = {
 		questionId: 'damped-osc-2-federkonstante',
-        question: `Im Versuch ist eine feste Feder eingebaut, die Federkonstante kann also nicht varriert werden. Was würde aber passieren, wenn man die Federkonstante variieren könnte?
-			Sortieren Sie die Graphen nach der Größe der Federkonstante. 
-			Sortieren Sie die Graphen absteigend, indem Sie den Graphen mit der größten Federkonstante nach oben einsortieren (andere Variablen sind konstant gehalten).`,
+        question: `Welchen Einfluss hat die Federkonstante auf eine Schwingung?<br>
+			  Sortieren Sie die Graphen nach der Größe der Federkonstante. 
+			  Sortieren Sie die Graphen absteigend, indem Sie den Graphen mit der größten Federkonstante nach oben einsortieren (andere Variablen sind konstant gehalten).`,
 		questionInstruction: 'Frage 2 von 5 (30 Punkte): Sortierung Federkonstante',
         images: [
-			{ id: 'weak', imageSrc: 'assets/images/damped_oscillations/weak_spring_constant_2.png', label: 'Schwingung A' },
+			      { id: 'weak', imageSrc: 'assets/images/damped_oscillations/weak_spring_constant_2.png', label: 'Schwingung A' },
             { id: 'medium', imageSrc: 'assets/images/damped_oscillations/medium_spring_constant_2.png', label: 'Schwingung B' },
             { id: 'strong', imageSrc: 'assets/images/damped_oscillations/strong_spring_constant_2.png', label: 'Schwingung C' }
         ],
@@ -99,9 +85,9 @@ export class TestDampedOscillations implements OnInit, OnDestroy {
 	// question 3 data
     question3 = {
 		questionId: 'damped-osc-3-frequency-damping',
-        question: `Sie haben in einer ersten Messung einer gedämpften Schwingung gesehen, dass das Schwungrad mit einer Frequenz von $\\omega_1=0.3$ Hz geschwungen ist.
-			Nun hat ihr*e Praktikumspartner*in die Wirbelstrombremse weiter über das Schwungrad bewegt - sie erwarten also eine größere Dämpfung.
-			Mit welcher Frequenz $\\omega_2$ erwarten Sie nun das Schwungrad zu schwingen?`,
+        question: `Welchen Einfluss hat eine größere Dämpfung auf die Frequenz der Schwingung? <br>
+      Sei $\\omega_1$ die Schwingungsfrequenz bei einer niedrigen Dämpfung und $\\omega_2$ die Schwingungsfrequenz bei einer stärkeren Dämpfung.
+      Was gilt dann für das Verhältnis zwischen den beiden Schwingungsfrequenzen?`,
 		questionInstruction: 'Frage 3 von 5 (10 Punkte): Zusammenhang Frequenz und Dämpfungskonstante',
         options: [
             { value: 'answer1', label: '$\\omega_1<\\omega_2$.' },
@@ -131,50 +117,45 @@ export class TestDampedOscillations implements OnInit, OnDestroy {
 		],
 		correctAnswers: ['half_life', 'damping'],
         maxPoints: 20,
-		pointsPerCorrectClick: 5,
+		    pointsPerCorrectClick: 5,
         containerId: 'test-question4-container'
     };
 
 	// question 5 data
     question5 = {
         questionId: 'damped-osc-5-phase-space',
-        question: `Der Phasenraum beschreibt mögliche Zustände, die ein System annehmen kann über die Angabe der Raum- und einer Geschwindigkeitskoordinate. 
-		Für das Pohlsche Rad kann die Bewegung des Schwungrads angegeben werden über den Auslenkwinkel $\\phi$ und die Winkelgeschwindigkeit $\\dot{\\phi}$.
-
-		Ordnen Sie den gezeigten Phasenraumdarstellungen die korrekten Anfangsbedingungen und Dämpfungskonstanten zu.`,
-        questionInstruction: 'Frage 5 von 5 (60 Punkte): Zuordnung Phasenraum',
+        question: `Man unterscheidet bei Schwingungen zwischen qualitativ unterschiedlichen Formen: dem Schwingfall, dem aperiodischen Grenzfall und dem Kriechfall.<br>
+        Ordnen Sie die Bezeichnungen und die Bedingungen für das Verhältnis von Eigenschwingfrequenz $\\omega_0$ und Dämpfungskonstante $\\gamma$ den entsprechenden Graphen zu.`,
+        questionInstruction: 'Frage 5 von 5 (60 Punkte): Zuordnung Bewegungsformen mit Dämpfung',
         containers: [
             { 
-				id: 'spiral1', 
-				imageSrc: 'assets/images/damped_oscillations/phase_space_spiral1_5.png', 
+				id: 'aperiodic', 
+				imageSrc: 'assets/images/damped_oscillations/aperiodisch.png', 
 				imageAlt: 'Spirale 1', 
-				correctAnswerIds: [ 'phi_gr_zero', 'phi_dot_eq_zero', 'gamma_weak' ], 
+				correctAnswerIds: [ 'omega_sm_gamma', 'aperiod' ], 
 				assignedAnswerIds: [] 
 			},
             { 
-				id: 'spiral2', 
-				imageSrc: 'assets/images/damped_oscillations/phase_space_spiral2_5.png', 
+				id: 'kriechfall', 
+				imageSrc: 'assets/images/damped_oscillations/kriechfall.png', 
 				imageAlt: 'Spirale 2', 
-				correctAnswerIds: [ 'phi_sm_zero', 'phi_dot_gr_zero', 'gamma_medium' ],
+				correctAnswerIds: [ 'omega_eq_gamma', 'kriech' ],
 				assignedAnswerIds: [] 
 			},
             { 
-				id: 'spiral3', 
-				imageSrc: 'assets/images/damped_oscillations/phase_space_spiral3_5.png', 
+				id: 'schwingfall', 
+				imageSrc: 'assets/images/damped_oscillations/schwingfall.png', 
 				imageAlt: 'Spirale 3', 
-				correctAnswerIds: [ 'phi_eq_zero', 'phi_dot_sm_zero', 'gamma_strong'], 
+				correctAnswerIds: [ 'omega_gr_gamma', 'schwing'], 
 				assignedAnswerIds: [] }
         ],
         answers: [
-			{ id: 'phi_sm_zero', label: '$\\phi(0)<0$' },
-			{ id: 'phi_eq_zero', label: '$\\phi(0)=0$' },
-			{ id: 'phi_gr_zero', label: '$\\phi(0)>0$' },
-			{ id: 'phi_dot_sm_zero', label: '$\\dot{\\phi}(0)<0$' },
-			{ id: 'phi_dot_eq_zero', label: '$\\dot{\\phi}(0)=0$' },
-			{ id: 'phi_dot_gr_zero', label: '$\\dot{\\phi}(0)>0$' },
-			{ id: 'gamma_weak', label: '$\\gamma=0.1$' },
-			{ id: 'gamma_medium', label: '$\\gamma=0.4$' },
-			{ id: 'gamma_strong', label: '$\\gamma=0.8$' },
+			{ id: 'omega_sm_gamma', label: '$\\omega_0^2<gamma^2$' },
+			{ id: 'omega_eq_gamma', label: '$\\omega_0^2=gamma^2$' },
+			{ id: 'omega_gr_gamma', label: '$\\omega_0^2>gamma^2$' },
+			{ id: 'aperiod', label: 'Aperiodischer Grenzfall' },
+			{ id: 'kriech', label: 'Kriechfall' },
+			{ id: 'schwing', label: 'Schwingfall' },
         ],
         maxPoints: 60,
         containerId: 'test-question5-container'
@@ -194,11 +175,11 @@ export class TestDampedOscillations implements OnInit, OnDestroy {
     // results page data
     continueLink = '/';
     continueLinkText = 'Weiter';
-    performanceLevel: 'low' | 'medium' | 'high' = 'low';
+    performanceLevel: 'low' | 'high' = 'low';
 
     // calculate results directly when navigating to results page
     private calculateResults() {
-        const testProgress = this.testTracking.getTestResults('damped-oscillations');
+        const testProgress = this.testTracking.getTestResults('t-damped-oscillations');
         
         if (!testProgress) {
             console.warn('No test results found');
@@ -246,7 +227,7 @@ export class TestDampedOscillations implements OnInit, OnDestroy {
 	
     ngOnInit() {
 		// start tracking this test
-        this.testTracking.startTest('damped-oscillations', 5, 150); // 5 questions, 150 total points
+        this.testTracking.startTest('t-damped-oscillations', 5, 150); // 5 questions, 150 total points
         
         // restore completion state from previous session
         this.restoreCompletionState();
@@ -261,7 +242,7 @@ export class TestDampedOscillations implements OnInit, OnDestroy {
 	
     private restoreCompletionState() {
 		// check if question was already answered
-        this.question1Submitted = this.testTracking.isQuestionAnswered(this.question1.questionId);
+    this.question1Submitted = this.testTracking.isQuestionAnswered(this.question1.questionId);
 		this.question2Submitted = this.testTracking.isQuestionAnswered(this.question2.questionId);
 		this.question3Submitted = this.testTracking.isQuestionAnswered(this.question3.questionId);
 		this.question4Submitted = this.testTracking.isQuestionAnswered(this.question4.questionId);

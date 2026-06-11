@@ -197,6 +197,8 @@ Bei welcher der Graphen ist der Einschwingvorgang abgeschlossen?`,
         
         // restore completion state from previous session
         this.restoreCompletionState();
+
+        this.renderMath();
     }
 	
 	

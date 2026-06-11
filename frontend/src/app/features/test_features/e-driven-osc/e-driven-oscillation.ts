@@ -12,6 +12,12 @@ import { TestDragDrop } from '../../../shared/test/drag-and-drop/drag-and-drop';
 import { TestTrueFalse } from '../../../shared/test/test-true-false/test-true-false';
 import { EndPage } from '../../../shared/test/end-page/end-page';
 
+declare global {
+	interface Window {
+		MathJax: any;
+    }
+}
+
 @Component({
   selector: 'app-e-driven-oscillation',
   imports: [TestTrueFalse, TestImageChoice, EndPage, RouterLink],
@@ -47,10 +53,9 @@ export class EDrivenOscillation implements OnInit, OnDestroy {
 	// question 1 data
     question1 = {
 		questionId: 'driven-osc-e-1-gesamtgleichung',
-        question: `Die Gesamtlösung für den getriebenen, gedämpften harmonischen Oszillator kann in folgender Weise geschrieben werden:<br><br>
-    \$\\varphi(t) = {\\varphi_0 \\cos(\\omega_e t + \\Phi) \\mathrm{e}^{-\\beta t}}+ { \\frac{N}{\\sqrt{(\\omega_0^2 - \\omega^2)^2 + 4\\beta^2\\omega^2}} \\cos\\left(\\omega t - \\arctan\\left(\\frac{2\\beta\\omega}{\\omega_0^2 - \\omega^2}\\right) \\right)} ,\$<br><br>
-    wobei $\\varphi(t)$ die Winkelauslenkung, $\\omega_0$ bzw. $\\omega_e$ die Eigenfrequenz des ungedämpften bzw. gedämpften Oszillators, $\\beta$ die Dämpfungskonstante, $N$ und $\\omega$ die Amplitude und Frequenz des Antriebs beschreiben. $\\varphi_0\$ und $\\Phi\$ sind Hilfsgrößen, die sich aus den Anfangsbedingungen ergeben.<br><br>
-    Welche der Aussagen zu dieser Gesamtlösung sind korrekt? `,
+        question: `Die Gesamtlösung für den getriebenen, gedämpften harmonischen Oszillator kann in folgender Weise geschrieben werden: <br><br> \$\\varphi(t) = {\\varphi_0 \\cos(\\omega_e t + \\Phi) \\mathrm{e}^{-\\beta t}}+ {\\frac{N}{\\sqrt{(\\omega_0^2 - \\omega^2)^2 + 4\\beta^2\\omega^2}} \\cos\\left(\\omega t - \\arctan\\left(\\frac{2\\beta\\omega}{\\omega_0^2 - \\omega^2}\\right) \\right)}\$<br><br>
+        wobei $\\varphi(t)$ die Winkelauslenkung, $\\omega_0$ bzw. $\\omega_e$ die Eigenfrequenz des ungedämpften bzw. gedämpften Oszillators, $\\beta$ die Dämpfungskonstante, $N$ und $\\omega$ die Amplitude und Frequenz des Antriebs beschreiben. $\\varphi_0$ und $\\Phi$ sind Hilfsgrößen, die sich aus den Anfangsbedingungen ergeben.<br><br>
+        Welche der Aussagen zu dieser Gesamtlösung sind korrekt? `,
 		questionInstruction: 'Frage 1 von 4 (35 Punkte): Analyse der Gleichung',
 		statements: [
 			{ id: 'first_ext', text: 'Der erste Summand beschreibt die Dynamik des Schwungrads ohne äußeren Antrieb.', isCorrect: true },

@@ -96,7 +96,14 @@
 .testtf-btn:hover:not(:disabled) {
     background: white;
     color: var(--physik-gelb);
-    border: 2px solid var(--physik-gelb);
+    border: 1px solid var(--physik-gelb);
+}
+
+.testtf-btn.selected {
+    background: white;
+    border: 1px solid var(--physik-gelb);
+    color: var(--physik-gelb);
+    font-weight: bold;
 }
 
 .testtf-btn:disabled {

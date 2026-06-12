@@ -12,9 +12,15 @@ import { TestDragDrop } from '../../../shared/test/drag-and-drop/drag-and-drop';
 import { TestTrueFalse } from '../../../shared/test/test-true-false/test-true-false';
 import { EndPage } from '../../../shared/test/end-page/end-page';
 
+declare global {
+	interface Window {
+		MathJax: any;
+    }
+}
+
 @Component({
   selector: 'app-t-driven-oscillation',
-  imports: [TestTrueFalse, TestImageChoice, EndPage],
+  imports: [TestTrueFalse, TestImageChoice, EndPage, RouterLink],
   templateUrl: './t-driven-oscillation.html',
   styleUrl: './t-driven-oscillation.css',
 })

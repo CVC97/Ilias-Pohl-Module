@@ -71,11 +71,11 @@
             </div>
         }
 
-        <!-- page 6: test results -->
+        <!-- page 5: test results -->
         @if (currentView === 'driven_osc5') {
             <div>
                 <app-end-page
-                    [testId]="'damped-oscillations'"
+                    [testId]="'e-driven-oscillations'"
                     [testTitle]="'Getriebene Schwingungen'"
                     [thresholds]="performanceThresholds"
                     (resultsCalculated)="onResultsCalculated($event)">
@@ -95,10 +95,10 @@
             @if (!isEndPage) {
                 <button class="btn" (click)="goForward()" [disabled]="!canProceed">Weiter →</button>
             }
-            @if (currentView === 'damped_osc5') {
+            @if (currentView === 'driven_osc4') {
                 <button class="btn" (click)="goForward()" [disabled]="!canProceed">Test beenden →</button>
             }
-            @if (currentView === 'damped_osc6') {
+            @if (currentView === 'driven_osc5') {
                 <button class="btn" (click)="goForward()" [disabled]="!canProceed">{{ continueLinkText }} →</button>
             }
         </div>

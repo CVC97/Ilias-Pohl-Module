@@ -21,6 +21,7 @@ import { MomentOfInertia } from './features/glossary_features/moment-of-inertia/
 
 // learning features
 import { IntroExperiment } from './features/learning_features/intro-experiment/intro-experiment';
+import { ChaoticBehavior } from './features/learning_features/chaotic-behavior/chaotic-behavior';
 
 // test features
 import { TestDampedOscillations } from './features/test_features/damped-oscillations/damped-oscillations';
@@ -65,6 +66,7 @@ export const routes: Routes = [
     { path: 'glossary/moment-of-inertia',   component: MomentOfInertia,     title: 'Trägheitsmoment' },
 
     { path: 'learning/intro-experiment', component: IntroExperiment, title: 'Einstieg Versuchsaufbau' },
+    { path: 'learning/chaotic-behavior', component: ChaoticBehavior, title: 'Grundlagen nichtlineare Schwingung und Chaos'},
 
     { path: 'test/damped-oscillations', component: TestDampedOscillations, title: 'Test: Gedämpfte Schwingungen' },
     { path: 'test/t-damped-oscillations', component: TDampedOscillation, title: 'Test: Gedämpfte Schwingungen' },

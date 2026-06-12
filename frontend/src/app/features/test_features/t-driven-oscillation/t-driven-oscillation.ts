@@ -9,11 +9,12 @@ import { TestSingleChoice } from '../../../shared/test/single-choice/single-choi
 import { TestImageChoice } from '../../../shared/test/image-choice/image-choice';
 import { TestMultipleChoice } from '../../../shared/test/multiple-choice/multiple-choice';
 import { TestDragDrop } from '../../../shared/test/drag-and-drop/drag-and-drop';
+import { TestTrueFalse } from '../../../shared/test/test-true-false/test-true-false';
 import { EndPage } from '../../../shared/test/end-page/end-page';
 
 @Component({
   selector: 'app-t-driven-oscillation',
-  imports: [],
+  imports: [TestTrueFalse, TestImageChoice, EndPage],
   templateUrl: './t-driven-oscillation.html',
   styleUrl: './t-driven-oscillation.css',
 })
@@ -61,7 +62,8 @@ export class TDrivenOscillation implements OnInit, OnDestroy {
 			{ id: 'const', text: 'Aufgrund des äußeren Antriebs ist die Schwingung zu allen Zeiten gleichmäßig und periodisch.' , isCorrect: false }      
 		],
         maxPoints: 35,
-		pointsPerCorrectClick: 5
+		pointsPerCorrectClick: 5,
+        containerId: 'test-question1-container'
     };
 
 
@@ -72,12 +74,12 @@ export class TDrivenOscillation implements OnInit, OnDestroy {
 Im folgenden sind vier Phasenraumdiagramme für unterschiedliche Anfangsbedingungen und Einstellungen gezeigt. Der erste Messwert ist jeweils mit einem grauen, der letzte mit einem roten Kreuz markiert.<br><br>
 Bei welcher der Graphen ist der Einschwingvorgang abgeschlossen?`,
 		questionInstruction: 'Frage 2 von 4 (5 Punkte): Einschwingvorgang abgeschlossen?',
-        images: [
-			{ id: 'osc1', imageSrc: 'assets/images/driven_oscillation_t/Einschwingvorgang_JA.png', label: 'Schwingung A' },
-            { id: 'osc2', imageSrc: 'assets/images/driven_oscillation_t/Einschwingvorgang_NEIN1.png', label: 'Schwingung B' },
-            { id: 'osc3', imageSrc: 'assets/images/driven_oscillation_t/Einschwingvorgang_NEIN2.png', label: 'Schwingung C' }
+        options: [
+			{ value: 'osc1', imageSrc: 'assets/images/driven_oscillation_t/Einschwingvorgang_JA.png', label: 'Schwingung A' },
+            { value: 'osc2', imageSrc: 'assets/images/driven_oscillation_t/Einschwingvorgang_NEIN1.png', label: 'Schwingung B' },
+            { value: 'osc3', imageSrc: 'assets/images/driven_oscillation_t/Einschwingvorgang_NEIN2.png', label: 'Schwingung C' }
         ],
-        correctAnswer: ['osc1'],
+        correctAnswer: 'osc1',
         maxPoints: 5,
         containerId: 'test-question2-container'
     };
@@ -91,10 +93,10 @@ Bei welcher der Graphen ist der Einschwingvorgang abgeschlossen?`,
         Die Amplitude des Antriebs und die Dämpfung sind über die Messungen konstant gehalten.<br><br>
         Bei welcher der unten stehenden Abbildungen ist die x-Achsenskalierung korrekt? (Beachten Sie die Beschriftung der x-Achse)`,
 		questionInstruction: 'Frage 3 von 4 (10 Punkte): Zusammenhang Frequenz und Schwingungsamplitude - Resonanzkurve',
-        images: [
-            { id: 'answer1', imageSrc: 'assets/images/driven_oscillation_t/Einschwingvorgang_JA.png', label: 'Resonanzkurve A' },
-            { id: 'answer2', imageSrc: 'assets/images/driven_oscillation_t/Einschwingvorgang_JA.png', label: 'Resonanzkurve B' },
-            { id: 'answer3', imageSrc: 'assets/images/driven_oscillation_t/Einschwingvorgang_JA.png', label: 'Resonanzkurve C' },
+        options: [
+            { value: 'answer1', imageSrc: 'assets/images/driven_oscillation_t/Einschwingvorgang_JA.png', label: 'Resonanzkurve A' },
+            { value: 'answer2', imageSrc: 'assets/images/driven_oscillation_t/Einschwingvorgang_JA.png', label: 'Resonanzkurve B' },
+            { value: 'answer3', imageSrc: 'assets/images/driven_oscillation_t/Einschwingvorgang_JA.png', label: 'Resonanzkurve C' },
         ],
 		correctAnswer: 'answer2',
         maxPoints: 10,
